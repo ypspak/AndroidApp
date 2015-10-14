@@ -21,6 +21,7 @@ public class Question implements Comparable<Question> {
     private long timestamp;
     private String tags;
     private int echo;
+    private int dislike;
     private int order;
     private boolean newQuestion;
 
@@ -48,6 +49,7 @@ public class Question implements Comparable<Question> {
     public Question(String message) {
         this.wholeMsg = message;
         this.echo = 0;
+        this.dislike = 0;
         this.head = getFirstSentence(message).trim();
         this.desc = "";
         if (this.head.length() < message.length()) {
@@ -102,6 +104,8 @@ public class Question implements Comparable<Question> {
     public int getEcho() {
         return echo;
     }
+
+    public int getDislike() {return dislike; }
 
     public String getWholeMsg() {
         return wholeMsg;
