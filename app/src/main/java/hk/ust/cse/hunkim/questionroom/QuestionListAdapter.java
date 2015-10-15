@@ -23,6 +23,8 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  * This class is an example of how to use FirebaseListAdapter. It uses the <code>Chat</code> class to encapsulate the
  * data for each individual chat message
  */
+
+//Here control how the question is listed.
 public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
@@ -52,12 +54,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
+        int dislike = question.getDislike();
         Button echoButton = (Button) view.findViewById(R.id.echo);
+        Button dislikeButton = (Button) view.findViewById(R.id.dislike);
         echoButton.setText("" + echo);
         echoButton.setTextColor(Color.BLUE);
+        dislikeButton.setText("" + dislike);
+        dislikeButton.setTextColor(Color.RED);
 
 
         echoButton.setTag(question.getKey()); // Set tag for button
+        dislikeButton.setTag(question.getKey());
 
         echoButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -69,6 +76,18 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                 }
 
         );
+
+        dislikeButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MainActivity m = (MainActivity) view.getContext();
+                        m.updateDislike((String) view.getTag());
+                    }
+                }
+
+        );
+
 
         String msgString = "";
 

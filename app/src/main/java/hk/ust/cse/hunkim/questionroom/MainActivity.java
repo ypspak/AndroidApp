@@ -25,7 +25,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -143,6 +143,7 @@ public class MainActivity extends ListActivity {
         }
     }
 
+    //Update Like here. For every person who have liked, their key is stored at database.
     public void updateEcho(String key) {
         if (dbutil.contains(key)) {
             Log.e("Dupkey", "Key is already in the DB!");
@@ -157,7 +158,55 @@ public class MainActivity extends ListActivity {
                         Long echoValue = (Long) dataSnapshot.getValue();
                         Log.e("Echo update:", "" + echoValue);
 
+                        //Add 1 value to the echoValue
                         echoRef.setValue(echoValue + 1);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+        
+        final Firebase orderRef = mFirebaseRef.child(key).child("order");
+        orderRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long orderValue = (Long) dataSnapshot.getValue();
+                        Log.e("Order update:", "" + orderValue);
+
+                        orderRef.setValue(orderValue - 1);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+
+        // Update SQLite DB
+        dbutil.put(key);
+    }
+
+    public void updateDislike(String key) {
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
+
+        final Firebase dislikeRef = mFirebaseRef.child(key).child("dislike");
+        dislikeRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long dislikeValue = (Long) dataSnapshot.getValue();
+                        Log.e("dislike update:", "" + dislikeValue);
+
+                        //Add 1 value to the dislikeValue
+                        dislikeRef.setValue(dislikeValue + 1);
                     }
 
                     @Override
