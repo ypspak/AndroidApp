@@ -1,5 +1,4 @@
 # AndroidApp
-============
 ##This is the repository for Android Apps, all files for Android project should be here.
 **PLEASE NOTE** the dead our milestone 1 is _**October, 27th**_. All minor features should be released by this time.
 
