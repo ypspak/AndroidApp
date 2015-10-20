@@ -135,6 +135,9 @@ public class MainActivity extends ListActivity {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
         if (!input.equals("")) {
+            // Before creating our 'model', we have to replace substring so that prevent code injection
+            input = input.replace("<", "&lt;");
+            input = input.replace(">", "&gt;");
             // Create our 'model', a Chat object
             Question question = new Question(input);
             // Create a new, auto-generated child of that chat location, and save our chat data there
