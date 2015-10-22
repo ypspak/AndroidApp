@@ -7,6 +7,7 @@
     <string name="action_join">Join</string>
     <string name="action_join_short">Sign in</string>
 
+    <!--String related to enter a room-->
     <string name="error_invalid_room_name">Use only alphanumeric characters</string>
     <string name="error_field_required">This field is required</string>
 

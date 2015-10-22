@@ -1,8 +1,10 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.nfc.Tag;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +30,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
+    public static final String REPLIED_QEUSTION = "REPLIEDQ";
     private String roomName;
     MainActivity activity;
 
@@ -57,6 +60,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         int dislike = question.getDislike();
         Button echoButton = (Button) view.findViewById(R.id.echo);
         Button dislikeButton = (Button) view.findViewById(R.id.dislike);
+        Button replyButton = (Button) view.findViewById(R.id.reply);
         echoButton.setText("" + echo);
         echoButton.setTextColor(Color.BLUE);
         dislikeButton.setText("" + dislike);
@@ -65,6 +69,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         echoButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
+        replyButton.setTag(question.getKey());
 
         echoButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -88,7 +93,16 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         );
 
-
+        replyButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(view.getContext(), ReplyActivity.class);
+                        intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
+                        view.getContext().startActivity(intent);
+                    }
+                }
+        );
         String msgString = "";
 
         question.updateNewQuestion();
