@@ -31,6 +31,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
     public static final String REPLIED_QEUSTION = "REPLIEDQ";
+    public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
     MainActivity activity;
 
@@ -39,7 +40,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         // Must be MainActivity
         assert (activity instanceof MainActivity);
-
+        keepRoomName(roomName);
         this.activity = (MainActivity) activity;
     }
 
@@ -99,6 +100,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
                         intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
+                        intent.putExtra(ROOM_NAME,getRoomName());
                         view.getContext().startActivity(intent);
                     }
                 }
@@ -143,6 +145,12 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         view.setTag(question.getKey());  // store key in the view
     }
 
+    void keepRoomName(String rn){
+        roomName = rn;
+    }
+    String getRoomName(){
+        return roomName;
+    }
     @Override
     protected void sortModels(List<Question> mModels) {
         Collections.sort(mModels);
