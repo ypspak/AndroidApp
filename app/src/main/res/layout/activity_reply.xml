@@ -11,9 +11,8 @@
         android:layout_height="wrap_content"
         android:onClick="Close"
         android:text = "Quit Room"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        />
+        android:layout_alignParentRight="true" />
+
 
     <TextView
         android:layout_width="fill_parent"
@@ -26,7 +25,7 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Question"
+        android:layout_below="@+id/close"
         android:layout_above="@+id/listFooter"
         android:transcriptMode="alwaysScroll" />
 
@@ -38,7 +37,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/messageInput"
+            android:id="@+id/replyInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
