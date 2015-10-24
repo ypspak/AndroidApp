@@ -8,7 +8,6 @@ import java.util.Date;
 public class Reply{
     private String key;
     private String wholeMsg;
-    private boolean completed;
     private long timestamp;
     private int like;
     private int dislike;
@@ -21,6 +20,10 @@ public class Reply{
         this.timestamp = new Date().getTime();
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public int getLike() {
         return like;
     }
@@ -31,16 +34,16 @@ public class Reply{
         return wholeMsg;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public long getTimestamp() {
         return timestamp;
     }
 
     public int getOrder() {
         return order;
+    }
+
+    public String getKey() {
+        return key;
     }
     //getters
 }
