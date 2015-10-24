@@ -8,8 +8,10 @@ import android.nfc.Tag;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 
 import java.util.Collections;
@@ -30,6 +32,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
     public static final String REPLIED_QEUSTION = "REPLIEDQ";
     public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
@@ -56,6 +59,8 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     protected void populateView(View view, Question question) {
         DBUtil dbUtil = activity.getDbutil();
 
+        Firebase mReplyFirebaseRef = null;
+        ReplyListAdapter mReplyListAdapter = null;
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
         int dislike = question.getDislike();
@@ -134,6 +139,11 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
 
         view.setTag(question.getKey());  // store key in the view
+
+        //final ListView listView = (ListView) view;
+        mReplyFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(question.getKey());
+        mReplyListAdapter = new ReplyListAdapter(mReplyFirebaseRef.orderByChild("like").limitToFirst(5), this.activity, R.layout.question);
+        //listView.setAdapter(mReplyListAdapter);
     }
 
     void keepRoomName(String rn){

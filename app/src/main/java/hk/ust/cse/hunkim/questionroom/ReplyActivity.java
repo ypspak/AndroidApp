@@ -25,20 +25,12 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
  * Created by CAI on 21/10/2015.
  */
 public class ReplyActivity extends ListActivity {
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
 
     private TextView questionContent;
     private String key;
     private String roomName;
     private Firebase mFirebaseRef;
-    private ValueEventListener mConnectedListener;
-    private ReplyListAdapter mChatListAdapter;
-
-    private DBUtil dbutil;
-
-    public DBUtil getDbutil() {
-        return dbutil;
-    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,53 +64,10 @@ public class ReplyActivity extends ListActivity {
                 sendMessage();
             }
         });
-
-        // get the DB Helper
-        DBHelper mDbHelper = new DBHelper(this);
-        dbutil = new DBUtil(mDbHelper);
     }
 
     public void onStart() {
         super.onStart();
-
-        // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
-        final ListView listView = getListView();
-        // Tell our list adapter that we only want 200 messages at a time
-        mChatListAdapter = new ReplyListAdapter(
-                mFirebaseRef.orderByChild("dislike").limitToFirst(200),
-                this, R.layout.reply);
-        listView.setAdapter(mChatListAdapter);
-
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                listView.setSelection(mChatListAdapter.getCount() - 1);
-            }
-        });
-
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(ReplyActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ReplyActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-        });
-    }
-
-    public void onStop() {
-        super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-        mChatListAdapter.cleanup();
     }
 
     //Make this function private only because I want it triggered by the SendReply Button. For security.

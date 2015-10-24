@@ -25,7 +25,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -93,7 +93,7 @@ public class MainActivity extends ListActivity {
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new QuestionListAdapter(
-                mFirebaseRef.orderByChild("timeslamp").limitToFirst(200),
+                mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
                 this, R.layout.question, roomName);
         listView.setAdapter(mChatListAdapter);
 
