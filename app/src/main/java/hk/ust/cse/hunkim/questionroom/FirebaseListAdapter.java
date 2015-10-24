@@ -59,7 +59,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
 
-                T model = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
+                    T model = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
 
                 String modelName = dataSnapshot.getKey();
                 mModelKeys.put(modelName, model);
