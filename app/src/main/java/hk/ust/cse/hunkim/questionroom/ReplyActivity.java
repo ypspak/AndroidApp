@@ -85,7 +85,7 @@ public class ReplyActivity extends ListActivity {
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new ReplyListAdapter(
-                mFirebaseRef,
+                mFirebaseRef.orderByChild("dislike").limitToFirst(200),
                 this, R.layout.reply);
         listView.setAdapter(mChatListAdapter);
 
