@@ -2,6 +2,8 @@ package hk.ust.cse.hunkim.questionroom.question;
 
 import java.util.Date;
 
+import hk.ust.cse.hunkim.questionroom.reply.Reply;
+
 /**
  * Created by hunkim on 7/16/15.
  */

@@ -34,7 +34,7 @@ public class ReplyActivity extends ListActivity {
         //currently just for testing that I am entered the replying room corresponding to the question
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
-        mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key).child("replies");;
+        mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("Reply").child(key);
         questionContent = (TextView) findViewById(R.id.Question);
 
         questionContent.setText(key + "," + roomName + "\n" + mFirebaseRef);
