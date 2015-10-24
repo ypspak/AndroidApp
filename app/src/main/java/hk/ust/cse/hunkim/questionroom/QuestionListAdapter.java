@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.nfc.Tag;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -141,10 +142,13 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         view.setTag(question.getKey());  // store key in the view
 
         //Todo: add the list to the listview...
-        //final ListView listView = (ListView) view;
+        final ListView listView = (ListView) this.activity.findViewById(R.id.replylistview);
         mReplyFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(question.getKey());
-        mReplyListAdapter = new ReplyListAdapter(mReplyFirebaseRef.orderByChild("timestamp").limitToFirst(5), this.activity, R.layout.question);
-        //listView.setAdapter(mReplyListAdapter);
+        mReplyListAdapter = new ReplyListAdapter(mReplyFirebaseRef.orderByChild("timestamp").limitToFirst(5), this.activity, R.layout.reply);
+        String test = String.valueOf(mReplyListAdapter.getCount());
+        Log.e("USER:", test);
+        if (mReplyListAdapter.getCount() > 0)
+            listView.setAdapter(mReplyListAdapter);
     }
 
     void keepRoomName(String rn){
