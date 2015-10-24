@@ -2,6 +2,7 @@ package hk.ust.cse.hunkim.questionroom.question;
 
 import java.util.Date;
 
+import hk.ust.cse.hunkim.questionroom.ReplyListAdapter;
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
 
 /**
@@ -26,7 +27,16 @@ public class Question implements Comparable<Question> {
     private int dislike;
     private int order;
     private boolean newQuestion;
+    private ReplyListAdapter replies;
 
+    public ReplyListAdapter getReplyList() {
+        return replies;
+    }
+
+    public void setReplyListAdapter(ReplyListAdapter mReplyListAdapter)
+    {
+        this.replies = mReplyListAdapter;
+    }
     public String getDateString() {
         return dateString;
     }

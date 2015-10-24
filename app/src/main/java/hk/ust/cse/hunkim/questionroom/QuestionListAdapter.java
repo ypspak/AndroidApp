@@ -140,9 +140,10 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         view.setTag(question.getKey());  // store key in the view
 
+        //Todo: add the list to the listview...
         //final ListView listView = (ListView) view;
         mReplyFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(question.getKey());
-        mReplyListAdapter = new ReplyListAdapter(mReplyFirebaseRef.orderByChild("like").limitToFirst(5), this.activity, R.layout.question);
+        mReplyListAdapter = new ReplyListAdapter(mReplyFirebaseRef.orderByChild("timestamp").limitToFirst(5), this.activity, R.layout.question);
         //listView.setAdapter(mReplyListAdapter);
     }
 
