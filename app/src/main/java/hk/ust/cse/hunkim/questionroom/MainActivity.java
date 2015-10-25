@@ -3,12 +3,15 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -57,7 +62,6 @@ public class MainActivity extends ListActivity {
         }
 
         setTitle("Room name: " + roomName);
-
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
 
@@ -88,6 +92,18 @@ public class MainActivity extends ListActivity {
     @Override
     public void onStart() {
         super.onStart();
+
+        //GUI design initialization <26/10/2015 by Peter Yeung>
+        //Set the roomText located at the top of the screen, showing which room they are currently in
+        TextView roomText = (TextView) findViewById(R.id.roomTitle);
+        roomText.setText("You are now at room " + roomName);
+        roomText.setTextColor(Color.parseColor("#ffffff"));
+        //This is due to Android default, all buttons are come with capitalized. Need to fix
+        Button quitButton = (Button) findViewById(R.id.close);
+        quitButton.setTransformationMethod(null);
+        //Set the header color
+        LinearLayout header = (LinearLayout) findViewById(R.id.listHeader);
+        header.setBackgroundColor(Color.parseColor("#282828"));
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
@@ -122,6 +138,8 @@ public class MainActivity extends ListActivity {
                 // No-op
             }
             });
+
+
     }
 
     //Leave it here, probably will work on this part later
