@@ -121,7 +121,7 @@ public class MainActivity extends ListActivity {
             public void onCancelled(FirebaseError firebaseError) {
                 // No-op
             }
-            });
+        });
     }
 
     //Leave it here, probably will work on this part later

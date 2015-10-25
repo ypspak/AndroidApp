@@ -29,39 +29,39 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
     @Override
     protected void populateView(View view, Reply reply) {
         DBUtil dbUtil = activity.getDbutil();
-        int like = reply.getLike();
-        int dislike = reply.getDislike();
-        Button likeButton = (Button) view.findViewById(R.id.like);
-        Button dislikeButton = (Button) view.findViewById(R.id.dislike);
-        likeButton.setText("" + like);
-        likeButton.setTextColor(Color.BLUE);
-        dislikeButton.setText("" + dislike);
-        dislikeButton.setTextColor(Color.RED);
-
-        likeButton.setTag(reply.getKey()); // Set tag for button
-        dislikeButton.setTag(reply.getKey());
-
-        likeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ReplyActivity m = (ReplyActivity) view.getContext();
-
-                    }
-                }
-
-        );
-
-        dislikeButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ReplyActivity m = (ReplyActivity) view.getContext();
-//                        m.updateDislike((String) view.getTag());
-                    }
-                }
-
-        );
+//        int like = reply.getLike();
+//        int dislike = reply.getDislike();
+//        Button likeButton = (Button) view.findViewById(R.id.like);
+//        Button dislikeButton = (Button) view.findViewById(R.id.dislike);
+//        likeButton.setText("" + like);
+//        likeButton.setTextColor(Color.BLUE);
+//        dislikeButton.setText("" + dislike);
+//        dislikeButton.setTextColor(Color.RED);
+//
+//        likeButton.setTag(reply.getKey()); // Set tag for button
+//        dislikeButton.setTag(reply.getKey());
+//
+//        likeButton.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ReplyActivity m = (ReplyActivity) view.getContext();
+//
+//                    }
+//                }
+//
+//        );
+//
+//        dislikeButton.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ReplyActivity m = (ReplyActivity) view.getContext();
+////                        m.updateDislike((String) view.getTag());
+//                    }
+//                }
+//
+//        );
 
         String msgString = "";
         msgString += reply.getWholeMsg();

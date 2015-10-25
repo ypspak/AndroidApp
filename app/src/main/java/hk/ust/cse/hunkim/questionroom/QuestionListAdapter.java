@@ -100,12 +100,11 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
                         intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
-                        intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra(ROOM_NAME,getRoomName());
                         view.getContext().startActivity(intent);
                     }
                 }
         );
-
         String msgString = "";
 
         question.updateNewQuestion();
