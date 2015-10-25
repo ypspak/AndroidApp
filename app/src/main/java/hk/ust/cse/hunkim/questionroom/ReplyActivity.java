@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,10 +28,11 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
 public class ReplyActivity extends ListActivity {
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
-    private TextView questionContent;
     private String key;
     private String roomName;
+    private String questionContent;
     private Firebase mFirebaseRef;
+    private Firebase questionUrl;
     private ValueEventListener mConnectedListener;
     private ReplyListAdapter mChatListAdapter;
 
@@ -52,7 +54,6 @@ public class ReplyActivity extends ListActivity {
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
         setTitle("Room Name:" + roomName);
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(key);
-        questionContent = (TextView) findViewById(R.id.Question);
 
 
         EditText inputText = (EditText) findViewById(R.id.replyInput);
@@ -80,7 +81,19 @@ public class ReplyActivity extends ListActivity {
 
     public void onStart() {
         super.onStart();
+        questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
+        questionUrl.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                ((TextView) findViewById(R.id.QuestionContent)).setText(Html.fromHtml((String) snapshot.child("wholeMsg").getValue()));
+            }
 
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+
+        });
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
