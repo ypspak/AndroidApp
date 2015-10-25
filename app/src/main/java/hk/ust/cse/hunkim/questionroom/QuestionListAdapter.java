@@ -8,9 +8,12 @@ import android.nfc.Tag;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
+
+import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,13 +62,15 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
         int dislike = question.getDislike();
-        Button echoButton = (Button) view.findViewById(R.id.echo);
-        Button dislikeButton = (Button) view.findViewById(R.id.dislike);
-        Button replyButton = (Button) view.findViewById(R.id.reply);
-        echoButton.setText("" + echo);
+        ImageButton echoButton = (ImageButton) view.findViewById(R.id.echo);
+        ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
+        ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
+        TextView scoreText = (TextView) view.findViewById(R.id.score);
+        scoreText.setText("" + (echo - dislike));
+        /*echoButton.setText("" + echo);
         echoButton.setTextColor(Color.BLUE);
         dislikeButton.setText("" + dislike);
-        dislikeButton.setTextColor(Color.RED);
+        dislikeButton.setTextColor(Color.RED);*/
 
 
         echoButton.setTag(question.getKey()); // Set tag for button
