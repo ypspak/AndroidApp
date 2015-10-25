@@ -13,6 +13,10 @@ public class Reply{
     private int dislike;
     private int order;
 
+    private Reply(){
+
+    }
+
     public Reply(String reply){
         this.wholeMsg = reply;
         this.like = 0;
