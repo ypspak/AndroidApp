@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="HeaderGrey">#282828</color>
+	<color name="HeaderRoomText">#FFFFFF</color>
+	<!-- For transparent_button.xml -->
+	<color name="Transparent">#00FFFFFF</color>
+	<color name="SemiTransparent">#60FFFFFF</color>
+	<!-- For round_button.xml -->
+	<color name="RoundButtonBase">#000000</color>
+	<color name="RoundButtonPress">#505050</color>
+</resources>
