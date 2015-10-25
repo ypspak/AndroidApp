@@ -5,34 +5,9 @@
     android:layout_height="fill_parent"
     android:orientation="horizontal">
 
-    <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:id="@+id/echo"
-        android:src="@drawable/like"
-        android:background="@drawable/round_button"
-        android:padding="5dp"
-        android:scaleType="fitCenter"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:layout_marginLeft="5dp" />
-
     <TextView
-        android:id="@+id/head_desc"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:text="Message"
-        android:inputType="textMultiLine"
-        android:layout_rowWeight="0"
-        android:gravity="center_vertical|left"
-        android:layout_rowSpan="3"
-        android:background="@drawable/border_textfield" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="39dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="-420"
         android:id="@+id/score"
@@ -43,24 +18,52 @@
         android:layout_marginBottom="0dp"
         android:layout_marginTop="0dp"
         android:gravity="center"
-        android:layout_marginLeft="0dp"
-        android:textSize="16sp" />
+        android:layout_marginLeft="5dp"
+        android:textSize="16sp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/round_button"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:id="@+id/timetext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:text="Time Created: 2015/10/25 19:31 (GMT + 8)"
+        android:layout_rowWeight="0"
+        android:gravity="center_vertical|left"
+        android:layout_marginTop="0dp"
+        android:layout_columnSpan="3"
+        android:layout_marginBottom="0dp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/head_desc"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:text="Hello! This is COMP3111 Layout Testing (Prototype)"
+        android:layout_rowWeight="0"
+        android:gravity="center_vertical|left"
+        android:layout_marginTop="10dp"
+        android:layout_columnSpan="3"
+        android:maxLength="80" />
 
     <ImageButton
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:id="@+id/reply"
-        android:src="@drawable/reply"
+        android:id="@+id/echo"
+        android:src="@drawable/like"
         android:background="@drawable/round_button"
         android:padding="5dp"
         android:scaleType="fitCenter"
-        android:layout_row="1"
-        android:layout_column="2"
-        android:layout_margin="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="5dp"
-        android:paddingLeft="0dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_row="2"
+        android:layout_column="1"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp" />
 
     <ImageButton
         android:layout_width="30dp"
@@ -71,7 +74,26 @@
         android:padding="5dp"
         android:scaleType="fitCenter"
         android:layout_row="2"
-        android:layout_column="0"
-        android:layout_marginLeft="5dp" />
+        android:layout_column="2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp" />
+
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/reply"
+        android:src="@drawable/reply"
+        android:background="@drawable/round_button"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:layout_row="2"
+        android:layout_column="3"
+        android:layout_margin="0dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="0dp"
+        android:paddingLeft="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
 </GridLayout>

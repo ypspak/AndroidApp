@@ -25,7 +25,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -159,6 +159,7 @@ public class MainActivity extends ListActivity {
 
     //Update Like here. For every person who have liked, their key is stored at database.
     public void updateEcho(String key) {
+
         if (dbutil.contains(key)) {
             Log.e("Dupkey", "Key is already in the DB!");
             return;

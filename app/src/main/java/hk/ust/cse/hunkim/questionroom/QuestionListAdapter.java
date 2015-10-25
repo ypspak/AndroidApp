@@ -15,7 +15,10 @@ import com.firebase.client.Query;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -62,17 +65,22 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
         int dislike = question.getDislike();
+        int score = echo - dislike;
         ImageButton echoButton = (ImageButton) view.findViewById(R.id.echo);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
         TextView scoreText = (TextView) view.findViewById(R.id.score);
-        scoreText.setText("" + (echo - dislike));
-        /*echoButton.setText("" + echo);
-        echoButton.setTextColor(Color.BLUE);
-        dislikeButton.setText("" + dislike);
-        dislikeButton.setTextColor(Color.RED);*/
+        TextView timeText = (TextView) view.findViewById((R.id.timetext));
+
+        scoreText.setText("" + (score));
+        if (score < 0)
+            scoreText.setTextColor(Color.parseColor("#ae0000"));
+        else if(score > 0)
+            scoreText.setTextColor(Color.parseColor("#42dfd8"));
 
 
+        timeText.setText("created: " + getDate(question.getTimestamp()));
+        
         echoButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
         replyButton.setTag(question.getKey());
@@ -127,6 +135,8 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         echoButton.setClickable(clickable);
         echoButton.setEnabled(clickable);
+        dislikeButton.setClickable(clickable);
+        dislikeButton.setEnabled(clickable);
         view.setClickable(clickable);
 
 
@@ -134,8 +144,10 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         // grey out our button
         if (clickable) {
             echoButton.getBackground().setColorFilter(null);
+            dislikeButton.getBackground().setColorFilter(null);
         } else {
-            echoButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+            echoButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
         }
 
 
@@ -145,8 +157,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     void keepRoomName(String rn){
         roomName = rn;
     }
+
     String getRoomName(){
         return roomName;
+    }
+
+    private String getDate(long timestamp)
+    {
+        //"Thu Oct 22 2015 11:17:20 GMT+0800 (HKT)"
+        DateFormat df = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z");
+        Date date = (new Date(timestamp));
+        return df.format(date);
     }
     @Override
     protected void sortModels(List<Question> mModels) {
