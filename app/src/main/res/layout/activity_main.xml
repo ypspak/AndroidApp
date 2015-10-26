@@ -50,11 +50,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Quit Room"
+            android:text="◀ Room: COMP3111111"
             android:id="@+id/close"
-            android:background="@drawable/complete_transparent_button"
             android:onClick="Close"
-            android:textColor="@color/ComTransBtnTextColor" />
+            android:background="@drawable/complete_transparent_button"
+            android:textSize="18sp"
+            android:textColor="@color/HeaderRoomText" />
     </LinearLayout>
 
 

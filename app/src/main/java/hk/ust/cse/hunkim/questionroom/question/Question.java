@@ -35,8 +35,7 @@ public class Question implements Comparable<Question> {
     private boolean completed;
     private long timestamp;
     private String tags;
-    private int order;
-    private String wholeMsg;
+    private double order;
     private String wholeMsgReply; //unused
     private int replies;
 
@@ -51,19 +50,22 @@ public class Question implements Comparable<Question> {
      * @param message string message
      */
     public Question(String message) {
-        this.wholeMsg = message;
         this.like = 0;
         this.dislike = 0;
         this.completed = false;
         this.head = getFirstSentence(message).trim();
-        this.desc = "";
+        this.desc = message;
         this.tags = "";
-        if (this.head.length() < message.length()) {
-            this.desc = message.substring(this.head.length());
-        }
+        this.timestamp = new Date().getTime();
+    }
 
-        // get the last char
-
+    public Question(String title, String body) {
+        this.like = 0;
+        this.dislike = 0;
+        this.completed = false;
+        this.head = title;
+        this.desc = body;
+        this.tags = "";
         this.timestamp = new Date().getTime();
     }
 
@@ -106,13 +108,11 @@ public class Question implements Comparable<Question> {
 
     public int getDislike() {return dislike; }
 
-    public String getWholeMsg() { return wholeMsg; }
-
     public boolean isCompleted() { return completed; }
 
     public long getTimestamp() {return timestamp; }
 
-    public int getOrder() { return order; }
+    public double getOrder() { return order; }
 
     public String getKey() {return key; }
 

@@ -5,13 +5,13 @@
 	<!-- For transparent_button.xml -->
 	<color name="Transparent">#00FFFFFF</color>
 	<color name="SemiTransparent">#60FFFFFF</color>
-	<!-- For round_button.xml -->
-	<color name="RoundButtonBase">#000000</color>
-	<color name="RoundButtonPress">#505050</color>
+	<!-- For round_button.xml (currently Black)-->
+	<color name="RoundButton1Base">#000000</color>
+	<color name="RoundButton1Press">#505050</color>
 	<!-- For reply order in round button -->
 	<color name="ReplyOrderLike">#AE0000</color>
 	<color name="ReplyOrderDislike">#42DFD8</color>
 	<color name="ReplyOrderNeutral">#FFFFFF</color>
-	<!-- For text color in complete_transparent_button.xml -->
+	<!-- For text color in header_return_button.xml -->
 	<color name="ComTransBtnTextColor">#FFFFFF</color>
 </resources>
