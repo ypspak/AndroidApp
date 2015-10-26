@@ -30,7 +30,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -96,7 +96,7 @@ public class MainActivity extends ListActivity {
         //GUI design initialization <26/10/2015 by Peter Yeung>
         //Set the roomText located at the top of the screen, showing which room they are currently in
         Button closeButton = (Button) findViewById(R.id.close);
-        closeButton.setText("← Room: " + roomName);
+        closeButton.setText("◀ Room: " + roomName);
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
         quitButton.setTransformationMethod(null);
@@ -206,7 +206,7 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
+                        double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
                         orderRef.setValue(orderValue - 1);
@@ -253,7 +253,7 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
+                        double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
                         orderRef.setValue(orderValue + 1);
