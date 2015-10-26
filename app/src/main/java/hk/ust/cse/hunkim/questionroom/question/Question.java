@@ -13,34 +13,36 @@ public class Question implements Comparable<Question> {
      * Must be synced with firebase JSON structure
      * Each must have getters
      */
+
+    /*
+    question in questions
+	head: string, // the title
+	desc: string, // the main text
+	like: integer, // counter of likes
+	dislike: integer, // counter of dislikes
+	completed: bool, // Was the question solved?
+	timestamp: date, // posting time of the question
+	tags: string, // string with all hashtags,e.g.: "#first #second"
+	order: double, // a value used for ordering
+	wholeMsgReply: string, // hack to store reply input (to be dropped)
+	replies: integer // number of replies
+     */
     private String key;
-    private String wholeMsg;
     private String head;
-    private String headLastChar;
     private String desc;
-    private String linkedDesc;
+    private int like;
+    private int dislike;
     private boolean completed;
     private long timestamp;
     private String tags;
-    private int echo;
-    private int dislike;
     private int order;
-    private boolean newQuestion;
+    private String wholeMsg;
+    private String wholeMsgReply; //unused
+    private int replies;
 
-    public String getDateString() {
-        return dateString;
-    }
-
-    private String dateString;
-
-    public String getTrustedDesc() {
-        return trustedDesc;
-    }
-
-    private String trustedDesc;
 
     // Required default constructor for Firebase object mapping
-    @SuppressWarnings("unused")
+    //unused
     private Question() {
     }
 
@@ -50,16 +52,17 @@ public class Question implements Comparable<Question> {
      */
     public Question(String message) {
         this.wholeMsg = message;
-        this.echo = 0;
+        this.like = 0;
         this.dislike = 0;
+        this.completed = false;
         this.head = getFirstSentence(message).trim();
         this.desc = "";
+        this.tags = "";
         if (this.head.length() < message.length()) {
             this.desc = message.substring(this.head.length());
         }
 
         // get the last char
-        this.headLastChar = head.substring(head.length() - 1);
 
         this.timestamp = new Date().getTime();
     }
@@ -95,87 +98,48 @@ public class Question implements Comparable<Question> {
     }
 
     /* -------------------- Getters ------------------- */
-    public String getHead() {
-        return head;
-    }
+    public String getHead() { return head; }
 
-    public String getDesc() {
-        return desc;
-    }
+    public String getDesc() { return desc; }
 
-    public int getEcho() {
-        return echo;
-    }
+    public int getLike() { return like; }
 
     public int getDislike() {return dislike; }
 
-    public String getWholeMsg() {
-        return wholeMsg;
-    }
+    public String getWholeMsg() { return wholeMsg; }
 
-    public String getHeadLastChar() {
-        return headLastChar;
-    }
+    public boolean isCompleted() { return completed; }
 
-    public String getLinkedDesc() {
-        return linkedDesc;
-    }
+    public long getTimestamp() {return timestamp; }
 
-    public boolean isCompleted() {
-        return completed;
-    }
+    public int getOrder() { return order; }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+    public String getKey() {return key; }
 
-    public String getTags() {
-        return tags;
-    }
+    public int getReplies() { return replies; }
 
-    public int getOrder() {
-        return order;
-    }
-
-    public boolean isNewQuestion() {
-        return newQuestion;
-    }
-
-    public void updateNewQuestion() {
-        newQuestion = this.timestamp > new Date().getTime() - 180000;
-    }
-
-    public String getKey() {
-        return key;
-    }
+    public String getTags() { return tags; }
 
     public void setKey(String key) {
         this.key = key;
     }
 
     /**
-     * New one/high echo goes bottom
+     * New one/high like goes bottom
      * @param other other chat
      * @return order
      */
     @Override
     public int compareTo(Question other) {
-        // Push new on top
-        other.updateNewQuestion(); // update NEW button
-        this.updateNewQuestion();
-
-        if (this.newQuestion != other.newQuestion) {
-            return this.newQuestion ? 1 : -1; // this is the winner
-        }
 
 
-        if (this.echo == other.echo) {
+        if (this.like == other.like) {
             if (other.timestamp == this.timestamp) {
                 return 0;
             }
             return other.timestamp > this.timestamp ? -1 : 1;
         }
-        return this.echo - other.echo;
+        return this.like - other.like;
     }
 
 
