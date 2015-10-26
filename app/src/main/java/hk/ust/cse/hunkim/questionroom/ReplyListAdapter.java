@@ -2,6 +2,7 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -30,10 +31,18 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
     @Override
     protected void populateView(View view, Reply reply) {
         DBUtil dbUtil = activity.getDbutil();
-        int like = reply.getLike();
-        int dislike = reply.getDislike();
+        int order = reply.getOrder();
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
+        TextView scoreText = (TextView) view.findViewById(R.id.order);
+
+        scoreText.setText("" + order);
+        if (order < 0)
+            scoreText.setTextColor(view.getResources().getColor(R.color.ReplyOrderDislike));
+        else if(order > 0)
+            scoreText.setTextColor(view.getResources().getColor(R.color.ReplyOrderLike));
+        else
+            scoreText.setTextColor(view.getResources().getColor(R.color.ReplyOrderNeutral));
 
         likeButton.setTag(reply.getKey()); // Set tag for button
         dislikeButton.setTag(reply.getKey());
@@ -43,7 +52,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
                     @Override
                     public void onClick(View view) {
                         ReplyActivity m = (ReplyActivity) view.getContext();
-
+                        m.updateLike((String) view.getTag());
                     }
                 }
 
@@ -54,16 +63,39 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
                     @Override
                     public void onClick(View view) {
                         ReplyActivity m = (ReplyActivity) view.getContext();
-//                        m.updateDislike((String) view.getTag());
+                        m.updateDislike((String) view.getTag());
                     }
                 }
 
         );
 
         String msgString = "";
-        msgString += reply.getWholeMsg();
+        msgString += reply.getDesc();
 
         ((TextView) view.findViewById(R.id.replyMsg)).setText(Html.fromHtml(msgString));
+
+        // check if we already clicked
+        boolean clickable = !dbUtil.contains(reply.getKey());
+
+        likeButton.setClickable(clickable);
+        likeButton.setEnabled(clickable);
+        dislikeButton.setClickable(clickable);
+        dislikeButton.setEnabled(clickable);
+        view.setClickable(clickable);
+
+
+        // http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button
+        // grey out our button
+        if (clickable) {
+            likeButton.getBackground().setColorFilter(null);
+            dislikeButton.getBackground().setColorFilter(null);
+        } else {
+            likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+        }
+
+
+        view.setTag(reply.getKey());  // store key in the view
     }
 
     @Override

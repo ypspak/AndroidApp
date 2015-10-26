@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,7 +27,7 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
  * Created by CAI on 21/10/2015.
  */
 public class ReplyActivity extends ListActivity {
-    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
     private String key;
     private String roomName;
@@ -85,7 +86,7 @@ public class ReplyActivity extends ListActivity {
         questionUrl.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                ((TextView) findViewById(R.id.QuestionContent)).setText(Html.fromHtml((String) snapshot.child("wholeMsg").getValue()));
+                ((TextView) findViewById(R.id.QuestionContent)).setText(Html.fromHtml((String) snapshot.child("desc").getValue()));
             }
 
             @Override
@@ -149,6 +150,65 @@ public class ReplyActivity extends ListActivity {
             inputText.setText("");
         }
     }
+
+    //Update Like here. For every person who have liked, their key is stored at database.
+    public void updateLike(String key) {
+
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
+
+        final Firebase orderRef = mFirebaseRef.child(key).child("order");
+        orderRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long orderValue = (Long) dataSnapshot.getValue();
+                        Log.e("Order update:", "" + orderValue);
+
+                        orderRef.setValue(orderValue + 1);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+
+        // Update SQLite DB
+        dbutil.put(key);
+    }
+
+    public void updateDislike(String key) {
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
+
+        final Firebase orderRef = mFirebaseRef.child(key).child("order");
+        orderRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long orderValue = (Long) dataSnapshot.getValue();
+                        Log.e("Dislike update:", "" + orderValue);
+
+                        //Add 1 value to the dislikeValue
+                        orderRef.setValue(orderValue - 1);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+        // Update SQLite DB
+        dbutil.put(key);
+    }
+
     public void Close(View view) {
         finish();
     }

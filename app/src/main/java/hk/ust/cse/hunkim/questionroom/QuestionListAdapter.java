@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.nfc.Tag;
 import android.text.Html;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -63,10 +59,10 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         DBUtil dbUtil = activity.getDbutil();
 
         // Map a Chat object to an entry in our listview
-        int echo = question.getEcho();
+        int like = question.getLike();
         int dislike = question.getDislike();
-        int score = echo - dislike;
-        ImageButton echoButton = (ImageButton) view.findViewById(R.id.echo);
+        int score = like - dislike;
+        ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
         TextView scoreText = (TextView) view.findViewById(R.id.score);
@@ -81,16 +77,16 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         timeText.setText("created: " + getDate(question.getTimestamp()));
         
-        echoButton.setTag(question.getKey()); // Set tag for button
+        likeButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
         replyButton.setTag(question.getKey());
 
-        echoButton.setOnClickListener(
+        likeButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         MainActivity m = (MainActivity) view.getContext();
-                        m.updateEcho((String) view.getTag());
+                        m.updateLike((String) view.getTag());
                     }
                 }
 
@@ -121,20 +117,16 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         String msgString = "";
 
-        question.updateNewQuestion();
-        if (question.isNewQuestion()) {
-            msgString += "<font color=red>NEW </font>";
-        }
 
-        msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
-
+        //msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
+        msgString += question.getDesc();
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
 
         // check if we already clicked
         boolean clickable = !dbUtil.contains(question.getKey());
 
-        echoButton.setClickable(clickable);
-        echoButton.setEnabled(clickable);
+        likeButton.setClickable(clickable);
+        likeButton.setEnabled(clickable);
         dislikeButton.setClickable(clickable);
         dislikeButton.setEnabled(clickable);
         view.setClickable(clickable);
@@ -143,10 +135,10 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         // http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button
         // grey out our button
         if (clickable) {
-            echoButton.getBackground().setColorFilter(null);
+            likeButton.getBackground().setColorFilter(null);
             dislikeButton.getBackground().setColorFilter(null);
         } else {
-            echoButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
             dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
         }
 

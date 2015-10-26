@@ -6,23 +6,11 @@
     tools:context=".MainActivity">
 
 
-    <Button
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="Close"
-        android:text = "Quit room"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/transparent_button"
-        android:textColor="#ffffff"
-        android:layout_margin="5dp" />
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/close"
+        android:layout_below="@+id/listHeader"
         android:layout_above="@+id/listFooter"
         android:transcriptMode="alwaysScroll" />
 
@@ -52,27 +40,22 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@android:id/list"
-        android:layout_alignParentStart="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:weightSum="1"
-        android:id="@+id/listHeader">
+        android:id="@+id/listHeader"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Room"
-            android:id="@+id/roomTitle"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_above="@android:id/list"
-            android:layout_toStartOf="@+id/close"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:paddingLeft="10dp"
-            android:layout_weight="0.70" />
+            android:text="◀ Room: COMP3111111"
+            android:id="@+id/close"
+            android:onClick="Close"
+            android:background="@drawable/complete_transparent_button"
+            android:textSize="18sp"
+            android:textColor="@color/HeaderRoomText" />
     </LinearLayout>
 
 
