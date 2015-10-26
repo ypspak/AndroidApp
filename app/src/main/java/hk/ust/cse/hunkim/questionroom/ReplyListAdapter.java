@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -31,12 +32,8 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         DBUtil dbUtil = activity.getDbutil();
         int like = reply.getLike();
         int dislike = reply.getDislike();
-        Button likeButton = (Button) view.findViewById(R.id.like);
-        Button dislikeButton = (Button) view.findViewById(R.id.dislike);
-        likeButton.setText("" + like);
-        likeButton.setTextColor(Color.BLUE);
-        dislikeButton.setText("" + dislike);
-        dislikeButton.setTextColor(Color.RED);
+        ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
+        ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
 
         likeButton.setTag(reply.getKey()); // Set tag for button
         dislikeButton.setTag(reply.getKey());
