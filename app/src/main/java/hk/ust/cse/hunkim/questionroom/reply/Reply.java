@@ -9,6 +9,7 @@ public class Reply{
     private String desc;
     private long timestamp;
     private int order;
+    private String key;
 
     private Reply(){
 
@@ -33,9 +34,17 @@ public class Reply{
         return order;
     }
 
+    public String getKey(){
+        return key;
+    }
+
     //modifier of each attribute, timestamp is supposed to be unable to modified
     public void setDesc(String newReply){
         this.desc= newReply;
+    }
+
+    public void setKey(String key) {
+        this.key=key;
     }
 
     public void setOrder(int newOrder){
