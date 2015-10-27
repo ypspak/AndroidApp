@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="HeaderGrey">#282828</color>
-	<color name="HeaderRoomText">#FFFFFF</color>
+	<color name="HeaderText">#FFFFFF</color>
+	<color name="SubHeaderGrey">#3F3F3F</color>
 	<!-- For transparent_button.xml -->
 	<color name="Transparent">#00FFFFFF</color>
 	<color name="SemiTransparent">#60FFFFFF</color>
-	<!-- For round_button.xml (currently Black)-->
+	<!-- For round_button_1.xml (currently Black)-->
 	<color name="RoundButton1Base">#000000</color>
 	<color name="RoundButton1Press">#505050</color>
+	<!-- For round_button.xml (currently white)-->
+	<color name="RoundButton2Base">#FFFFFF</color>
+	<color name="RoundButton2Press">#505050</color>
 	<!-- For reply order in round button -->
 	<color name="ReplyOrderLike">#AE0000</color>
 	<color name="ReplyOrderDislike">#42DFD8</color>

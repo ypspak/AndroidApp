@@ -61,25 +61,24 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         // Map a Chat object to an entry in our listview
         int like = question.getLike();
         int dislike = question.getDislike();
-        int score = like - dislike;
+
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
-        TextView scoreText = (TextView) view.findViewById(R.id.score);
         TextView timeText = (TextView) view.findViewById((R.id.timetext));
+        TextView likeNumText = (TextView) view.findViewById((R.id.likenumber));
+        TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
+        TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
 
-        scoreText.setText("" + (score));
-        if (score < 0)
-            scoreText.setTextColor(Color.parseColor("#ae0000"));
-        else if(score > 0)
-            scoreText.setTextColor(Color.parseColor("#42dfd8"));
+        timeText.setText("" + getDate(question.getTimestamp()));
+        likeNumText.setText("" + question.getLike());
+        dislikeNumText.setText("" + question.getDislike());
+        replyNumText.setText("" + question.getReplies());
 
-
-        timeText.setText("created: " + getDate(question.getTimestamp()));
-        
         likeButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
         replyButton.setTag(question.getKey());
+        replyButton.getBackground().setColorFilter(null);
 
         likeButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -146,18 +145,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         view.setTag(question.getKey());  // store key in the view
     }
 
-    void keepRoomName(String rn){
+    private void keepRoomName(String rn){
         roomName = rn;
     }
 
-    String getRoomName(){
+    private String getRoomName(){
         return roomName;
     }
 
     private String getDate(long timestamp)
     {
-        //"Thu Oct 22 2015 11:17:20 GMT+0800 (HKT)"
-        DateFormat df = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = (new Date(timestamp));
         return df.format(date);
     }

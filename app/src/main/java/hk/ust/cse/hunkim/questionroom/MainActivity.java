@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    public static final String ROOM_NAME = "ROOM_NAME";
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -65,22 +67,13 @@ public class MainActivity extends ListActivity {
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
 
-        // Setup our input methods. Enter key on the keyboard or pushing the send button
-        EditText inputText = (EditText) findViewById(R.id.messageInput);
-        inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
-                }
-                return true;
-            }
-        });
-
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+        ImageButton postQ = (ImageButton) findViewById(R.id.postQuestion);
+        postQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+                Intent intent = new Intent(MainActivity.this, PostQuestion.class);
+                intent.putExtra(ROOM_NAME, getRoomName());
+                startActivity(intent);
             }
         });
 
@@ -94,15 +87,10 @@ public class MainActivity extends ListActivity {
         super.onStart();
 
         //GUI design initialization <26/10/2015 by Peter Yeung>
-        //Set the roomText located at the top of the screen, showing which room they are currently in
-        Button closeButton = (Button) findViewById(R.id.close);
-        closeButton.setText("◀ Room: " + roomName);
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
+        quitButton.setText("" + roomName);
         quitButton.setTransformationMethod(null);
-        //Set the header color
-        LinearLayout header = (LinearLayout) findViewById(R.id.listHeader);
-        header.setBackgroundColor(getResources().getColor(R.color.HeaderGrey)); //Get the color through getResource class
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
@@ -141,7 +129,7 @@ public class MainActivity extends ListActivity {
 
     }
 
-    //Leave it here, probably will work on this part later
+    //todo: Leave it here, probably will work on this part later
 //    @Override
 //    public void onResume(){
 //
@@ -159,19 +147,8 @@ public class MainActivity extends ListActivity {
         mChatListAdapter.cleanup();
     }
 
-    private void sendMessage() {
-        EditText inputText = (EditText) findViewById(R.id.messageInput);
-        String input = inputText.getText().toString();
-        if (!input.equals("")) {
-            // Before creating our 'model', we have to replace substring so that prevent code injection
-            input = input.replace("<", "&lt;");
-            input = input.replace(">", "&gt;");
-            // Create our 'model', a Chat object
-            Question question = new Question(input);
-            // Create a new, auto-generated child of that chat location, and save our chat data there
-            mFirebaseRef.push().setValue(question);
-            inputText.setText("");
-        }
+    private String getRoomName(){
+        return roomName;
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
@@ -200,7 +177,7 @@ public class MainActivity extends ListActivity {
                     }
                 }
         );
-        
+
         final Firebase orderRef = mFirebaseRef.child(key).child("order");
         orderRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -209,7 +186,7 @@ public class MainActivity extends ListActivity {
                         double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue - 1);
+                        orderRef.setValue(orderValue - 1);  //Need clarification, the higher value of order, the lower priorty sorted in firebase?
                     }
 
                     @Override
@@ -256,8 +233,9 @@ public class MainActivity extends ListActivity {
                         double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue + 1);
+                        orderRef.setValue(orderValue + 1); //Need clarification, the higher value of order, the lower priorty sorted in firebase?
                     }
+
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
 

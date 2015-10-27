@@ -6,24 +6,22 @@ import java.util.Date;
  * Created by CAI on 23/10/2015.
  */
 public class Reply{
-    private String key;
     private String desc;
     private long timestamp;
     private int order;
+    private String key;
 
     private Reply(){
 
     }
 
     public Reply(String reply){
+        this.order = 0;
         this.desc = reply;
         this.timestamp = new Date().getTime();
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
+    //getter of each attribute
     public String getDesc() {
         return desc;
     }
@@ -36,8 +34,20 @@ public class Reply{
         return order;
     }
 
-    public String getKey() {
+    public String getKey(){
         return key;
     }
-    //getters
+
+    //modifier of each attribute, timestamp is supposed to be unable to modified
+    public void setDesc(String newReply){
+        this.desc= newReply;
+    }
+
+    public void setKey(String key) {
+        this.key=key;
+    }
+
+    public void setOrder(int newOrder){
+        this.order = newOrder;
+    }
 }
