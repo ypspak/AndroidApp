@@ -80,7 +80,7 @@
                 android:text="COMP3111"
                 android:id="@+id/close"
                 android:textSize="18sp"
-                android:textColor="@color/HeaderRoomText"
+                android:textColor="@color/HeaderText"
                 android:layout_toRightOf="@+id/gobackbtn"
                 android:layout_marginLeft="2dp"
                 android:gravity="center_vertical|left"

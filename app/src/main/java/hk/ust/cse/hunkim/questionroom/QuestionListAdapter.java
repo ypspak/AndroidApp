@@ -155,7 +155,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     private String getDate(long timestamp)
     {
-        //"Thu Oct 22 2015 11:17:20 GMT+0800 (HKT)"
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = (new Date(timestamp));
         return df.format(date);

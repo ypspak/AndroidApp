@@ -31,7 +31,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
     public static final String ROOM_NAME = "ROOM_NAME";
 
     private String roomName;
