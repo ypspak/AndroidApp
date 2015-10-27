@@ -27,7 +27,7 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
  * Created by CAI on 21/10/2015.
  */
 public class ReplyActivity extends ListActivity {
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
 
     private String key;
     private String roomName;

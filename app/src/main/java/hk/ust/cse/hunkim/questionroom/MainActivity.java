@@ -30,7 +30,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://ypspakclassroom.firebaseio.com/";
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -100,9 +100,6 @@ public class MainActivity extends ListActivity {
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
         quitButton.setTransformationMethod(null);
-        //Set the header color
-        LinearLayout header = (LinearLayout) findViewById(R.id.listHeader);
-        header.setBackgroundColor(getResources().getColor(R.color.HeaderGrey)); //Get the color through getResource class
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();

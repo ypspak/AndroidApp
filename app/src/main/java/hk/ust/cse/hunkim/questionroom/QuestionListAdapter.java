@@ -65,17 +65,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
-        TextView scoreText = (TextView) view.findViewById(R.id.score);
         TextView timeText = (TextView) view.findViewById((R.id.timetext));
 
-        scoreText.setText("" + (score));
-        if (score < 0)
-            scoreText.setTextColor(Color.parseColor("#ae0000"));
-        else if(score > 0)
-            scoreText.setTextColor(Color.parseColor("#42dfd8"));
-
-
-        timeText.setText("created: " + getDate(question.getTimestamp()));
+        timeText.setText("" + getDate(question.getTimestamp()));
         
         likeButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
@@ -157,7 +149,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     private String getDate(long timestamp)
     {
         //"Thu Oct 22 2015 11:17:20 GMT+0800 (HKT)"
-        DateFormat df = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z");
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = (new Date(timestamp));
         return df.format(date);
     }
