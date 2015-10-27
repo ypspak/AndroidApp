@@ -52,8 +52,8 @@
         android:maxLength="80" />
 
     <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/RoundButtonSize"
+        android:layout_height="@dimen/RoundButtonSize"
         android:id="@+id/like"
         android:src="@drawable/like"
         android:background="@drawable/round_button_black"
@@ -66,8 +66,8 @@
         android:layout_marginBottom="15dp" />
 
     <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/RoundButtonSize"
+        android:layout_height="@dimen/RoundButtonSize"
         android:id="@+id/dislike"
         android:src="@drawable/dislike"
         android:background="@drawable/round_button_black"
@@ -80,8 +80,8 @@
         android:layout_marginBottom="15dp" />
 
     <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/RoundButtonSize"
+        android:layout_height="@dimen/RoundButtonSize"
         android:id="@+id/reply"
         android:src="@drawable/reply"
         android:background="@drawable/round_button_black"
