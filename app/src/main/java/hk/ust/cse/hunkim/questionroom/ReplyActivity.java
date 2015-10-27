@@ -148,6 +148,8 @@ public class ReplyActivity extends ListActivity {
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(reply);
             inputText.setText("");
+            updateQuestionReply(key);
+
         }
     }
 
@@ -209,6 +211,26 @@ public class ReplyActivity extends ListActivity {
         dbutil.put(key);
     }
 
+    public void updateQuestionReply(String key) {
+        final Firebase replyRef = questionUrl.child("replies");
+        replyRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long replyValue = (Long) dataSnapshot.getValue();
+                        Log.e("Reply update:", "" + replyValue);
+
+                        //Add 1 value to the dislikeValue
+                        replyRef.setValue(replyValue + 1);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+    }
     public void Close(View view) {
         finish();
     }
