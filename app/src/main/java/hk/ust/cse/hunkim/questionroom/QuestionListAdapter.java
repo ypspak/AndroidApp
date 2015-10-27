@@ -61,17 +61,24 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         // Map a Chat object to an entry in our listview
         int like = question.getLike();
         int dislike = question.getDislike();
-        int score = like - dislike;
+
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
         TextView timeText = (TextView) view.findViewById((R.id.timetext));
+        TextView likeNumText = (TextView) view.findViewById((R.id.likenumber));
+        TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
+        TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
 
         timeText.setText("" + getDate(question.getTimestamp()));
-        
+        likeNumText.setText("" + question.getLike());
+        dislikeNumText.setText("" + question.getDislike());
+        replyNumText.setText("" + question.getReplies());
+
         likeButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
         replyButton.setTag(question.getKey());
+        replyButton.getBackground().setColorFilter(null);
 
         likeButton.setOnClickListener(
                 new View.OnClickListener() {
