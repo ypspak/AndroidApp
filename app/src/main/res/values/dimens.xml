@@ -5,4 +5,7 @@
 
     <!--For normal size round_button .xml -->
     <dimen name="RoundButtonSize">30dp</dimen>
+
+    <dimen name="HeaderReturnBtnSize">37dp</dimen>
+    <dimen name="HeaderIconSize"> 25dp</dimen>
 </resources>
