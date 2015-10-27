@@ -41,21 +41,40 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:weightSum="1"
         android:id="@+id/listHeader"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="@color/HeaderGrey">
 
-        <Button
+        <LinearLayout
+            android:id="@+id/closebtn_container"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="◀ Room: COMP3111111"
-            android:id="@+id/close"
-            android:onClick="Close"
-            android:background="@drawable/complete_transparent_button"
-            android:textSize="18sp"
-            android:textColor="@color/HeaderRoomText" />
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:onClick="Close">
+
+            <ImageView
+                android:id="@+id/gobackbtn"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/btn_goback"
+                android:scaleType="fitXY" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Room: COMP3111111"
+                android:id="@+id/close"
+                android:background="@drawable/complete_transparent_button"
+                android:textSize="18sp"
+                android:textColor="@color/HeaderRoomText" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

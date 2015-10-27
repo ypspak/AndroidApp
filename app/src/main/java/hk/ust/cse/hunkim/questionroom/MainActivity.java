@@ -96,7 +96,7 @@ public class MainActivity extends ListActivity {
         //GUI design initialization <26/10/2015 by Peter Yeung>
         //Set the roomText located at the top of the screen, showing which room they are currently in
         Button closeButton = (Button) findViewById(R.id.close);
-        closeButton.setText("◀ Room: " + roomName);
+        closeButton.setText("" + roomName);
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
         quitButton.setTransformationMethod(null);
