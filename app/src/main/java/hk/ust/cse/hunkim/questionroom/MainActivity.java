@@ -3,12 +3,15 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -57,7 +62,6 @@ public class MainActivity extends ListActivity {
         }
 
         setTitle("Room name: " + roomName);
-
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
 
@@ -89,11 +93,22 @@ public class MainActivity extends ListActivity {
     public void onStart() {
         super.onStart();
 
+        //GUI design initialization <26/10/2015 by Peter Yeung>
+        //Set the roomText located at the top of the screen, showing which room they are currently in
+        Button closeButton = (Button) findViewById(R.id.close);
+        closeButton.setText("◀ Room: " + roomName);
+        //This is due to Android default, all buttons are come with capitalized.
+        Button quitButton = (Button) findViewById(R.id.close);
+        quitButton.setTransformationMethod(null);
+        //Set the header color
+        LinearLayout header = (LinearLayout) findViewById(R.id.listHeader);
+        header.setBackgroundColor(getResources().getColor(R.color.HeaderGrey)); //Get the color through getResource class
+
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new QuestionListAdapter(
-                mFirebaseRef.orderByChild("timeslamp").limitToFirst(200),
+                mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
                 this, R.layout.question, roomName);
         listView.setAdapter(mChatListAdapter);
 
@@ -122,6 +137,8 @@ public class MainActivity extends ListActivity {
                 // No-op
             }
             });
+
+
     }
 
     //Leave it here, probably will work on this part later
@@ -158,22 +175,23 @@ public class MainActivity extends ListActivity {
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
-    public void updateEcho(String key) {
+    public void updateLike(String key) {
+
         if (dbutil.contains(key)) {
             Log.e("Dupkey", "Key is already in the DB!");
             return;
         }
 
-        final Firebase echoRef = mFirebaseRef.child(key).child("echo");
-        echoRef.addListenerForSingleValueEvent(
+        final Firebase likeRef = mFirebaseRef.child(key).child("like");
+        likeRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long echoValue = (Long) dataSnapshot.getValue();
-                        Log.e("Echo update:", "" + echoValue);
+                        Long likeValue = (Long) dataSnapshot.getValue();
+                        Log.e("Like update:", "" + likeValue);
 
                         //Add 1 value to the echoValue
-                        echoRef.setValue(echoValue + 1);
+                        likeRef.setValue(likeValue + 1);
                     }
 
                     @Override
@@ -188,7 +206,7 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
+                        double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
                         orderRef.setValue(orderValue - 1);
@@ -217,7 +235,7 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Long dislikeValue = (Long) dataSnapshot.getValue();
-                        Log.e("dislike update:", "" + dislikeValue);
+                        Log.e("Dislike update:", "" + dislikeValue);
 
                         //Add 1 value to the dislikeValue
                         dislikeRef.setValue(dislikeValue + 1);
@@ -235,12 +253,11 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
+                        double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue - 1);
+                        orderRef.setValue(orderValue + 1);
                     }
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
 
