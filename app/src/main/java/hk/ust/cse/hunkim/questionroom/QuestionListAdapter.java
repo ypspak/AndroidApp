@@ -145,11 +145,11 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         view.setTag(question.getKey());  // store key in the view
     }
 
-    void keepRoomName(String rn){
+    private void keepRoomName(String rn){
         roomName = rn;
     }
 
-    String getRoomName(){
+    private String getRoomName(){
         return roomName;
     }
 
