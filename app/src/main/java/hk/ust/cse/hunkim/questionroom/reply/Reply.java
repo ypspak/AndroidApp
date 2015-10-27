@@ -7,10 +7,8 @@ import java.util.Date;
  */
 public class Reply{
     private String key;
-    private String wholeMsg;
+    private String desc;
     private long timestamp;
-    private int like;
-    private int dislike;
     private int order;
 
     private Reply(){
@@ -18,9 +16,7 @@ public class Reply{
     }
 
     public Reply(String reply){
-        this.wholeMsg = reply;
-        this.like = 0;
-        this.dislike = 0;
+        this.desc = reply;
         this.timestamp = new Date().getTime();
     }
 
@@ -28,14 +24,8 @@ public class Reply{
         this.key = key;
     }
 
-    public int getLike() {
-        return like;
-    }
-
-    public int getDislike() {return dislike; }
-
-    public String getWholeMsg() {
-        return wholeMsg;
+    public String getDesc() {
+        return desc;
     }
 
     public long getTimestamp() {
