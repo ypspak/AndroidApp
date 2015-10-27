@@ -48,7 +48,7 @@
         android:layout_alignParentStart="true"
         android:background="@color/HeaderGrey">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/closebtn_container"
             android:layout_width="250dp"
             android:layout_height="match_parent"
@@ -65,19 +65,29 @@
                 android:layout_width="37dp"
                 android:layout_height="37dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
                 android:src="@drawable/btn_goback"
-                android:scaleType="fitXY" />
+                android:scaleType="fitCenter"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="false"
+                android:layout_alignParentEnd="false"
+                android:layout_centerVertical="true"
+                android:cropToPadding="false"
+                android:adjustViewBounds="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:text="COMP3111"
                 android:id="@+id/close"
-                android:background="@drawable/complete_transparent_button"
                 android:textSize="18sp"
-                android:textColor="@color/HeaderRoomText" />
-        </LinearLayout>
+                android:textColor="@color/HeaderRoomText"
+                android:layout_toRightOf="@+id/gobackbtn"
+                android:layout_marginLeft="2dp"
+                android:gravity="center_vertical|left"
+                android:background="@drawable/complete_transparent_button"
+                android:onClick="Close"
+                android:singleLine="true" />
+        </RelativeLayout>
 
         <ImageButton
             android:layout_width="@dimen/HeaderIconSize"
