@@ -87,15 +87,10 @@ public class MainActivity extends ListActivity {
         super.onStart();
 
         //GUI design initialization <26/10/2015 by Peter Yeung>
-        //Set the roomText located at the top of the screen, showing which room they are currently in
-        Button closeButton = (Button) findViewById(R.id.close);
-        closeButton.setText("◀ Room: " + roomName);
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
+        quitButton.setText("" + roomName);
         quitButton.setTransformationMethod(null);
-        //Set the header color
-        LinearLayout header = (LinearLayout) findViewById(R.id.listHeader);
-        header.setBackgroundColor(getResources().getColor(R.color.HeaderGrey)); //Get the color through getResource class
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
@@ -191,7 +186,7 @@ public class MainActivity extends ListActivity {
                         double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue - 1);
+                        orderRef.setValue(orderValue - 1);  //Need clarification, the higher value of order, the lower priorty sorted in firebase?
                     }
 
                     @Override
@@ -238,7 +233,7 @@ public class MainActivity extends ListActivity {
                         double orderValue = (double) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue + 1);
+                        orderRef.setValue(orderValue + 1); //Need clarification, the higher value of order, the lower priorty sorted in firebase?
                     }
 
                     @Override
