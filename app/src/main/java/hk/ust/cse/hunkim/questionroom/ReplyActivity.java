@@ -7,9 +7,8 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -62,8 +61,8 @@ public class ReplyActivity extends ListActivity {
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
         setTitle("Room Name:" + roomName);
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(key);
-
-
+        // make sure the keyboard wont pop up when I first time enter this interface
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override

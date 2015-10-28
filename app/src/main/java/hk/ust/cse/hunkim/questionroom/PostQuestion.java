@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,6 +70,8 @@ public class PostQuestion extends Activity {
 //                return true;
 //            }
 //        });
+        // make sure the keyboard wont pop up when I first time enter this interface
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         postQuestion = (Button) findViewById(R.id.PostQuestion);
         postQuestion.setOnClickListener(new View.OnClickListener() {
