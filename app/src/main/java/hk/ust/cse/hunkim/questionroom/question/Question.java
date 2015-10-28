@@ -36,27 +36,13 @@ public class Question implements Comparable<Question> {
     private long timestamp;
     private String tags;
     private double order;
-    private String wholeMsgReply; //unused
+    private String wholeMsgReply; //todo: unused, gonna to delete
     private int replies;
 
 
     // Required default constructor for Firebase object mapping
     //unused
     private Question() {
-    }
-
-    /**
-     * Set question from a String message
-     * @param message string message
-     */
-    public Question(String message) {
-        this.like = 0;
-        this.dislike = 0;
-        this.completed = false;
-        this.head = getFirstSentence(message).trim();
-        this.desc = message;
-        this.tags = "";
-        this.timestamp = new Date().getTime();
     }
 
     public Question(String title, String body) {
@@ -67,37 +53,9 @@ public class Question implements Comparable<Question> {
         this.desc = body;
         this.tags = "";
         this.timestamp = new Date().getTime();
+        this.wholeMsgReply = ""; //todo: will be dropped if web team no long use this attribute
     }
 
-    /**
-     * Get first sentence from a message
-     * @param message
-     * @return
-     */
-    public static String getFirstSentence(String message) {
-        String[] tokens = {". ", "? ", "! "};
-
-        int index = -1;
-
-        for (String token : tokens) {
-            int i = message.indexOf(token);
-            if (i == -1) {
-                continue;
-            }
-
-            if (index == -1) {
-                index = i;
-            } else {
-                index = Math.min(i, index);
-            }
-        }
-
-        if (index == -1) {
-            return message;
-        }
-
-        return message.substring(0, index+1);
-    }
 
     /* -------------------- Getters ------------------- */
     public String getHead() { return head; }
@@ -120,10 +78,11 @@ public class Question implements Comparable<Question> {
 
     public String getTags() { return tags; }
 
+    public String getWholeMsgReply(){return wholeMsgReply;}//todo: can delete later
+
     public void setKey(String key) {
         this.key = key;
     }
-
     /**
      * New one/high like goes bottom
      * @param other other chat

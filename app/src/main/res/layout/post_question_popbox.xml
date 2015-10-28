@@ -1,40 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#d51d39">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        android:id="@+id/Cancel"
-        android:layout_marginBottom="67dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Post Question"
-        android:id="@+id/PostQuestion"
-        android:layout_alignTop="@+id/Cancel"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/QuestionTitle"
-        android:text="Title"
+        android:layout_height="30dp"
+        android:background="#ffffff"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/PostQuestion" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:id="@+id/linearLayout"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
-    <EditText
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/QuestionTitle"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="@null"
+            android:hint="@string/prompt_question_title"
+            android:layout_gravity="center_horizontal"
+            android:maxLength="50" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/QuestionBody"
-        android:layout_below="@+id/QuestionTitle"
-        android:layout_alignEnd="@+id/PostQuestion"
-        android:layout_marginTop="104dp"
-        android:text="Body" />
+        android:layout_height="50dp"
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/linearLayout2"
+        android:layout_marginBottom="38dp"
+        android:id="@+id/buttons"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <Button
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:text="Cancel"
+            android:id="@+id/Cancel"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp" />
+
+        <Button
+            android:layout_width="170dp"
+            android:layout_height="match_parent"
+            android:text="Post Question"
+            android:id="@+id/PostQuestion"
+            android:layout_alignTop="@+id/Cancel"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:background="#ffffff"
+        android:id="@+id/linearLayout2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignEnd="@+id/linearLayout">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/QuestionBody"
+            android:layout_below="@+id/QuestionTitle"
+            android:layout_alignEnd="@+id/linearLayout"
+            android:autoText="true"
+            android:contentDescription="hi"
+            android:singleLine="false"
+            android:maxWidth="200dp"
+            android:hint="@string/prompt_question_body"
+            android:background="@null"
+            android:elegantTextHeight="true"
+            android:textAlignment="viewStart" />
+    </LinearLayout>
 
 </RelativeLayout>

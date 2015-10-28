@@ -59,9 +59,6 @@ public class MainActivity extends ListActivity {
 
         // Make it a bit more reliable
         roomName = intent.getStringExtra(JoinActivity.ROOM_NAME);
-        if (roomName == null || roomName.length() == 0) {
-            roomName = "all";
-        }
 
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
