@@ -52,7 +52,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
                     @Override
                     public void onClick(View view) {
                         ReplyActivity m = (ReplyActivity) view.getContext();
-                        m.updateLike((String) view.getTag());
+                        m.updateOrder((String) view.getTag(), 1);
                     }
                 }
 
@@ -63,7 +63,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
                     @Override
                     public void onClick(View view) {
                         ReplyActivity m = (ReplyActivity) view.getContext();
-                        m.updateDislike((String) view.getTag());
+                        m.updateOrder((String) view.getTag(), -1);
                     }
                 }
 
