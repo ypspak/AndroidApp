@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -42,7 +43,7 @@ public class ReplyActivity extends ListActivity {
     private Firebase questionUrl;
     private ValueEventListener mConnectedListener;
     private ReplyListAdapter mChatListAdapter;
-
+    private EditText inputText;
     private DBUtil dbutil;
 
     public DBUtil getDbutil() {
@@ -63,16 +64,6 @@ public class ReplyActivity extends ListActivity {
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(key);
 
 
-        EditText inputText = (EditText) findViewById(R.id.replyInput);
-        inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
-                }
-                return true;
-            }
-        });
 
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,9 +138,11 @@ public class ReplyActivity extends ListActivity {
 
     //Make this function private only because I want it triggered by the SendReply Button. For security.
     private void sendMessage() {
-        EditText inputText = (EditText) findViewById(R.id.replyInput);
+        inputText = (EditText) findViewById(R.id.replyInput);
+        inputText.setError(null);
+
         String input = inputText.getText().toString();
-        if (!input.equals("")) {
+        if (!TextUtils.isEmpty(input)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
             // Before creating our 'model', we have to replace substring so that prevent code injection
             input = input.replace("<", "&lt;");
             input = input.replace(">", "&gt;");
@@ -159,8 +152,9 @@ public class ReplyActivity extends ListActivity {
             mFirebaseRef.push().setValue(reply);
             inputText.setText("");
             updateQuestionReply();
-
-        }
+        }else {
+            inputText.setError(getString(R.string.error_field_required));
+        }//warning to force user input reply
     }
 
     public void UpdateHeader() {
