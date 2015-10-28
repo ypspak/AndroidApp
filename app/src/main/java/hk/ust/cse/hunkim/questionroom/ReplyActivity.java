@@ -4,12 +4,12 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +18,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,8 +35,9 @@ public class ReplyActivity extends ListActivity {
 
     private String key;
     private String roomName;
-    private String questionContent;
-    private Firebase mFirebaseRef;
+    private ImageButton likePQB;
+    private ImageButton dislikePQB;
+    private Firebase replyContainerRef;
     private Firebase questionUrl;
     private ValueEventListener mConnectedListener;
     private ReplyListAdapter mChatListAdapter;
@@ -60,7 +59,7 @@ public class ReplyActivity extends ListActivity {
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
         setTitle("Room Name:" + roomName);
-        mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(key);
+        replyContainerRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(key);
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -79,27 +78,38 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
-        questionUrl.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                ((TextView) findViewById(R.id.desc)).setText(Html.fromHtml((String) snapshot.child("desc").getValue()));
-            }
+        likePQB = (ImageButton) findViewById(R.id.likeParentQuestion);
+        dislikePQB = (ImageButton) findViewById(R.id.dislikeParentQuestion);
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+        likePQB.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updateLikeDislike("like");
+                    }
+                }
 
-            }
+        );
 
-        });
+        dislikePQB.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updateLikeDislike("dislike");
+                    }
+                }
 
-        //Initialization of the UI here, by Peter Yeung 2015/10/27
+        );
         UpdateHeader();
+
+        //Like & dislike buttons
+
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new ReplyListAdapter(
-                mFirebaseRef.orderByChild("dislike").limitToFirst(200),
+                replyContainerRef.orderByChild("dislike").limitToFirst(200),
                 this, R.layout.reply);
         listView.setAdapter(mChatListAdapter);
 
@@ -111,7 +121,7 @@ public class ReplyActivity extends ListActivity {
             }
         });
 
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+        mConnectedListener = replyContainerRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean connected = (Boolean) dataSnapshot.getValue();
@@ -131,7 +141,7 @@ public class ReplyActivity extends ListActivity {
 
     public void onStop() {
         super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+        replyContainerRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 
@@ -148,7 +158,7 @@ public class ReplyActivity extends ListActivity {
             // Create our 'model', a Chat object
             Reply reply = new Reply(input);
             // Create a new, auto-generated child of that chat location, and save our chat data there
-            mFirebaseRef.push().setValue(reply);
+            replyContainerRef.push().setValue(reply);
             inputText.setText("");
             updateQuestionReply();
         }else {
@@ -170,14 +180,43 @@ public class ReplyActivity extends ListActivity {
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
-    public void updateLike(String key) {
+    public void updateOrder(String key, final int value) {
 
         if (dbutil.contains(key)) {
             Log.e("Dupkey", "Key is already in the DB!");
             return;
         }
 
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
+        final Firebase orderRef = replyContainerRef.child(key).child("order");
+        orderRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long orderValue = (Long) dataSnapshot.getValue();
+                        Log.e("Order update:", "" + orderValue);
+
+                        orderRef.setValue(orderValue + value);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+
+        // Update SQLite DB
+        dbutil.put(key);
+    }
+
+    public void updateLikeDislike(String attri) {
+
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
+
+        final Firebase orderRef = questionUrl.child(attri);
         orderRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -195,34 +234,6 @@ public class ReplyActivity extends ListActivity {
                 }
         );
 
-        // Update SQLite DB
-        dbutil.put(key);
-    }
-
-    public void updateDislike(String key) {
-        if (dbutil.contains(key)) {
-            Log.e("Dupkey", "Key is already in the DB!");
-            return;
-        }
-
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
-                        Log.e("Dislike update:", "" + orderValue);
-
-                        //Add 1 value to the dislikeValue
-                        orderRef.setValue(orderValue - 1);
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
         // Update SQLite DB
         dbutil.put(key);
     }
