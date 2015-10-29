@@ -1,5 +1,7 @@
 package hk.ust.cse.hunkim.questionroom.question;
 
+import android.util.Log;
+
 import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
@@ -53,6 +55,13 @@ public class Question implements Comparable<Question> {
         this.desc = body;
         this.tags = "";
         this.timestamp = new Date().getTime();
+        /* Added by Peter Yeung, 2015/10/30
+                    this.timestamp has to be changed to the following comment-out code (apply negative value)
+                    since there is no way to reverse order in firebase query(default behaviour: obtain list in ascending order of timestamp)
+                    as a result this.timestamp has to be multipled by -1.
+                */
+
+        //this.timestamp = (new Date().getTime())*-1;
         this.wholeMsgReply = ""; //todo: will be dropped if web team no long use this attribute
     }
 
@@ -92,13 +101,24 @@ public class Question implements Comparable<Question> {
     public int compareTo(Question other) {
 
 
-        if (this.like == other.like) {
-            if (other.timestamp == this.timestamp) {
+        /*** Added by Peter Yeung, 2015/10/30
+         *      Two questions(this and other) are compared and sorted by using this function
+         *      First, group two questions together if the time created are within 2 minutes
+         *      Then, compare their like member (which will be changed later) and put it at higher position
+         */
+        double TimestampDifference = this.timestamp - other.timestamp;
+        if (Math.abs(TimestampDifference) < 120000)
+        {
+            if (this.like == other.like)
                 return 0;
-            }
-            return other.timestamp > this.timestamp ? -1 : 1;
+
+            //Added by Peter Yeung, 2015/10/30
+            //Intended behaviour, instead of 1 : -1. Just drop question with more dislike behind for bug fix.
+            //In addition, the order will be re-ordered by timestamp from query, since there is no algorithm for evaluation of each question.
+            return other.like > this.like ? 0 : -1;
         }
-        return this.like - other.like;
+
+        return (TimestampDifference < 0) ? 0 : -1;
     }
 
 
