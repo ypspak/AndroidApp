@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d51d39">
+    android:background="#d51d39"
+    android:id="@+id/popup_element">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -41,7 +42,7 @@
         android:layout_marginRight="5dp">
 
         <Button
-            android:layout_width="170dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:text="Cancel"
             android:id="@+id/Cancel"
@@ -52,10 +53,10 @@
             android:layout_marginBottom="1dp" />
 
         <Button
-            android:layout_width="170dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:text="Post Question"
-            android:id="@+id/PostQuestion"
+            android:text="Confirm"
+            android:id="@+id/Confirm"
             android:layout_alignTop="@+id/Cancel"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="1dp"
@@ -66,7 +67,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_height="50dp"
         android:background="#ffffff"
         android:id="@+id/linearLayout2"
         android:layout_marginLeft="5dp"
