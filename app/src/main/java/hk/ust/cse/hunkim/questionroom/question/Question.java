@@ -102,23 +102,9 @@ public class Question implements Comparable<Question> {
 
 
         /*** Added by Peter Yeung, 2015/10/30
-         *      Two questions(this and other) are compared and sorted by using this function
-         *      First, group two questions together if the time created are within 2 minutes
-         *      Then, compare their like member (which will be changed later) and put it at higher position
+         *      We can't implement any method unless a sorting algorithm/method is implemented.
          */
-        double TimestampDifference = this.timestamp - other.timestamp;
-        if (Math.abs(TimestampDifference) < 120000)
-        {
-            if (this.like == other.like)
-                return 0;
-
-            //Added by Peter Yeung, 2015/10/30
-            //Intended behaviour, instead of 1 : -1. Just drop question with more dislike behind for bug fix.
-            //In addition, the order will be re-ordered by timestamp from query, since there is no algorithm for evaluation of each question.
-            return other.like > this.like ? 0 : -1;
-        }
-
-        return (TimestampDifference < 0) ? 0 : -1;
+        return 0;
     }
 
 
