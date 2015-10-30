@@ -6,6 +6,8 @@
     <string name="prompt_room_name">Room Name</string>
     <string name="action_join">Join</string>
     <string name="action_join_short">Sign in</string>
+    <string name="question_room">Question Room</string>
+    <string name="question_room_descibe">This totally anonymous and\n real-time updating question \nmoderated system permits\n students to ask more questions\n in a typical class setting.\n Simply join a question room\n using a simple name \n (such as comp3111).</string>
 
     <!--String related to enter a room-->
     <string name="error_invalid_room_name">Use only alphanumeric characters</string>

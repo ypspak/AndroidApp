@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="hk.ust.cse.hunkim.questionroom.JoinActivity">
+    tools:context="hk.ust.cse.hunkim.questionroom.JoinActivity"
+    android:weightSum="1">
 
     <AutoCompleteTextView
         android:id="@+id/room_name"
@@ -28,6 +29,31 @@
         android:onClick="attemptJoin"
         android:text="@string/action_join"
         android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/question_room"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textSize="30dp" />
+
+    <TextView
+        android:layout_width="298dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/question_room_descibe"
+        android:id="@+id/question_room_descibe"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"
+        android:singleLine="false"
+        android:password="false"
+        android:editable="false"
+        android:gravity="center" />
 
 </LinearLayout>
 
