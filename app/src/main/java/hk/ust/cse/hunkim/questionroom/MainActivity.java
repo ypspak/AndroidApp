@@ -1,24 +1,19 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,8 +68,9 @@ public class MainActivity extends ListActivity {
         postQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //start PopupWindows GUI and with its question input functions
-                popupWindowsQuestionInput();
+                Intent intent = new Intent(MainActivity.this, PostQuestion.class);
+                intent.putExtra(ROOM_NAME, getRoomName());
+                startActivity(intent);
             }
         });
 
@@ -152,24 +148,6 @@ public class MainActivity extends ListActivity {
         return roomName;
     }
 
-    private PopupWindow popup;
-    private Button popDismiss;
-    private void popupWindowsQuestionInput() {
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.post_question_popbox,
-                (ViewGroup) findViewById(R.id.popup_element));
-        popup = new PopupWindow(layout, 600, 600, true);
-        popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
-
-        popDismiss = (Button) layout.findViewById(R.id.Cancel);
-        popDismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popup.dismiss();
-            }
-        });
-
-    }
     //Update Like here. For every person who have liked, their key is stored at database.
     public void updateLike(String key) {
 
