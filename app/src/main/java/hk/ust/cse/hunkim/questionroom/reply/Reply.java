@@ -9,16 +9,18 @@ public class Reply{
     private String desc;
     private long timestamp;
     private int order;
+    private String parentID;
     private String key;
 
     private Reply(){
 
     }
 
-    public Reply(String reply){
+    public Reply(String reply, String ID){
         this.order = 0;
         this.desc = reply;
         this.timestamp = new Date().getTime();
+        this.parentID = ID;
     }
 
     //getter of each attribute
@@ -38,16 +40,11 @@ public class Reply{
         return key;
     }
 
+    public String getParentID() {return parentID;}
+
     //modifier of each attribute, timestamp is supposed to be unable to modified
-    public void setDesc(String newReply){
-        this.desc= newReply;
-    }
 
     public void setKey(String key) {
         this.key=key;
-    }
-
-    public void setOrder(int newOrder){
-        this.order = newOrder;
     }
 }
