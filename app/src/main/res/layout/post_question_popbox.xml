@@ -22,10 +22,11 @@
             android:id="@+id/QuestionTitle"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
+            android:singleLine="true"
             android:background="@null"
             android:hint="Please input a title"
             android:layout_gravity="center_horizontal"
-            android:maxLength="100" />
+            android:maxLength="50" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -66,7 +67,7 @@
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:background="#ffffff"
         android:id="@+id/linearLayout2"
         android:layout_marginLeft="5dp"
