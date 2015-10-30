@@ -59,7 +59,7 @@ public class ReplyActivity extends ListActivity {
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
         setTitle("Room Name:" + roomName);
-        replyContainerRef = new Firebase(FIREBASE_URL).child(roomName).child("replies");
+        replyContainerRef = new Firebase(FIREBASE_URL).child(roomName).child("replies").child(key);
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -109,7 +109,7 @@ public class ReplyActivity extends ListActivity {
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new ReplyListAdapter(
-                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
+                replyContainerRef.orderByChild("dislike").limitToFirst(200),
                 this, R.layout.reply);
         listView.setAdapter(mChatListAdapter);
 
@@ -156,7 +156,7 @@ public class ReplyActivity extends ListActivity {
             input = input.replace("<", "&lt;");
             input = input.replace(">", "&gt;");
             // Create our 'model', a Chat object
-            Reply reply = new Reply(input, key);
+            Reply reply = new Reply(input);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             replyContainerRef.push().setValue(reply);
             inputText.setText("");
