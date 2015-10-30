@@ -47,7 +47,7 @@ public class PostQuestion extends Activity {
         int height = dm.heightPixels;
         //Defining size of the popwindow
         //Todo: Make the background out of the pop up windows to be Translucent
-        getWindow().setLayout((int)(width*.8),(int)(height*.4));
+        getWindow().setLayout((int)(width*.8),(int)(height*.45));
 
         Intent intent = getIntent();
         assert (intent != null);
