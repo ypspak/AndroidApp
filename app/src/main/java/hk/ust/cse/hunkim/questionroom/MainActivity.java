@@ -159,11 +159,15 @@ public class MainActivity extends ListActivity {
     private EditText titleInput;
     private EditText bodyInput;
     private View layout;
+
     private void popupWindowsQuestionInput() {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layout = inflater.inflate(R.layout.post_question_popbox,
-                (ViewGroup) findViewById(R.id.popup_element));
-        popup = new PopupWindow(layout, 1000, 1000, true);
+                null);
+        popup = new PopupWindow(layout, 1000, 650, true);
+        //Allows the popup window to be editable
+        popup .setTouchable(true);
+        popup .setFocusable(true);
         popup.showAtLocation(layout, Gravity.CENTER, 0, 0);
 
         sendQuestion = (Button) layout.findViewById(R.id.Confirm);
@@ -203,14 +207,14 @@ public class MainActivity extends ListActivity {
             body = body.replace(">", "&gt;");
             // Create our 'model', a Chat object
 
-            Question question = new Question(title,body);
+            Question question = new Question(title, body);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(question);
             popup.dismiss();
-        }else {
+        }
+//        }else {
 //            titleInput.setError(getString(R.string.error_field_required));
-            titleInput.setError("This field is required!");
-        }//warning to force user input title
+//        }//warning to force user input title
 
     }
     //Update Like here. For every person who have liked, their key is stored at database.
