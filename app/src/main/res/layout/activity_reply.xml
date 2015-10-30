@@ -101,7 +101,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/Question"
         android:layout_above="@+id/listFooter"
-        android:transcriptMode="alwaysScroll"/>
+        android:transcriptMode="alwaysScroll" />
 
     <LinearLayout
         android:id="@+id/listFooter"

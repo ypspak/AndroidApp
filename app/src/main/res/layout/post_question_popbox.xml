@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#010101"
+    android:background="#d51d39"
     android:id="@+id/popup_element">
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:id="@+id/TitleLayout"
+        android:id="@+id/linearLayout"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
@@ -27,16 +27,16 @@
             android:hint="@string/prompt_question_title"
             android:layout_gravity="center_horizontal"
             android:maxLength="50" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/linearLayout2"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="38dp"
         android:id="@+id/buttons"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
@@ -62,29 +62,34 @@
             android:layout_marginTop="1dp"
             android:layout_marginRight="1dp"
             android:layout_marginBottom="1dp" />
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:background="#ffffff"
         android:id="@+id/linearLayout2"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/TitleLayout">
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignEnd="@+id/linearLayout">
 
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/QuestionBody"
+            android:layout_below="@+id/QuestionTitle"
+            android:layout_alignEnd="@+id/linearLayout"
+            android:autoText="true"
+            android:contentDescription="hi"
             android:singleLine="false"
             android:maxWidth="200dp"
             android:hint="@string/prompt_question_body"
             android:background="@null"
             android:elegantTextHeight="true"
             android:textAlignment="viewStart" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>
