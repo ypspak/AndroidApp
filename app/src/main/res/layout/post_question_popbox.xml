@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:background="#d51d39">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="30dp"
         android:background="#ffffff"
         android:layout_alignParentTop="true"
@@ -23,26 +23,26 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:background="@null"
-            android:hint="@string/prompt_question_title"
+            android:hint="Please input a title"
             android:layout_gravity="center_horizontal"
-            android:maxLength="50" />
-    </LinearLayout>
+            android:maxLength="100" />
+    </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="#ffffff"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/linearLayout2"
-        android:layout_marginBottom="38dp"
+        android:layout_marginBottom="5dp"
         android:id="@+id/buttons"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp">
 
         <Button
-            android:layout_width="170dp"
-            android:layout_height="match_parent"
+            android:layout_width="100dp"
+            android:layout_height="fill_parent"
             android:text="Cancel"
             android:id="@+id/Cancel"
             android:layout_alignParentBottom="true"
@@ -52,16 +52,16 @@
             android:layout_marginBottom="1dp" />
 
         <Button
-            android:layout_width="170dp"
-            android:layout_height="match_parent"
-            android:text="Post Question"
+            android:layout_width="100dp"
+            android:layout_height="fill_parent"
+            android:text="Confirm"
             android:id="@+id/PostQuestion"
             android:layout_alignTop="@+id/Cancel"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="1dp"
             android:layout_marginRight="1dp"
             android:layout_marginBottom="1dp" />
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="horizontal"
