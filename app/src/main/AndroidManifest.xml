@@ -30,6 +30,11 @@
             android:label="@string/app_name" >
         </activity>
 
+        <activity
+            android:name=".PostQuestion"
+            android:theme="@style/AppTheme.PopWindowTheme"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>
