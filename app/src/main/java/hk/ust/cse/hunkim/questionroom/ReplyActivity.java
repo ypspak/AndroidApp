@@ -26,6 +26,7 @@ import com.firebase.client.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
@@ -83,12 +84,11 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
-        //Like & dislike buttons
-
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
+
         mChatListAdapter = new ReplyListAdapter(
                 replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
                 this, R.layout.reply);
@@ -106,10 +106,11 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("like");
+                        TextView likeText = (TextView) findViewById((R.id.likeText));
+                        likeText.setText("" + (Integer.parseInt((String) likeText.getText()) + 1));
                         checkButtonPressed();
                     }
                 }
-
         );
 
         dislikePQB.setOnClickListener(
@@ -117,13 +118,13 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("dislike");
+                        TextView dislikeText = (TextView) findViewById((R.id.dislikeText));
+                        dislikeText.setText("" + (Integer.parseInt((String) dislikeText.getText()) + 1));
                         checkButtonPressed();
                     }
                 }
-
         );
         UpdateHeader();
-
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -203,10 +204,14 @@ public class ReplyActivity extends ListActivity {
         TextView timeText = (TextView) findViewById((R.id.timetext));
         TextView titleText = (TextView) findViewById((R.id.head));
         TextView descText = (TextView) findViewById((R.id.desc));
+        TextView likeText = (TextView) findViewById((R.id.likeText));
+        TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
         //timeText.setText("" + getDate(questionUrl.child("timestamp").get));
-        retrieveQuestionDetails("timestamp", timeText, true);
+        retrieveQuestionDetails("timestamp", timeText, true, true);
         retrieveQuestionDetails("head", titleText, false);
         retrieveQuestionDetails("desc", descText, false);
+        retrieveQuestionDetails("like", likeText, true);
+        retrieveQuestionDetails("dislike", dislikeText, true);
         /*likeNumText.setText("" + question.getLike());
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());*/
@@ -271,16 +276,24 @@ public class ReplyActivity extends ListActivity {
         dbutil.put(key);
     }
 
-    public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsDate)
+    //Helper function
+    public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsNumber)
+    {
+        retrieveQuestionDetails(childName, textView, IsNumber, false);
+    }
+    public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsNumber, final boolean IsDate)
     {
         final Firebase childRef = questionUrl.child(childName);
         childRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (IsDate) {
-                            Long tempTimestamp = (Long) dataSnapshot.getValue();
-                            textView.setText("" + getDate((Long) tempTimestamp));
+                        if (IsNumber) {
+                            Long tempNum = (Long) dataSnapshot.getValue();
+                            if (IsDate)
+                                textView.setText("" + getDate((Long) tempNum));
+                            else
+                                textView.setText("" + String.valueOf(tempNum));
                         }
                         else {
                             String tempStr = (String) dataSnapshot.getValue();
