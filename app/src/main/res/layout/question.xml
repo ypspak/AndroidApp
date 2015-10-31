@@ -117,6 +117,7 @@
         android:layout_marginBottom="10dp"
         android:textStyle="italic"
         android:layout_gravity="center_vertical|right"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_marginRight="25dp" />
 
 </GridLayout>
