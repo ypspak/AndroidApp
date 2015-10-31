@@ -3,14 +3,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
 
-    tools:context=".ReplyActivity">
+    tools:context=".ReplyActivity"
+    android:focusableInTouchMode="false"
+    android:touchscreenBlocksFocus="false"
+    android:focusable="false">
 
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:transcriptMode="alwaysScroll"
         android:headerDividersEnabled="false"
         android:stackFromBottom="false"
         android:layout_alignParentStart="false"
