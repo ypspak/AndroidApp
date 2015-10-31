@@ -12,7 +12,7 @@
 	<color name="RoundButton1Base">#000000</color>
 	<color name="RoundButton1Press">#505050</color>
 	<!-- For round_button.xml (currently white)-->
-	<color name="RoundButton2Base">#FFFFFF</color>
+	<color name="RoundButton2Base">#FF8C00</color>
 	<color name="RoundButton2Press">#505050</color>
 
 	<color name="RoundBg1"> #000000</color>

@@ -11,23 +11,36 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listHeader"
-        android:layout_above="@+id/listFooter"
         android:transcriptMode="alwaysScroll" />
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/listFooter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="#00000000"
+        android:layout_marginBottom="15dp">
 
         <ImageButton
             android:id="@+id/postQuestion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send" />
-    </LinearLayout>
+            android:layout_width="@dimen/QuestionSendButtonSize"
+            android:layout_height="@dimen/QuestionSendButtonSize"
+            android:src="@drawable/create"
+            android:background="@drawable/round_button_2"
+            android:scaleType="fitXY"
+            android:layout_gravity="top"
+            android:layout_alignParentLeft="false"
+            android:layout_marginLeft="0dp"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="0dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="0dp"
+            android:padding="5dp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:orientation="horizontal"
