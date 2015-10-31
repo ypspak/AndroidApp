@@ -1,5 +1,7 @@
 package hk.ust.cse.hunkim.questionroom.question;
 
+import android.util.Log;
+
 import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
@@ -53,6 +55,13 @@ public class Question implements Comparable<Question> {
         this.desc = body;
         this.tags = "";
         this.timestamp = new Date().getTime();
+        /* Added by Peter Yeung, 2015/10/30
+                    this.timestamp has to be changed to the following comment-out code (apply negative value)
+                    since there is no way to reverse order in firebase query(default behaviour: obtain list in ascending order of timestamp)
+                    as a result this.timestamp has to be multipled by -1.
+                */
+
+        //this.timestamp = (new Date().getTime())*-1;
         this.wholeMsgReply = ""; //todo: will be dropped if web team no long use this attribute
     }
 
@@ -92,13 +101,10 @@ public class Question implements Comparable<Question> {
     public int compareTo(Question other) {
 
 
-        if (this.like == other.like) {
-            if (other.timestamp == this.timestamp) {
-                return 0;
-            }
-            return other.timestamp > this.timestamp ? -1 : 1;
-        }
-        return this.like - other.like;
+        /*** Added by Peter Yeung, 2015/10/30
+         *      We can't implement any method unless a sorting algorithm/method is implemented.
+         */
+        return 0;
     }
 
 
