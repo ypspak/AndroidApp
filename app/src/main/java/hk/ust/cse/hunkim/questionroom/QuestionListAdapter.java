@@ -114,11 +114,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                 }
         );
 
-        String msgString = "";
-
-
-        //msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
-        msgString += question.getDesc();
+        String msgString = "" + question.getHead();
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
 
         // check if we already clicked
