@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!--For PopupWindow color-->
+	<color name="PopupWindowColor">#007983</color>
 	<color name="HeaderGrey">#282828</color>
 	<color name="HeaderText">#FFFFFF</color>
 	<color name="SubHeaderGrey">#3F3F3F</color>
@@ -13,8 +15,8 @@
 	<color name="RoundButton2Base">#FFFFFF</color>
 	<color name="RoundButton2Press">#505050</color>
 	<!-- For reply order in round button -->
-	<color name="ReplyOrderLike">#AE0000</color>
-	<color name="ReplyOrderDislike">#42DFD8</color>
+	<color name="ReplyOrderLike">#42DFD8</color>
+	<color name="ReplyOrderDislike">#AE0000</color>
 	<color name="ReplyOrderNeutral">#FFFFFF</color>
 	<!-- For text color in header_return_button.xml -->
 	<color name="ComTransBtnTextColor">#FFFFFF</color>
