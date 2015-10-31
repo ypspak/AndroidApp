@@ -175,8 +175,8 @@ public class ReplyActivity extends ListActivity {
             likePQB.getBackground().setColorFilter(null);
             dislikePQB.getBackground().setColorFilter(null);
         } else {
-            likePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
-            dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            likePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
+            dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
         }
     }
     //Make this function private only because I want it triggered by the SendReply Button. For security.

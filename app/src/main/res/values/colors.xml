@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!--For PopupWindow color-->
-	<color name="PopupWindowColor">#007983</color>
-	<color name="HeaderGrey">#282828</color>
+	<color name="PopupWindowColor">#FF8C00</color>
+	<color name="HeaderColor">#FF8C00</color>
 	<color name="HeaderText">#FFFFFF</color>
-	<color name="SubHeaderGrey">#3F3F3F</color>
+	<color name="SubHeaderColor">#FFB732</color>
 	<!-- For transparent_button.xml -->
 	<color name="Transparent">#00FFFFFF</color>
 	<color name="SemiTransparent">#60FFFFFF</color>
@@ -14,6 +14,8 @@
 	<!-- For round_button.xml (currently white)-->
 	<color name="RoundButton2Base">#FFFFFF</color>
 	<color name="RoundButton2Press">#505050</color>
+
+	<color name="RoundBg1"> #000000</color>
 	<!-- For reply order in round button -->
 	<color name="ReplyOrderLike">#42DFD8</color>
 	<color name="ReplyOrderDislike">#AE0000</color>
