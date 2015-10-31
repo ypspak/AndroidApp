@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">QuestionRoom</string>
     <string name="title_activity_login">Question Room</string>
-
+    <string name="question_room">Question Room</string>
+    <string name="question_room_descibe">This totally anonymous and\n real-time updating question \nmoderated system permits\n students to ask more questions\n in a typical class setting.\n Simply join a question room\n using a simple name \n (such as comp3111).</string>
     <!-- Strings related to login -->
     <string name="prompt_room_name">Room Name</string>
     <string name="action_join">Join</string>
