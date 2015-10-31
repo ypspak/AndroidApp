@@ -83,8 +83,6 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
-        DBUtil dbUtil = this.getDbutil();
-
         //Like & dislike buttons
 
 
@@ -102,12 +100,13 @@ public class ReplyActivity extends ListActivity {
         //For the like & dislike button in headerview
         likePQB = (ImageButton) findViewById(R.id.likeParentQuestion);
         dislikePQB = (ImageButton) findViewById(R.id.dislikeParentQuestion);
-
+        checkButtonPressed();
         likePQB.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("like");
+                        checkButtonPressed();
                     }
                 }
 
@@ -118,6 +117,7 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("dislike");
+                        checkButtonPressed();
                     }
                 }
 
@@ -152,6 +152,17 @@ public class ReplyActivity extends ListActivity {
         });
 
         // check if we already clicked
+    }
+
+    public void onStop() {
+        super.onStop();
+        replyContainerRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+        mChatListAdapter.cleanup();
+    }
+
+    private void checkButtonPressed()
+    {
+        DBUtil dbUtil = this.getDbutil();
         boolean clickable = !dbUtil.contains(key);
 
         likePQB.setClickable(clickable);
@@ -167,13 +178,6 @@ public class ReplyActivity extends ListActivity {
             dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
         }
     }
-
-    public void onStop() {
-        super.onStop();
-        replyContainerRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-        mChatListAdapter.cleanup();
-    }
-
     //Make this function private only because I want it triggered by the SendReply Button. For security.
     private void sendMessage() {
         inputText = (EditText) findViewById(R.id.replyInput);
