@@ -3,10 +3,15 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -78,6 +83,23 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
+        DBUtil dbUtil = this.getDbutil();
+
+        //Like & dislike buttons
+
+
+        // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
+        final ListView listView = getListView();
+        // Tell our list adapter that we only want 200 messages at a time
+        mChatListAdapter = new ReplyListAdapter(
+                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
+                this, R.layout.reply);
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup headerview =  (ViewGroup) inflater.inflate(R.layout.reply_header, listView, false);
+        listView.addHeaderView(headerview);
+
+        //For the like & dislike button in headerview
         likePQB = (ImageButton) findViewById(R.id.likeParentQuestion);
         dislikePQB = (ImageButton) findViewById(R.id.dislikeParentQuestion);
 
@@ -102,15 +124,6 @@ public class ReplyActivity extends ListActivity {
         );
         UpdateHeader();
 
-        //Like & dislike buttons
-
-
-        // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
-        final ListView listView = getListView();
-        // Tell our list adapter that we only want 200 messages at a time
-        mChatListAdapter = new ReplyListAdapter(
-                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
-                this, R.layout.reply);
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -137,6 +150,22 @@ public class ReplyActivity extends ListActivity {
                 // No-op
             }
         });
+
+        // check if we already clicked
+        boolean clickable = !dbUtil.contains(key);
+
+        likePQB.setClickable(clickable);
+        likePQB.setEnabled(clickable);
+        dislikePQB.setClickable(clickable);
+        dislikePQB.setEnabled(clickable);
+
+        if (clickable) {
+            likePQB.getBackground().setColorFilter(null);
+            dislikePQB.getBackground().setColorFilter(null);
+        } else {
+            likePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+        }
     }
 
     public void onStop() {
