@@ -6,13 +6,13 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -26,7 +26,6 @@ import com.firebase.client.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
@@ -202,13 +201,13 @@ public class ReplyActivity extends ListActivity {
 
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.timetext));
-        TextView titleText = (TextView) findViewById((R.id.head));
+        Button titleText = (Button) findViewById((R.id.head_reply));
         TextView descText = (TextView) findViewById((R.id.desc));
         TextView likeText = (TextView) findViewById((R.id.likeText));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
         //timeText.setText("" + getDate(questionUrl.child("timestamp").get));
         retrieveQuestionDetails("timestamp", timeText, true, true);
-        retrieveQuestionDetails("head", titleText, false);
+        retrieveQuestionDetails("head", titleText);
         retrieveQuestionDetails("desc", descText, false);
         retrieveQuestionDetails("like", likeText, true);
         retrieveQuestionDetails("dislike", dislikeText, true);
@@ -280,6 +279,25 @@ public class ReplyActivity extends ListActivity {
     public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsNumber)
     {
         retrieveQuestionDetails(childName, textView, IsNumber, false);
+    }
+
+    public void retrieveQuestionDetails(String childName, final Button btn)
+    {
+        final Firebase childRef = questionUrl.child(childName);
+        childRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                            String tempStr = (String) dataSnapshot.getValue();
+                            btn.setText("" + tempStr);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
     }
     public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsNumber, final boolean IsDate)
     {
