@@ -98,19 +98,10 @@ public class PostQuestion extends Activity {
         bodyInput = (EditText) findViewById(R.id.QuestionBody);
         String title = titleInput.getText().toString();
         String body = bodyInput.getText().toString();
-        boolean allowPost = true;
         if (!TextUtils.isEmpty(title)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
             // Before creating our 'model', we have to replace substring so that prevent code injection
             title = title.replace("<", "&lt;");
             title = title.replace(">", "&gt;");
-            // Create our 'model', a Chat object
-        }else {
-            titleInput.setError(getString(R.string.error_field_required));
-            allowPost = false;
-        }//warning to force user input title
-
-
-        if(allowPost){
             //todo: more outcome for preventing html attack for Q body
             // Before creating our 'model', we have to replace substring so that prevent code injection
             body = body.replace("<", "&lt;");
@@ -121,7 +112,9 @@ public class PostQuestion extends Activity {
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(question);
             Close(view);
-        }
+        }else {
+            titleInput.setError(getString(R.string.error_field_required));
+        }//warning to force user input title
     }
 
     public void Close(View view) {
