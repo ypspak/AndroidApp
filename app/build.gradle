@@ -1,10 +1,5 @@
 apply plugin: 'com.android.application'
-<<<<<<< HEAD
-apply plugin: 'jacoco'
-=======
 apply plugin: "jacoco"
-
->>>>>>> 69b865bf8d09992b8293232dd3989b136d97bd42
 android {
 
     packagingOptions {
