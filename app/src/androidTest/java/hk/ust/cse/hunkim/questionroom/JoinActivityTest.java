@@ -4,6 +4,7 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -26,8 +27,8 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
     EditText roomNameEditText;
     Button joinButton;
 
-    private static final int TIMEOUT_IN_MS = 10000;
-    private static final int TIMEOUT_IN_MS_2 = 10000;
+    private static final int TIMEOUT_IN_MS = 5000;
+    private static final int TIMEOUT_IN_MS_2 = 8000;
     public JoinActivityTest() {
         super(JoinActivity.class);
     }
@@ -45,11 +46,11 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
     }
 
-    @Test
     public void testCreatingActivity_EmptyString() throws Exception {
 
         //Create and add an ActivityMonitor to monitor interaction between the system and the
         //ReceiverActivity
+        Instrumentation inst = new Instrumentation();
         Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
                 .addMonitor(MainActivity.class.getName(), null, false);
 
@@ -63,6 +64,10 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
 
+        inst.sendKeyDownUpSync(KeyEvent.ACTION_DOWN);
+
+        //Now press enter
+
         //Send the room name
         //Case 1:Empty string
         getInstrumentation().sendStringSync("");
@@ -71,7 +76,8 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         String actualText = roomNameEditText.getText().toString();
         assertTrue(actualText.isEmpty());
         //Click on the sendToReceiverButton to send the message to ReceiverActivity
-        TouchUtils.clickView(this, joinButton);
+        //TouchUtils.clickView(this, joinButton);
+        TouchUtils.clickView(this, roomNameEditText);
 
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
@@ -90,7 +96,6 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
     }
 
-    @Test
     public void testCreatingActivity_InvalidString() throws Exception {
 
         //Create and add an ActivityMonitor to monitor interaction between the system and the
@@ -110,10 +115,15 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
         //Send the room name
         //Case 2: Invalid Symbol
+        Thread.sleep(2000);
         getInstrumentation().sendStringSync("@#$%");
         getInstrumentation().waitForIdleSync();
-        Thread.sleep(TIMEOUT_IN_MS_2);
+
+        //Some hacks here
         String actualText = roomNameEditText.getText().toString();
+        while (actualText.isEmpty())
+            actualText = roomNameEditText.getText().toString();
+
         assertEquals("@#$%", actualText);
         //Click on the sendToReceiverButton to send the message to ReceiverActivity
         TouchUtils.clickView(this, joinButton);
@@ -135,7 +145,6 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
     }
 
-    @Test
     public void testCreatingActivity_ValidString() throws Exception {
 
         //Create and add an ActivityMonitor to monitor interaction between the system and the
@@ -155,11 +164,15 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
         //Send the room name
         //Case 3: Valid String
+        Thread.sleep(2000);
         getInstrumentation().sendStringSync("TestCase");
         getInstrumentation().waitForIdleSync();
 
-        Thread.sleep(TIMEOUT_IN_MS_2);
+        //Some hacks here
         String actualText = roomNameEditText.getText().toString();
+        while (actualText.isEmpty())
+            actualText = roomNameEditText.getText().toString();
+
         assertEquals("TestCase", actualText);
         //Click on the sendToReceiverButton to send the message to ReceiverActivity
         TouchUtils.clickView(this, joinButton);
@@ -180,7 +193,7 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
         Intent intent = mainActivity.getIntent();
         assertNotNull("Intent should be set", intent);
-        assertEquals("all", intent.getStringExtra(JoinActivity.ROOM_NAME));
+        assertEquals("TestCase", intent.getStringExtra(JoinActivity.ROOM_NAME));
         assertEquals("This is set correctly", "Room name: TestCase", mainActivity.getTitle());
 
         //Unregister monitor for ReceiverActivity
