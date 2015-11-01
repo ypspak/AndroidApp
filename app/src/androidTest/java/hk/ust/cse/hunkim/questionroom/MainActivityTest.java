@@ -43,7 +43,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         assertEquals("This is set correctly", "Room name: all", getActivity().getTitle());
     }
 
-
+    /*
     @MediumTest
     public void testPostingMessage() {
         Activity activity = startActivity(mStartIntent, null, null);
@@ -84,5 +84,5 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
 
         // TODO: How to confirm a new text is posted?
         // assertEquals("Child count: ", lView.getChildCount(), 10);
-    }
+    }*/
 }
