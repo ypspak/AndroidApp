@@ -133,8 +133,8 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
             likeButton.getBackground().setColorFilter(null);
             dislikeButton.getBackground().setColorFilter(null);
         } else {
-            likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
-            dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
+            dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
         }
 
 

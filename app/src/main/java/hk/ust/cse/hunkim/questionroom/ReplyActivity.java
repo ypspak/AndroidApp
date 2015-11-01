@@ -6,13 +6,13 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -26,7 +26,6 @@ import com.firebase.client.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
@@ -86,13 +85,14 @@ public class ReplyActivity extends ListActivity {
         questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
+
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
-
         mChatListAdapter = new ReplyListAdapter(
                 replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
                 this, R.layout.reply);
 
+        // Inflate the view and add it to the header
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup headerview =  (ViewGroup) inflater.inflate(R.layout.reply_header, listView, false);
         listView.addHeaderView(headerview);
@@ -124,9 +124,10 @@ public class ReplyActivity extends ListActivity {
                     }
                 }
         );
+
+        //Now update the header, and update altogether  by setting the listview
         UpdateHeader();
         listView.setAdapter(mChatListAdapter);
-
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -151,8 +152,6 @@ public class ReplyActivity extends ListActivity {
                 // No-op
             }
         });
-
-        // check if we already clicked
     }
 
     public void onStop() {
@@ -175,8 +174,8 @@ public class ReplyActivity extends ListActivity {
             likePQB.getBackground().setColorFilter(null);
             dislikePQB.getBackground().setColorFilter(null);
         } else {
-            likePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
-            dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            likePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
+            dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
         }
     }
     //Make this function private only because I want it triggered by the SendReply Button. For security.
@@ -202,19 +201,16 @@ public class ReplyActivity extends ListActivity {
 
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.timetext));
-        TextView titleText = (TextView) findViewById((R.id.head));
+        Button titleText = (Button) findViewById((R.id.head_reply));
         TextView descText = (TextView) findViewById((R.id.desc));
         TextView likeText = (TextView) findViewById((R.id.likeText));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
-        //timeText.setText("" + getDate(questionUrl.child("timestamp").get));
         retrieveQuestionDetails("timestamp", timeText, true, true);
-        retrieveQuestionDetails("head", titleText, false);
+        retrieveQuestionDetails("head", titleText);
         retrieveQuestionDetails("desc", descText, false);
         retrieveQuestionDetails("like", likeText, true);
         retrieveQuestionDetails("dislike", dislikeText, true);
-        /*likeNumText.setText("" + question.getLike());
-        dislikeNumText.setText("" + question.getDislike());
-        replyNumText.setText("" + question.getReplies());*/
+        titleText.setTransformationMethod(null);
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
@@ -277,11 +273,30 @@ public class ReplyActivity extends ListActivity {
     }
 
     //Helper function
-    public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsNumber)
+    public void retrieveQuestionDetails(final String childName, final TextView textView, final boolean IsNumber)
     {
         retrieveQuestionDetails(childName, textView, IsNumber, false);
     }
-    public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsNumber, final boolean IsDate)
+
+    public void retrieveQuestionDetails(final String childName, final Button btn)
+    {
+        final Firebase childRef = questionUrl.child(childName);
+        childRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                            String tempStr = (String) dataSnapshot.getValue();
+                            btn.setText("" + tempStr);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+    }
+    public void retrieveQuestionDetails(final String childName, final TextView textView, final boolean IsNumber, final boolean IsDate)
     {
         final Firebase childRef = questionUrl.child(childName);
         childRef.addListenerForSingleValueEvent(
@@ -297,7 +312,12 @@ public class ReplyActivity extends ListActivity {
                         }
                         else {
                             String tempStr = (String) dataSnapshot.getValue();
-                            textView.setText("" + tempStr);
+
+                            //Test for desc and empty string, special case
+                            if (tempStr.isEmpty() && childName.equals("desc"))
+                                    textView.setText("Empty message");
+                            else
+                                textView.setText("" + tempStr);
                         }
                     }
 
