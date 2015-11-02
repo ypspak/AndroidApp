@@ -35,13 +35,10 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
     protected void populateView(View view, Reply reply) {
         DBUtil dbUtil = activity.getDbutil();
         int order = reply.getOrder();
-<<<<<<< HEAD
+
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.ReplyLike);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.ReplyDislike);
-=======
-        ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
-        ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
->>>>>>> refs/remotes/origin/master
+
         TextView scoreText = (TextView) view.findViewById(R.id.order);
         TextView timeText = (TextView) view.findViewById(R.id.timetext);
 
