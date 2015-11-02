@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.firebase.client.Query;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -35,7 +38,9 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         TextView scoreText = (TextView) view.findViewById(R.id.order);
+        TextView timeText = (TextView) view.findViewById(R.id.timetext);
 
+        //Set the color of the score according to the like/dislike
         scoreText.setText("" + order);
         if (order < 0)
             scoreText.setTextColor(view.getResources().getColor(R.color.ReplyOrderDislike));
@@ -44,6 +49,8 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         else
             scoreText.setTextColor(view.getResources().getColor(R.color.ReplyOrderNeutral));
 
+        //Set the text of the timestamp
+        timeText.setText("" + getDate(reply.getTimestamp()));
         likeButton.setTag(reply.getKey()); // Set tag for button
         dislikeButton.setTag(reply.getKey());
 
@@ -90,14 +97,20 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
             likeButton.getBackground().setColorFilter(null);
             dislikeButton.getBackground().setColorFilter(null);
         } else {
-            likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
-            dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.LIGHTEN);
+            likeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
+            dislikeButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
         }
 
 
         view.setTag(reply.getKey());  // store key in the view
     }
 
+    private String getDate(long timestamp)
+    {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = (new Date(timestamp));
+        return df.format(date);
+    }
     @Override
     protected void sortModels(List<Reply> mModels) {
 

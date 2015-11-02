@@ -3,11 +3,16 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -78,17 +83,34 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
+
+        // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
+
+        final ListView listView = getListView();
+        // Tell our list adapter that we only want 200 messages at a time
+        mChatListAdapter = new ReplyListAdapter(
+                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
+                this, R.layout.reply);
+
+        // Inflate the view and add it to the header
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup headerview =  (ViewGroup) inflater.inflate(R.layout.reply_header, listView, false);
+        listView.addHeaderView(headerview);
+
+        //For the like & dislike button in headerview
         likePQB = (ImageButton) findViewById(R.id.likeParentQuestion);
         dislikePQB = (ImageButton) findViewById(R.id.dislikeParentQuestion);
-
+        checkButtonPressed();
         likePQB.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("like");
+                        TextView likeText = (TextView) findViewById((R.id.likeText));
+                        likeText.setText("" + (Integer.parseInt((String) likeText.getText()) + 1));
+                        checkButtonPressed();
                     }
                 }
-
         );
 
         dislikePQB.setOnClickListener(
@@ -96,23 +118,16 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("dislike");
+                        TextView dislikeText = (TextView) findViewById((R.id.dislikeText));
+                        dislikeText.setText("" + (Integer.parseInt((String) dislikeText.getText()) + 1));
+                        checkButtonPressed();
                     }
                 }
-
         );
+
+        //Now update the header, and update altogether  by setting the listview
         UpdateHeader();
-
-        //Like & dislike buttons
-
-
-        // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
-        final ListView listView = getListView();
-        // Tell our list adapter that we only want 200 messages at a time
-        mChatListAdapter = new ReplyListAdapter(
-                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
-                this, R.layout.reply);
         listView.setAdapter(mChatListAdapter);
-
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -145,6 +160,24 @@ public class ReplyActivity extends ListActivity {
         mChatListAdapter.cleanup();
     }
 
+    private void checkButtonPressed()
+    {
+        DBUtil dbUtil = this.getDbutil();
+        boolean clickable = !dbUtil.contains(key);
+
+        likePQB.setClickable(clickable);
+        likePQB.setEnabled(clickable);
+        dislikePQB.setClickable(clickable);
+        dislikePQB.setEnabled(clickable);
+
+        if (clickable) {
+            likePQB.getBackground().setColorFilter(null);
+            dislikePQB.getBackground().setColorFilter(null);
+        } else {
+            likePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
+            dislikePQB.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_OVER);
+        }
+    }
     //Make this function private only because I want it triggered by the SendReply Button. For security.
     private void sendMessage() {
         inputText = (EditText) findViewById(R.id.replyInput);
@@ -168,15 +201,16 @@ public class ReplyActivity extends ListActivity {
 
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.timetext));
-        TextView titleText = (TextView) findViewById((R.id.head));
+        Button titleText = (Button) findViewById((R.id.head_reply));
         TextView descText = (TextView) findViewById((R.id.desc));
-        //timeText.setText("" + getDate(questionUrl.child("timestamp").get));
-        retrieveQuestionDetails("timestamp", timeText, true);
-        retrieveQuestionDetails("head", titleText, false);
+        TextView likeText = (TextView) findViewById((R.id.likeText));
+        TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
+        retrieveQuestionDetails("timestamp", timeText, true, true);
+        retrieveQuestionDetails("head", titleText);
         retrieveQuestionDetails("desc", descText, false);
-        /*likeNumText.setText("" + question.getLike());
-        dislikeNumText.setText("" + question.getDislike());
-        replyNumText.setText("" + question.getReplies());*/
+        retrieveQuestionDetails("like", likeText, true);
+        retrieveQuestionDetails("dislike", dislikeText, true);
+        titleText.setTransformationMethod(null);
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
@@ -238,20 +272,52 @@ public class ReplyActivity extends ListActivity {
         dbutil.put(key);
     }
 
-    public void retrieveQuestionDetails(String childName, final TextView textView, final boolean IsDate)
+    //Helper function
+    public void retrieveQuestionDetails(final String childName, final TextView textView, final boolean IsNumber)
+    {
+        retrieveQuestionDetails(childName, textView, IsNumber, false);
+    }
+
+    public void retrieveQuestionDetails(final String childName, final Button btn)
     {
         final Firebase childRef = questionUrl.child(childName);
         childRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (IsDate) {
-                            Long tempTimestamp = (Long) dataSnapshot.getValue();
-                            textView.setText("" + getDate((Long) tempTimestamp));
+                            String tempStr = (String) dataSnapshot.getValue();
+                            btn.setText("" + tempStr);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                }
+        );
+    }
+    public void retrieveQuestionDetails(final String childName, final TextView textView, final boolean IsNumber, final boolean IsDate)
+    {
+        final Firebase childRef = questionUrl.child(childName);
+        childRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (IsNumber) {
+                            Long tempNum = (Long) dataSnapshot.getValue();
+                            if (IsDate)
+                                textView.setText("" + getDate((Long) tempNum));
+                            else
+                                textView.setText("" + String.valueOf(tempNum));
                         }
                         else {
                             String tempStr = (String) dataSnapshot.getValue();
-                            textView.setText("" + tempStr);
+
+                            //Test for desc and empty string, special case
+                            if (tempStr.isEmpty() && childName.equals("desc"))
+                                    textView.setText("Empty message");
+                            else
+                                textView.setText("" + tempStr);
                         }
                     }
 
