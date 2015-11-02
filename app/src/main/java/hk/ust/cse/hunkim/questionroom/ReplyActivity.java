@@ -139,11 +139,13 @@ public class ReplyActivity extends ListActivity {
         mConnectedListener = replyContainerRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(ReplyActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(ReplyActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+                if(dataSnapshot.getValue()!=null){
+                    boolean connected = (Boolean) dataSnapshot.getValue();
+                    if (connected) {
+                        Toast.makeText(ReplyActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ReplyActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -226,10 +228,12 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
-                        Log.e("Order update:", "" + orderValue);
+                        if(dataSnapshot.getValue()!=null){
+                            Long orderValue = (Long) dataSnapshot.getValue();
+                            Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue + value);
+                            orderRef.setValue(orderValue + value);
+                        }
                     }
 
                     @Override
@@ -255,10 +259,11 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long orderValue = (Long) dataSnapshot.getValue();
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue + 1);
+                        if(dataSnapshot.getValue()!=null){
+                            Long orderValue = (Long) dataSnapshot.getValue();
+                            Log.e("Order update:", "" + orderValue);
+                            orderRef.setValue(orderValue + 1);
+                        }
                     }
 
                     @Override
@@ -285,8 +290,10 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                            String tempStr = (String) dataSnapshot.getValue();
-                            btn.setText("" + tempStr);
+                            if(dataSnapshot.getValue()!=null){
+                                String tempStr = (String) dataSnapshot.getValue();
+                                btn.setText("" + tempStr);
+                            }
                     }
 
                     @Override
@@ -303,21 +310,18 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (IsNumber) {
-                            Long tempNum = (Long) dataSnapshot.getValue();
-                            if (IsDate)
-                                textView.setText("" + getDate((Long) tempNum));
-                            else
-                                textView.setText("" + String.valueOf(tempNum));
-                        }
-                        else {
-                            String tempStr = (String) dataSnapshot.getValue();
-
-                            //Test for desc and empty string, special case
-                            if (tempStr.isEmpty() && childName.equals("desc"))
-                                    textView.setText("Empty message");
-                            else
+                        if(dataSnapshot.getValue()!=null){
+                            if (IsNumber) {
+                                Long tempNum = (Long) dataSnapshot.getValue();
+                                if (IsDate)
+                                    textView.setText("" + getDate(tempNum));
+                                else
+                                    textView.setText("" + String.valueOf(tempNum));
+                            }
+                            else {
+                                String tempStr = (String) dataSnapshot.getValue();
                                 textView.setText("" + tempStr);
+                            }
                         }
                     }
 
@@ -335,11 +339,12 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long replyValue = (Long) dataSnapshot.getValue();
-                        Log.e("Reply update:", "" + replyValue);
-
-                        //Add 1 value to the dislikeValue
-                        replyRef.setValue(replyValue + 1);
+                        if(dataSnapshot.getValue()!=null){
+                            Long replyValue = (Long) dataSnapshot.getValue();
+                            Log.e("Reply update:", "" + replyValue);
+                            //Add 1 value to the dislikeValue
+                            replyRef.setValue(replyValue + 1);
+                        }
                     }
 
                     @Override
