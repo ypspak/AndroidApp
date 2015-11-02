@@ -62,7 +62,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         int like = question.getLike();
         int dislike = question.getDislike();
 
-        ImageButton likeButton = (ImageButton) view.findViewById(R.id.like);
+        ImageButton likeButton = (ImageButton) view.findViewById(R.id.questionLike);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.dislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.reply);
         TextView timeText = (TextView) view.findViewById((R.id.timetext));
