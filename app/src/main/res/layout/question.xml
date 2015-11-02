@@ -22,7 +22,7 @@
     <ImageButton
         android:layout_width="@dimen/QuestionRoundButtonSize"
         android:layout_height="@dimen/QuestionRoundButtonSize"
-        android:id="@+id/QuestionLike"
+        android:id="@+id/like"
         android:src="@drawable/like"
         android:background="@drawable/round_button_1"
         android:padding="5dp"
@@ -38,7 +38,7 @@
     <ImageButton
         android:layout_width="@dimen/QuestionRoundButtonSize"
         android:layout_height="@dimen/QuestionRoundButtonSize"
-        android:id="@+id/QuestionDislike"
+        android:id="@+id/dislike"
         android:src="@drawable/dislike"
         android:background="@drawable/round_button_1"
         android:padding="5dp"
@@ -78,7 +78,7 @@
     <ImageButton
         android:layout_width="@dimen/QuestionRoundButtonSize"
         android:layout_height="@dimen/QuestionRoundButtonSize"
-        android:id="@+id/QuestionReply"
+        android:id="@+id/reply"
         android:src="@drawable/reply"
         android:background="@drawable/round_button_1"
         android:padding="3dp"
