@@ -4,9 +4,16 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 
+import org.junit.Test;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 
 /**
@@ -21,7 +28,7 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
     Button joinButton;
 
     private static final int TIMEOUT_IN_MS = 5000;
-
+    private static final int TIMEOUT_IN_MS_2 = 8000;
     public JoinActivityTest() {
         super(JoinActivity.class);
     }
@@ -30,47 +37,66 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
     protected void setUp() throws Exception {
         super.setUp();
 
+        //Obtain all basic information, it's actually act like constructor
         activity = getActivity();
-
         roomNameEditText =
                 (EditText) activity.findViewById(R.id.room_name);
-
         joinButton =
                 (Button) activity.findViewById(R.id.join_button);
 
     }
 
-//Henry: the following rode has run for 10 min but no result
-    public void testIntentSetting() {
+    public void testCreatingActivity_EmptyString() throws Exception {
 
+        //Create and add an ActivityMonitor to monitor interaction between the system and the
+        //ReceiverActivity
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(MainActivity.class.getName(), null, false);
+
+        //Request focus on the EditText field. This must be done on the UiThread because?
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
             public void run() {
                 roomNameEditText.requestFocus();
             }
         });
-
-        getInstrumentation().sendStringSync("all");
-        getInstrumentation().waitForIdleSync();
-
-        String actualText = roomNameEditText.getText().toString();
-        assertEquals("all", actualText);
-
-        // Tap "Join" button
-        // ----------------------
-
-        TouchUtils.clickView(this, joinButton);
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
 
-        Intent intent = activity.getIntent();
-        assertNotNull("Intent should be set", intent);
+        inst.sendKeyDownUpSync(KeyEvent.ACTION_DOWN);
 
-        //assertEquals("all", intent.getStringExtra(LoginActivity.ROOM_NAME));
+        //Now press enter
+
+        //Send the room name
+        //Case 1:Empty string
+        getInstrumentation().sendStringSync("");
+        getInstrumentation().waitForIdleSync();
+
+        String actualText = roomNameEditText.getText().toString();
+        assertTrue(actualText.isEmpty());
+        //Click on the sendToReceiverButton to send the message to ReceiverActivity
+        //TouchUtils.clickView(this, joinButton);
+        TouchUtils.clickView(this, roomNameEditText);
+
+        //Wait until all events from the MainHandler's queue are processed
+        getInstrumentation().waitForIdleSync();
+
+        //Wait until MainActivity was launched and get a reference to it.
+        MainActivity mainActivity = (MainActivity) receiverActivityMonitor
+                .waitForActivityWithTimeout(TIMEOUT_IN_MS);
+
+        //Verify that MainActivity was started
+        assertNull("ReceiverActivity is not null", mainActivity);
+        assertEquals("Monitor for MainActivity has  been called", 0,
+                receiverActivityMonitor.getHits());
+
+        //Unregister monitor for ReceiverActivity
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+
     }
 
-
-    public void testCreatingActivity() {
+    public void testCreatingActivity_InvalidString() throws Exception {
 
         //Create and add an ActivityMonitor to monitor interaction between the system and the
         //ReceiverActivity
@@ -88,9 +114,66 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         getInstrumentation().waitForIdleSync();
 
         //Send the room name
-        getInstrumentation().sendStringSync("all");
+        //Case 2: Invalid Symbol
+        Thread.sleep(2000);
+        getInstrumentation().sendStringSync("@#$%");
         getInstrumentation().waitForIdleSync();
 
+        //Some hacks here
+        String actualText = roomNameEditText.getText().toString();
+        while (actualText.isEmpty())
+            actualText = roomNameEditText.getText().toString();
+
+        assertEquals("@#$%", actualText);
+        //Click on the sendToReceiverButton to send the message to ReceiverActivity
+        TouchUtils.clickView(this, joinButton);
+
+        //Wait until all events from the MainHandler's queue are processed
+        getInstrumentation().waitForIdleSync();
+
+        //Wait until MainActivity was launched and get a reference to it.
+        MainActivity mainActivity = (MainActivity) receiverActivityMonitor
+                .waitForActivityWithTimeout(TIMEOUT_IN_MS);
+
+        //Verify that MainActivity was started
+        assertNull("ReceiverActivity is not null", mainActivity);
+        assertEquals("Monitor for MainActivity has not been called", 0,
+                receiverActivityMonitor.getHits());
+
+        //Unregister monitor for ReceiverActivity
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+
+    }
+
+    public void testCreatingActivity_ValidString() throws Exception {
+
+        //Create and add an ActivityMonitor to monitor interaction between the system and the
+        //ReceiverActivity
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(MainActivity.class.getName(), null, false);
+
+        //Request focus on the EditText field. This must be done on the UiThread because?
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                roomNameEditText.requestFocus();
+            }
+        });
+        //Wait until all events from the MainHandler's queue are processed
+        getInstrumentation().waitForIdleSync();
+
+        //Send the room name
+        //Case 3: Valid String
+        Thread.sleep(2000);
+        getInstrumentation().sendStringSync("TestCase");
+        getInstrumentation().waitForIdleSync();
+
+        //Some hacks here
+        String actualText = roomNameEditText.getText().toString();
+        while (actualText.isEmpty())
+            actualText = roomNameEditText.getText().toString();
+
+        assertEquals("TestCase", actualText);
         //Click on the sendToReceiverButton to send the message to ReceiverActivity
         TouchUtils.clickView(this, joinButton);
 
@@ -108,21 +191,10 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         assertEquals("Activity is of wrong type", MainActivity.class,
                 mainActivity.getClass());
 
-        /*
-        //Read the message received by ReceiverActivity
-        final TextView receivedMessage = (TextView) mainActivity
-                .findViewById(R.id.received_message_text_view);
-        //Verify that received message is correct
-        assertNotNull(receivedMessage);
-        assertEquals("Wrong received message", TEST_MESSAGE, receivedMessage.getText().toString());
-        */
-
         Intent intent = mainActivity.getIntent();
         assertNotNull("Intent should be set", intent);
-
-        assertEquals("all", intent.getStringExtra(JoinActivity.ROOM_NAME));
-
-        assertEquals("This is set correctly", "Room name: all", mainActivity.getTitle());
+        assertEquals("TestCase", intent.getStringExtra(JoinActivity.ROOM_NAME));
+        assertEquals("This is set correctly", "Room name: TestCase", mainActivity.getTitle());
 
         //Unregister monitor for ReceiverActivity
         getInstrumentation().removeMonitor(receiverActivityMonitor);
