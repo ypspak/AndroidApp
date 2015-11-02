@@ -64,20 +64,15 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
 
-        inst.sendKeyDownUpSync(KeyEvent.ACTION_DOWN);
-
-        //Now press enter
 
         //Send the room name
         //Case 1:Empty string
         getInstrumentation().sendStringSync("");
         getInstrumentation().waitForIdleSync();
-
         String actualText = roomNameEditText.getText().toString();
         assertTrue(actualText.isEmpty());
         //Click on the sendToReceiverButton to send the message to ReceiverActivity
-        //TouchUtils.clickView(this, joinButton);
-        TouchUtils.clickView(this, roomNameEditText);
+        TouchUtils.clickView(this, joinButton);
 
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
@@ -93,7 +88,7 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
         //Unregister monitor for ReceiverActivity
         getInstrumentation().removeMonitor(receiverActivityMonitor);
-
+        getInstrumentation().waitForIdleSync();
     }
 
     public void testCreatingActivity_InvalidString() throws Exception {
@@ -112,10 +107,9 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         });
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
-
+        Thread.sleep(TIMEOUT_IN_MS);
         //Send the room name
         //Case 2: Invalid Symbol
-        Thread.sleep(2000);
         getInstrumentation().sendStringSync("@#$%");
         getInstrumentation().waitForIdleSync();
 
@@ -142,7 +136,7 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
         //Unregister monitor for ReceiverActivity
         getInstrumentation().removeMonitor(receiverActivityMonitor);
-
+        getInstrumentation().waitForIdleSync();
     }
 
     public void testCreatingActivity_ValidString() throws Exception {
@@ -198,6 +192,6 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
 
         //Unregister monitor for ReceiverActivity
         getInstrumentation().removeMonitor(receiverActivityMonitor);
-
+        getInstrumentation().waitForIdleSync();
     }
 }

@@ -1,20 +1,44 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
 import android.test.ActivityUnitTestCase;
+import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.MediumTest;
+import android.test.suitebuilder.annotation.SmallTest;
+import android.text.method.Touch;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
+import java.util.Date;
+
+import hk.ust.cse.hunkim.questionroom.question.Question;
+
 /**
  * Created by hunkim on 7/20/15.
  */
-public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
+public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
-    private Intent mStartIntent;
-    private ImageButton mButton;
+    MainActivity activity;
+    Intent mStartIntent;
+    ImageButton mButton;
+    Button mSendQuestion;
+    Button mCancel;
+    TextView mTitle;
+    TextView mBody;
+    Long timestamp = new Date().getTime();
+    Integer mCounter = 0;
+    String RoomString = "AppTestcase:" + String.valueOf(timestamp);;
+    String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
     public MainActivityTest() {
         super(MainActivity.class);
@@ -23,62 +47,280 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        // In setUp, you can create any shared test data,
-        // or set up mock components to inject
-        // into your Activity. But do not call startActivity()
-        // until the actual test methods.
-        // into your Activity. But do not call startActivity()
-        // until the actual test methods.
+
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra(JoinActivity.ROOM_NAME, "all");
+        //timestamp = new Date().getTime();
+        //RoomString = "Testcase:" + String.valueOf(timestamp);
+        mStartIntent.putExtra(JoinActivity.ROOM_NAME, RoomString);
+        setActivityIntent(mStartIntent);
+        activity = getActivity();
+        mButton = (ImageButton) getActivity().findViewById(R.id.postQuestion);
     }
 
-    @MediumTest
-    public void testPreconditions() {
-        startActivity(mStartIntent, null, null);
-        mButton = (ImageButton) getActivity().findViewById(R.id.sendButton);
-        assertNotNull(getActivity());
-        assertNotNull(mButton);
 
-        assertEquals("This is set correctly", "Room name: all", getActivity().getTitle());
-    }
-
-    /*
     @MediumTest
-    public void testPostingMessage() {
-        Activity activity = startActivity(mStartIntent, null, null);
-        mButton = (ImageButton) activity.findViewById(R.id.sendButton);
+    public void testPostingMessage_ValidString_Like() throws Exception {
+
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(PostQuestion.class.getName(), null, false);
+
         final ListView lView = getActivity().getListView();
 
-        assertNotNull(mButton);
-        assertNotNull(lView);
+        TouchUtils.clickView(this, mButton);
 
+        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
+                .waitForActivityWithTimeout(5000);
+
+        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
+        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
+        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
+        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
+
+
+        //Verify that MainActivity was started
+        assertNotNull("mSendQuestion is null", mSendQuestion);
+        assertNotNull("mCancel is null", mCancel);
+        assertNotNull("mTitle is null", mTitle);
+        assertNotNull("mBody is null", mBody);
+        assertNotNull("ReceiverActivity is null", postQuestion);
+        assertEquals("Monitor for postQuestion has been called", 1,
+                receiverActivityMonitor.getHits());
+
+        //Test case 1: Normal String
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                lView.performItemClick(lView, 0, lView.getItemIdAtPosition(0));
+                mTitle.requestFocus();
             }
         });
         getInstrumentation().waitForIdleSync();
+        getInstrumentation().sendStringSync("<Like message>");
+        getInstrumentation().waitForIdleSync();
 
-        try {
-            Thread.currentThread().sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String actualText = mTitle.getText().toString();
+        while (actualText.isEmpty())
+            actualText = mTitle.getText().toString();
+        assertEquals("<Like message>", actualText);
+
+        TouchUtils.clickView(this, mSendQuestion);
+
+        //This part should be separated by a new test
+        View listElement = lView.getChildAt(lView.getCount() - 1);
+        assertNotNull(listElement);
+
+        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.like);
+        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.dislike);
+
+        //Should exist
+        assertNotNull(mLikeButton);
+        assertNotNull(mDislikeButton);
+        Thread.sleep(1000);
+        //Click like button
+        TouchUtils.clickView(this, mLikeButton);
+        //Should be not clickable now
+        assertFalse(mLikeButton.isClickable());
+        assertFalse(mDislikeButton.isClickable());
+        //Try to update like/dislike by function call instead
+        activity.updateLike((String) listElement.getTag());
+        activity.updateDislike((String) listElement.getTag());
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+    }
+
+@MediumTest
+    public void testPostingMessage_ValidString_Dislike() throws Exception {
+
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(PostQuestion.class.getName(), null, false);
+
+        final ListView lView = getActivity().getListView();
+
+        TouchUtils.clickView(this, mButton);
+
+        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
+                .waitForActivityWithTimeout(5000);
+
+        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
+        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
+        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
+        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
 
 
+        //Verify that MainActivity was started
+        assertNotNull("mSendQuestion is null", mSendQuestion);
+        assertNotNull("mCancel is null", mCancel);
+        assertNotNull("mTitle is null", mTitle);
+        assertNotNull("mBody is null", mBody);
+        assertNotNull("ReceiverActivity is null", postQuestion);
+        assertEquals("Monitor for postQuestion has been called", 1,
+                receiverActivityMonitor.getHits());
+
+        //Test case 1: Normal String
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
             public void run() {
+                mTitle.requestFocus();
             }
         });
-
+        getInstrumentation().waitForIdleSync();
+        getInstrumentation().sendStringSync("<Dislike message>");
         getInstrumentation().waitForIdleSync();
 
-        mButton.performClick();
+        String actualText = mTitle.getText().toString();
+        while (actualText.isEmpty())
+            actualText = mTitle.getText().toString();
+        assertEquals("<Dislike message>", actualText);
 
-        // TODO: How to confirm a new text is posted?
-        // assertEquals("Child count: ", lView.getChildCount(), 10);
-    }*/
+        TouchUtils.clickView(this, mSendQuestion);
+
+        //This part should be separated by a new test
+        View listElement = lView.getChildAt(lView.getCount() - 1);
+        assertNotNull(listElement);
+
+        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.like);
+        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.dislike);
+        //Should exist
+        assertNotNull(mLikeButton);
+        assertNotNull(mDislikeButton);
+        //Click dislike button
+        Thread.sleep(1000);
+        TouchUtils.clickView(this, mDislikeButton);
+        //Should be not clickable now
+        assertFalse(mLikeButton.isClickable());
+        assertFalse(mDislikeButton.isClickable());
+        //Try to update like/dislike by function call instead
+        activity.updateLike((String) listElement.getTag());
+        activity.updateDislike((String) listElement.getTag());
+
+    getInstrumentation().removeMonitor(receiverActivityMonitor);
+    }
+
+
+    @MediumTest
+    public void testPostingMessage_EmptyString() {
+
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(PostQuestion.class.getName(), null, false);
+
+        final ListView lView = getActivity().getListView();
+
+        TouchUtils.clickView(this, mButton);
+
+        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
+                .waitForActivityWithTimeout(5000);
+
+        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
+        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
+        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
+        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
+
+
+        //Verify that MainActivity was started
+        assertNotNull("mSendQuestion is null", mSendQuestion);
+        assertNotNull("mCancel is null", mCancel);
+        assertNotNull("mTitle is null", mTitle);
+        assertNotNull("mBody is null", mBody);
+        assertNotNull("ReceiverActivity is null", postQuestion);
+        assertEquals("Monitor for postQuestion has been called", 1,
+                receiverActivityMonitor.getHits());
+
+        //Test case 2: Empty string
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                mTitle.requestFocus();
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+        getInstrumentation().sendStringSync("");
+        getInstrumentation().waitForIdleSync();
+
+        String actualText = mTitle.getText().toString();
+        actualText = mTitle.getText().toString();
+        assertTrue(actualText.isEmpty());
+
+        TouchUtils.clickView(this, mSendQuestion);
+        TouchUtils.clickView(this, mCancel);
+
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+    }
+
+    @MediumTest
+    public void testReplyMessage_LikeDislike() throws Exception{
+
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(PostQuestion.class.getName(), null, false);
+        Instrumentation.ActivityMonitor receiverActivityMonitor2 = getInstrumentation()
+                .addMonitor(ReplyActivity.class.getName(), null, false);
+
+        final ListView lView = getActivity().getListView();
+
+        TouchUtils.clickView(this, mButton);
+
+        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
+                .waitForActivityWithTimeout(5000);
+
+        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
+        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
+        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
+        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
+
+
+        //Verify that MainActivity was started
+        assertNotNull("mSendQuestion is null", mSendQuestion);
+        assertNotNull("mCancel is null", mCancel);
+        assertNotNull("mTitle is null", mTitle);
+        assertNotNull("mBody is null", mBody);
+        assertNotNull("ReceiverActivity is null", postQuestion);
+        assertEquals("Monitor for postQuestion has been called", 1,
+                receiverActivityMonitor.getHits());
+
+        //Test case 3
+        getInstrumentation().runOnMainSync(new Runnable() {
+            @Override
+            public void run() {
+                mTitle.requestFocus();
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+        getInstrumentation().sendStringSync("<Reply button and like testing>");
+        getInstrumentation().waitForIdleSync();
+
+        String actualText = mTitle.getText().toString();
+        while (actualText.isEmpty())
+            actualText = mTitle.getText().toString();
+        assertEquals("<Reply button and like testing>", actualText);
+
+        TouchUtils.clickView(this, mSendQuestion);
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+        //This part should be separated by a new test
+        View listElement = lView.getChildAt(lView.getCount() - 1);
+        assertNotNull(listElement);
+
+        ImageButton mReplyButton = (ImageButton) listElement.findViewById(R.id.reply);
+        //Should exist
+        assertNotNull(mReplyButton);
+        //Click dislike button
+        Thread.sleep(1000);
+        TouchUtils.clickView(this, mReplyButton);
+
+
+        ReplyActivity replyActivity = (ReplyActivity) receiverActivityMonitor2
+                .waitForActivityWithTimeout(5000);
+
+        ImageButton mLikeButton = (ImageButton) replyActivity.findViewById(R.id.likeParentQuestion);
+        ImageButton mDislikeButton = (ImageButton) replyActivity.findViewById(R.id.dislikeParentQuestion);
+        //Should exist
+        assertNotNull(mLikeButton);
+        assertNotNull(mDislikeButton);
+        //Click dislike button
+        Thread.sleep(1000);
+        TouchUtils.clickView(this, mLikeButton);
+        //Should be not clickable now
+        assertFalse(mLikeButton.isClickable());
+        assertFalse(mDislikeButton.isClickable());
+    }
 }
