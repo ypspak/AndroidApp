@@ -374,7 +374,7 @@ public class ReplyActivity extends ListActivity {
         }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
             timeResolution = DateUtils.HOUR_IN_MILLIS;
         }else{
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy KK:mm aa");
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
             Date date = (new Date(postTime));
             return df.format(date);
         }
