@@ -1,27 +1,17 @@
 package hk.ust.cse.hunkim.questionroom;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ActivityUnitTestCase;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.MediumTest;
-import android.test.suitebuilder.annotation.SmallTest;
-import android.text.method.Touch;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.firebase.client.Firebase;
-
 import java.util.Date;
-
-import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
  * Created by hunkim on 7/20/15.
@@ -109,8 +99,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View listElement = lView.getChildAt(lView.getCount() - 1);
         assertNotNull(listElement);
 
-        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.like);
-        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.dislike);
+        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.QuestionLike);
+        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.QuestionDislike);
 
         //Should exist
         assertNotNull(mLikeButton);
@@ -178,8 +168,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View listElement = lView.getChildAt(lView.getCount() - 1);
         assertNotNull(listElement);
 
-        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.like);
-        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.dislike);
+        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.QuestionLike);
+        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.QuestionDislike);
         //Should exist
         assertNotNull(mLikeButton);
         assertNotNull(mDislikeButton);
@@ -300,7 +290,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         View listElement = lView.getChildAt(lView.getCount() - 1);
         assertNotNull(listElement);
 
-        ImageButton mReplyButton = (ImageButton) listElement.findViewById(R.id.reply);
+        ImageButton mReplyButton = (ImageButton) listElement.findViewById(R.id.QuestionReply);
         //Should exist
         assertNotNull(mReplyButton);
         //Click dislike button
