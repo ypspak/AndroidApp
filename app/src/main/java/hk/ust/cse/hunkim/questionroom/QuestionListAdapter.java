@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -62,15 +63,10 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         int like = question.getLike();
         int dislike = question.getDislike();
 
-//<<<<<<< HEAD
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.QuestionLike);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.QuestionDislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
-/*=======
-        ImageButton likeButton = (ImageButton) view.findViewById(R.id.QuestionLike);
-        ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.QuestionDislike);
-        ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
->>>>>>> refs/remotes/origin/master*/
+
         TextView timeText = (TextView) view.findViewById((R.id.timetext));
         TextView likeNumText = (TextView) view.findViewById((R.id.likenumber));
         TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
@@ -155,11 +151,28 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         return roomName;
     }
 
-    private String getDate(long timestamp)
+    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
+    private String getDate(long postTime)
     {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date date = (new Date(timestamp));
-        return df.format(date);
+        long currentTime = new Date().getTime();
+        long timeResolution = 0;
+        long timeDiff = currentTime-postTime;
+        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
+            return "Just now";
+        }
+
+        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
+            timeResolution = DateUtils.SECOND_IN_MILLIS;
+        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
+            timeResolution = DateUtils.MINUTE_IN_MILLIS;
+        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
+            timeResolution = DateUtils.HOUR_IN_MILLIS;
+        }else{
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy KK:mm aa");
+            Date date = (new Date(postTime));
+            return df.format(date);
+        }
+        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
     }
     @Override
     protected void sortModels(List<Question> mModels) {
