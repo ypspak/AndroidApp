@@ -13,6 +13,8 @@ import com.firebase.client.Query;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -133,7 +135,15 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
 
     @Override
     protected void sortModels(List<Reply> mModels) {
-
+        Collections.sort(mModels, new Comparator<Reply>(){
+            public int compare(Reply reply1, Reply reply2) {
+                if (reply1.getOrder() >= reply2.getOrder()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
     @Override

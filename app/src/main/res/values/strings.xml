@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QuestionRoom</string>
+    <string name="app_name">resPOSTs</string>
     <string name="title_activity_login">Question Room</string>
 
     <!-- Strings related to login -->
