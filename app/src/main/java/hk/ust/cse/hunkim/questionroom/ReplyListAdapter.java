@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -13,6 +13,8 @@ import com.firebase.client.Query;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -107,15 +109,41 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         view.setTag(reply.getKey());  // store key in the view
     }
 
-    private String getDate(long timestamp)
+    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
+    private String getDate(long postTime)
     {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date date = (new Date(timestamp));
-        return df.format(date);
+        long currentTime = new Date().getTime();
+        long timeResolution = 0;
+        long timeDiff = currentTime-postTime;
+        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
+            return "Just now";
+        }
+
+        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
+            timeResolution = DateUtils.SECOND_IN_MILLIS;
+        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
+            timeResolution = DateUtils.MINUTE_IN_MILLIS;
+        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
+            timeResolution = DateUtils.HOUR_IN_MILLIS;
+        }else{
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
+            Date date = (new Date(postTime));
+            return df.format(date);
+        }
+        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
     }
+
     @Override
     protected void sortModels(List<Reply> mModels) {
-
+        Collections.sort(mModels, new Comparator<Reply>(){
+            public int compare(Reply reply1, Reply reply2) {
+                if (reply1.getOrder() >= reply2.getOrder()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });
     }
 
     @Override

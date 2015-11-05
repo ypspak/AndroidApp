@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
  */
 public class ReplyActivity extends ListActivity {
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+
 
     private String key;
     private String roomName;
@@ -355,12 +357,30 @@ public class ReplyActivity extends ListActivity {
         );
     }
 
-    private String getDate(long timestamp)
+    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
+    private String getDate(long postTime)
     {
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        Date date = (new Date(timestamp));
-        return df.format(date);
+        long currentTime = new Date().getTime();
+        long timeResolution = 0;
+        long timeDiff = currentTime-postTime;
+        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
+            return "Just now";
+        }
+
+        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
+            timeResolution = DateUtils.SECOND_IN_MILLIS;
+        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
+            timeResolution = DateUtils.MINUTE_IN_MILLIS;
+        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
+            timeResolution = DateUtils.HOUR_IN_MILLIS;
+        }else{
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
+            Date date = (new Date(postTime));
+            return df.format(date);
+        }
+        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
     }
+
     public void Close(View view) {
         finish();
     }
