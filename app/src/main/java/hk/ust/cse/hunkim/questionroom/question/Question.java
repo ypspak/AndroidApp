@@ -38,7 +38,7 @@ public class Question{
     private long timestamp;
     private long lastTimestamp;
     private String tags;
-    private double order;
+    private int order;
     private String wholeMsgReply; //todo: unused, gonna to delete
     private int replies;
 
@@ -82,7 +82,7 @@ public class Question{
 
     public long getLastTimestamp(){return lastTimestamp;}
 
-    public double getOrder() { return order; }
+    public int getOrder() { return order; }
 
     public String getKey() {return key; }
 

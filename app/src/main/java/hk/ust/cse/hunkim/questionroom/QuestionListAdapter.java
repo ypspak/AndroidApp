@@ -201,13 +201,25 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     private int difCompareWay(Question question1, Question question2){
         int method = this.getSortMethod();
-        if(method==0){
+        if(method==0){ //newest
             return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
-        }else if(method==1){
+        }else if(method==1){ //hot
+            if (question1.getOrder() == question2.getOrder()) {
+                return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
+            }
+            return question2.getOrder() - question1.getOrder();
+        }else if(method == 2) {//like
             if (question1.getLike() == question2.getLike()) {
                 return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
             }
             return question2.getLike() - question1.getLike();
+        }else if(method == 3){//dislike
+            if (question1.getDislike() == question2.getDislike()) {
+                return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
+            }
+            return question2.getDislike() - question1.getDislike();
+        }else if (method == 4){//latest reply
+            return question1.getLastTimestamp() > question2.getLastTimestamp() ? 1 : -1;
         }
         return 0;
     }
