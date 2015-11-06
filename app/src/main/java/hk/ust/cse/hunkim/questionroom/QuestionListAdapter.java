@@ -38,7 +38,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
     MainActivity activity;
-    private int sortMethod;//0=sortByTimestamp, 1=sortByLike
+    private int sortMethod;
 
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
         super(ref, Question.class, layout, activity);
@@ -47,7 +47,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         assert (activity instanceof MainActivity);
         keepRoomName(roomName);
         this.activity = (MainActivity) activity;
-        this.sortMethod = 0;
     }
 
     public int getSortMethod(){
