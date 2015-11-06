@@ -55,7 +55,6 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-        assert (intent != null);
 
         // Make it a bit more reliable
         roomName = intent.getStringExtra(JoinActivity.ROOM_NAME);
@@ -104,6 +103,26 @@ public class MainActivity extends ListActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
+
+        ((ImageButton) findViewById(R.id.sort1)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mChatListAdapter.setSortMethod(1);
+                    }
+                }
+
+        );
+
+        ((ImageButton) findViewById(R.id.sort0)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mChatListAdapter.setSortMethod(0);
+                    }
+                }
+
+        );
 
         // Finally, a little indication of connection status
         mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
