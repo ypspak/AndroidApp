@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,8 @@ public class MainActivity extends ListActivity {
 
     private String roomName;
     private Firebase mFirebaseRef;
+    private ImageButton sortButton;
+    private int sortIndex;
     private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
 
@@ -45,18 +49,19 @@ public class MainActivity extends ListActivity {
         return dbutil;
     }
 
+    public int getSortIndex(){return sortIndex;}
+
+    public void setSortIndex(int i){sortIndex = i;}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //initialized once with an Android context.
         Firebase.setAndroidContext(this);
-
         setContentView(R.layout.activity_main);
-
         Intent intent = getIntent();
-        assert (intent != null);
 
+        this.sortIndex = 0;
         // Make it a bit more reliable
         roomName = intent.getStringExtra(JoinActivity.ROOM_NAME);
 
@@ -104,6 +109,43 @@ public class MainActivity extends ListActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
+
+        sortButton = (ImageButton) findViewById(R.id.sort);
+        sortButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Creating the instance of PopupMenu
+                        PopupMenu popup = new PopupMenu(MainActivity.this, sortButton);
+                        //Inflating the Popup using xml file
+                        popup.getMenuInflater().inflate(R.menu.popup_menu_sort, popup.getMenu());
+
+                        for (int i = 0; i < popup.getMenu().size(); ++i) {
+                            MenuItem mi = popup.getMenu().getItem(i);
+                            // check the Id as you wish
+                            if (i==getSortIndex()) {
+                                mi.setChecked(true);
+                            }
+                        }
+                        //registering popup with OnMenuItemClickListener
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            public boolean onMenuItemClick(MenuItem item) {
+                                item.setChecked(true);
+                                switch(item.getItemId()){
+                                    case R.id.newest: setSortIndex(0); break;
+                                    case R.id.hot: setSortIndex(1); break;
+                                    case R.id.like: setSortIndex(2); break;
+                                    case R.id.dislike: setSortIndex(3); break;
+                                    case R.id.lastreplied: setSortIndex(4); break;
+                                }
+                                mChatListAdapter.setSortMethod(getSortIndex());
+                                listView.setAdapter(mChatListAdapter);
+                                return true;
+                            }
+                        });
+                        popup.show();//showing popup menu
+                    }
+                });
 
         // Finally, a little indication of connection status
         mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {

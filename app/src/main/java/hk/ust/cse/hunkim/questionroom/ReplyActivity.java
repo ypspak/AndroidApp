@@ -60,7 +60,6 @@ public class ReplyActivity extends ListActivity {
         setContentView(R.layout.activity_reply);
 
         Intent intent = getIntent();
-        assert (intent != null);
 
         //currently just for testing that I am entered the replying room corresponding to the question
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
@@ -336,16 +335,18 @@ public class ReplyActivity extends ListActivity {
     }
 
     public void updateQuestionReply() {
-        final Firebase replyRef = questionUrl.child("replies");
-        replyRef.addListenerForSingleValueEvent(
+        questionUrl.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getValue()!=null){
+                        if(dataSnapshot.child("replies").getValue()!=null){
                             Long replyValue = (Long) dataSnapshot.getValue();
                             Log.e("Reply update:", "" + replyValue);
                             //Add 1 value to the dislikeValue
-                            replyRef.setValue(replyValue + 1);
+                            questionUrl.child("replies").setValue(replyValue + 1);
+                        }
+                        if(dataSnapshot.child("lastTimestamp").getValue()!=null){
+                            questionUrl.child("lastTimestamp").setValue(new Date().getTime());
                         }
                     }
 

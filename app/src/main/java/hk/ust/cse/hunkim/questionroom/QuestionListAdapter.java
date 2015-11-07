@@ -15,6 +15,7 @@ import com.firebase.client.Query;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
     MainActivity activity;
+    private int sortMethod;
 
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
         super(ref, Question.class, layout, activity);
@@ -47,6 +49,13 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         this.activity = (MainActivity) activity;
     }
 
+    public int getSortMethod(){
+        return sortMethod;
+    }
+
+    public void setSortMethod(int method){
+        this.sortMethod = method;
+    }
     /**
      * Bind an instance of the <code>Chat</code> class to our view. This method is called by <code>FirebaseListAdapter</code>
      * when there is a data change, and we are given an instance of a View that corresponds to the layout that we passed
@@ -176,11 +185,41 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     }
     @Override
     protected void sortModels(List<Question> mModels) {
-        Collections.sort(mModels);
+        Collections.sort(mModels, new Comparator<Question>(){
+            public int compare(Question question1, Question question2) {
+                return difCompareWay(question1, question2);
+            }
+        });
     }
 
     @Override
     protected void setKey(String key, Question model) {
         model.setKey(key);
+    }
+
+
+    private int difCompareWay(Question question1, Question question2){
+        int method = this.getSortMethod();
+        if(method==0){ //newest
+            return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
+        }else if(method==1){ //hot
+            if (question1.getOrder() == question2.getOrder()) {
+                return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
+            }
+            return question2.getOrder() - question1.getOrder();
+        }else if(method == 2) {//like
+            if (question1.getLike() == question2.getLike()) {
+                return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
+            }
+            return question2.getLike() - question1.getLike();
+        }else if(method == 3){//dislike
+            if (question1.getDislike() == question2.getDislike()) {
+                return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
+            }
+            return question2.getDislike() - question1.getDislike();
+        }else if (method == 4){//latest reply
+            return question1.getLastTimestamp() > question2.getLastTimestamp() ? 1 : -1;
+        }
+        return 0;
     }
 }

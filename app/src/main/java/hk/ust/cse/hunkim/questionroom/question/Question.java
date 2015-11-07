@@ -9,7 +9,7 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
 /**
  * Created by hunkim on 7/16/15.
  */
-public class Question implements Comparable<Question> {
+public class Question{
 
     /**
      * Must be synced with firebase JSON structure
@@ -36,8 +36,9 @@ public class Question implements Comparable<Question> {
     private int dislike;
     private boolean completed;
     private long timestamp;
+    private long lastTimestamp;
     private String tags;
-    private double order;
+    private int order;
     private String wholeMsgReply; //todo: unused, gonna to delete
     private int replies;
 
@@ -54,7 +55,7 @@ public class Question implements Comparable<Question> {
         this.head = title;
         this.desc = body;
         this.tags = "";
-        this.timestamp = new Date().getTime();
+        this.timestamp = this.lastTimestamp = new Date().getTime();
         /* Added by Peter Yeung, 2015/10/30
                     this.timestamp has to be changed to the following comment-out code (apply negative value)
                     since there is no way to reverse order in firebase query(default behaviour: obtain list in ascending order of timestamp)
@@ -79,7 +80,9 @@ public class Question implements Comparable<Question> {
 
     public long getTimestamp() {return timestamp; }
 
-    public double getOrder() { return order; }
+    public long getLastTimestamp(){return lastTimestamp;}
+
+    public int getOrder() { return order; }
 
     public String getKey() {return key; }
 
@@ -92,33 +95,19 @@ public class Question implements Comparable<Question> {
     public void setKey(String key) {
         this.key = key;
     }
-    /**
-     * New one/high like goes bottom
-     * @param other other chat
-     * @return order
-     */
-    @Override
-    public int compareTo(Question other) {
 
-
-        /*** Added by Peter Yeung, 2015/10/30
-         *      We can't implement any method unless a sorting algorithm/method is implemented.
-         */
-        return 0;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Question)) {
-            return false;
-        }
-        Question other = (Question)o;
-        return key.equals(other.key);
-    }
-
-    @Override
-    public int hashCode() {
-        return key.hashCode();
-    }
+//Todo: currently I cant find the useage of the function below, so I hide it.
+//    @Override
+//    public boolean equals(Object o) {
+//        if (!(o instanceof Question)) {
+//            return false;
+//        }
+//        Question other = (Question)o;
+//        return key.equals(other.key);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return key.hashCode();
+//    }
 }

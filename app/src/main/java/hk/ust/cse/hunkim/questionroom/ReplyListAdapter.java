@@ -137,11 +137,10 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
     protected void sortModels(List<Reply> mModels) {
         Collections.sort(mModels, new Comparator<Reply>(){
             public int compare(Reply reply1, Reply reply2) {
-                if (reply1.getOrder() >= reply2.getOrder()) {
-                    return -1;
-                } else {
-                    return 1;
+                if (reply1.getOrder() == reply2.getOrder()) {
+                    return reply1.getTimestamp() > reply2.getTimestamp() ? 1 : -1;
                 }
+                return reply2.getOrder() - reply1.getOrder();
             }
         });
     }
