@@ -45,7 +45,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         // Must be MainActivity
         assert (activity instanceof MainActivity);
-        keepRoomName(roomName);
+        this.roomName=roomName;
         this.activity = (MainActivity) activity;
     }
 
@@ -81,7 +81,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
         TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
 
-        timeText.setText("" + getDate(question.getTimestamp()));
+        timeText.setText("Last update: " + getDate(question.getLastTimestamp()));
         likeNumText.setText("" + question.getLike());
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());
@@ -150,10 +150,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
 
         view.setTag(question.getKey());  // store key in the view
-    }
-
-    private void keepRoomName(String rn){
-        roomName = rn;
     }
 
     private String getRoomName(){

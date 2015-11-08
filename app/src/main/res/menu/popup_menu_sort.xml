@@ -3,24 +3,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/newest"
-            android:title="sort by new"/>
+            android:title="@string/sortNew"/>
 
 
         <item
             android:id="@+id/hot"
-            android:title="sort by hot"/>
+            android:title="@string/sortHot"/>
 
         <item
             android:id="@+id/like"
-            android:title="sort by like"/>
+            android:title="@string/sortLike"/>
 
         <item
             android:id="@+id/dislike"
-            android:title="sort by dislike"/>
+            android:title="@string/sortDislike"/>
 
         <item
             android:id="@+id/lastreplied"
-            android:title="sort by last replied"/>
+            android:title="@string/sortUpdate"/>
     </group>
 
 </menu>
