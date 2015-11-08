@@ -230,7 +230,7 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getValue()!=null){
-                            Long orderValue = (Long) dataSnapshot.getValue();
+                            long orderValue = (long) dataSnapshot.getValue();
                             Log.e("Order update:", "" + orderValue);
 
                             orderRef.setValue(orderValue + value);
@@ -261,7 +261,7 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getValue()!=null){
-                            Long orderValue = (Long) dataSnapshot.getValue();
+                            long orderValue = (long) dataSnapshot.getValue();
                             Log.e("Order update:", "" + orderValue);
                             orderRef.setValue(orderValue + 1);
                         }
@@ -313,7 +313,7 @@ public class ReplyActivity extends ListActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getValue()!=null){
                             if (IsNumber) {
-                                Long tempNum = (Long) dataSnapshot.getValue();
+                                long tempNum = (long) dataSnapshot.getValue();
                                 if (IsDate)
                                     textView.setText("" + getDate(tempNum));
                                 else
@@ -340,7 +340,7 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.child("replies").getValue()!=null){
-                            Long replyValue = (Long) dataSnapshot.getValue();
+                            long replyValue = (long) dataSnapshot.child("replies").getValue();
                             Log.e("Reply update:", "" + replyValue);
                             //Add 1 value to the dislikeValue
                             questionUrl.child("replies").setValue(replyValue + 1);
