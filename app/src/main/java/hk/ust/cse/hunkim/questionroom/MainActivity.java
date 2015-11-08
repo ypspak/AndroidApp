@@ -203,7 +203,7 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long likeValue = (Long) dataSnapshot.getValue();
+                        long likeValue = (long) dataSnapshot.getValue();
                         Log.e("Like update:", "" + likeValue);
 
                         //Add 1 value to the echoValue
@@ -250,7 +250,7 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Long dislikeValue = (Long) dataSnapshot.getValue();
+                        long dislikeValue = (long) dataSnapshot.getValue();
                         Log.e("Dislike update:", "" + dislikeValue);
 
                         //Add 1 value to the dislikeValue
