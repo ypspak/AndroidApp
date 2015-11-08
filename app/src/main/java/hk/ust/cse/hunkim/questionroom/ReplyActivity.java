@@ -340,7 +340,7 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.child("replies").getValue()!=null){
-                            int replyValue = (int) dataSnapshot.child("replies").getValue();
+                            long replyValue = (long) dataSnapshot.child("replies").getValue();
                             Log.e("Reply update:", "" + replyValue);
                             //Add 1 value to the dislikeValue
                             questionUrl.child("replies").setValue(replyValue + 1);
