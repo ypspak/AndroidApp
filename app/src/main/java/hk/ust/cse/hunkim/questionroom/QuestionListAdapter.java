@@ -130,7 +130,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
                         intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
-                        Log.e("Test", getRoomName());
                         intent.putExtra(ROOM_NAME, getRoomName());
                         view.getContext().startActivity(intent);
                     }
@@ -153,7 +152,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         //If the dbUtil is null, then probably the activity is neither MainActivity or SearchResultActivity, i.e. exception. So we do assertion here
         //By Peter Yeung 13/11/2015
-        assert(dbUtil == null);
+        assert(dbUtil != null);
 
         // check if we already clicked
         boolean clickable = !dbUtil.contains(question.getKey());
