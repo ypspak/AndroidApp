@@ -35,7 +35,8 @@ public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-    public static final String ROOM_NAME = "ROOM_NAME";
+    public static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent
+    public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -77,6 +78,7 @@ public class MainActivity extends ListActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PostQuestion.class);
                 intent.putExtra(ROOM_NAME, getRoomName());
+                intent.putExtra(m_FirebaseURL, FIREBASE_URL);
                 startActivity(intent);
             }
         });
