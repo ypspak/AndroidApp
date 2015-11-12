@@ -40,6 +40,10 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     MainActivity activity;
     private int sortMethod;
 
+    //Without filter
+    public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
+        this(ref, activity, layout, roomName, null);
+    }
     //Filter function
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName, String filterStr) {
         super(ref, Question.class, layout, activity, filterStr);
@@ -50,15 +54,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         this.activity = (MainActivity) activity;
     }
 
-    //Without filter
-    public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
-        super(ref, Question.class, layout, activity);
 
-        // Must be MainActivity
-        assert (activity instanceof MainActivity);
-        this.roomName=roomName;
-        this.activity = (MainActivity) activity;
-    }
 
     public int getSortMethod(){
         return sortMethod;
@@ -208,7 +204,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     {
 
         //Check header and then description
-        if (model.getHead().toLowerCase().contains(filterStr))
+        if (filterStr == null)
+            return true;
+        else if (model.getHead().toLowerCase().contains(filterStr))
             return true;
         else if (model.getDesc().toLowerCase().contains(filterStr))
             return true;
