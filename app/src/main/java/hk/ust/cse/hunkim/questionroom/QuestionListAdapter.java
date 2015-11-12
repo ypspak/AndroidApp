@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -37,7 +38,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     public static final String REPLIED_QEUSTION = "REPLIEDQ";
     public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
-    MainActivity activity;
+    Activity activity;
     private int sortMethod;
 
     //Without filter
@@ -48,12 +49,18 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName, String filterStr) {
         super(ref, Question.class, layout, activity, filterStr);
 
-        // Must be MainActivity
-        assert (activity instanceof MainActivity);
-        this.roomName=roomName;
-        this.activity = (MainActivity) activity;
-    }
+        //Originally only MainActivity is allowed.
+        //However, I want to reuse this class for search function. Therefore, we use instanceof here
+        //Check whether activity is a class of MainActivity / SearchResultActivity by using instanceof keyword
+        //By Peter Yeung 13/11/2015
+        this.roomName = roomName;
+        if (activity instanceof MainActivity) {
+            this.activity = (MainActivity) activity;
+        }
+        else if (activity instanceof SearchResultActivity)
+            this.activity = (SearchResultActivity) activity;
 
+    }
 
 
     public int getSortMethod(){
@@ -73,12 +80,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
      */
     @Override
     protected void populateView(View view, Question question) {
-        DBUtil dbUtil = activity.getDbutil();
+
 
         // Map a Chat object to an entry in our listview
-        int like = question.getLike();
-        int dislike = question.getDislike();
-
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.QuestionLike);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.QuestionDislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
@@ -126,6 +130,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
                         intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
+                        Log.e("Test", getRoomName());
                         intent.putExtra(ROOM_NAME, getRoomName());
                         view.getContext().startActivity(intent);
                     }
@@ -134,6 +139,21 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         String msgString = "" + question.getHead();
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
+
+        //Initialize the dbUtil, and check whether activity is a class of MainActivity/SearchResultActivity. If so, get the dbUtil.
+        //Moreover, if the class is SearchResultActivity, I want to enable the multiline of the description
+        //By Peter Yeung 13/11/2015
+        DBUtil dbUtil = null;
+        if (activity instanceof MainActivity) {
+            dbUtil = ((MainActivity) activity).getDbutil();
+        }
+        else if (activity instanceof SearchResultActivity) {
+            dbUtil = ((SearchResultActivity) activity).getDbutil();
+        }
+
+        //If the dbUtil is null, then probably the activity is neither MainActivity or SearchResultActivity, i.e. exception. So we do assertion here
+        //By Peter Yeung 13/11/2015
+        assert(dbUtil == null);
 
         // check if we already clicked
         boolean clickable = !dbUtil.contains(question.getKey());

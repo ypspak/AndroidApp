@@ -122,6 +122,7 @@ public class MainActivity extends ListActivity {
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), SearchMainActivity.class);
                         intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra(m_FirebaseURL, FIREBASE_URL);
                         view.getContext().startActivity(intent);
                     }
                 }
