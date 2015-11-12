@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
 
 /**
@@ -148,5 +149,10 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
     @Override
     protected void setKey(String key, Reply model) {
         model.setKey(key);
+    }
+
+    protected boolean IsContainString(String filterStr, Reply model)
+    {
+        return true; //Currently reply function does not need filter function, so just return true anyway
     }
 }

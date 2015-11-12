@@ -40,6 +40,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     MainActivity activity;
     private int sortMethod;
 
+    //Filter function
+    public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName, String filterStr) {
+        super(ref, Question.class, layout, activity, filterStr);
+
+        // Must be MainActivity
+        assert (activity instanceof MainActivity);
+        this.roomName=roomName;
+        this.activity = (MainActivity) activity;
+    }
+
+    //Without filter
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
         super(ref, Question.class, layout, activity);
 
@@ -193,6 +204,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         model.setKey(key);
     }
 
+    protected boolean IsContainString(String filterStr, Question model)
+    {
+
+        //Check header and then description
+        if (model.getHead().toLowerCase().contains(filterStr))
+            return true;
+        else if (model.getDesc().toLowerCase().contains(filterStr))
+            return true;
+
+        return false;
+    }
 
     private int difCompareWay(Question question1, Question question2){
         int method = this.getSortMethod();
