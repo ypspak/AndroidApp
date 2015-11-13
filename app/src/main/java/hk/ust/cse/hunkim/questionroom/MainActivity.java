@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,11 +35,13 @@ public class MainActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-    public static final String ROOM_NAME = "ROOM_NAME";
+    public static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent
+    public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
 
     private String roomName;
     private Firebase mFirebaseRef;
-    private ImageButton sortButton;
+    private ImageButton sortButton; //Added by Marvin
+    private ImageButton searchButton; //Added by Peter
     private int sortIndex;
     private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
@@ -75,6 +78,7 @@ public class MainActivity extends ListActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PostQuestion.class);
                 intent.putExtra(ROOM_NAME, getRoomName());
+                intent.putExtra(m_FirebaseURL, FIREBASE_URL);
                 startActivity(intent);
             }
         });
@@ -109,6 +113,20 @@ public class MainActivity extends ListActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
+
+
+        searchButton = (ImageButton) findViewById(R.id.search);
+        searchButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(view.getContext(), SearchMainActivity.class);
+                        intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra(m_FirebaseURL, FIREBASE_URL);
+                        view.getContext().startActivity(intent);
+                    }
+                }
+        );
 
         sortButton = (ImageButton) findViewById(R.id.sort);
         sortButton.setOnClickListener(
