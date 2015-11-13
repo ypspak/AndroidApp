@@ -12,10 +12,14 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
  * @param <T> The class type to use as a model for the data contained in the children of the given Firebase location
@@ -46,7 +50,16 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
      *                    instance of the corresponding view with the data from an instance of mModelClass.
      * @param activity    The activity containing the ListView
      */
-    public FirebaseListAdapter(Query mRef, Class<T> mModelClass, int mLayout, Activity activity) {
+
+    //Chain constructor
+    public FirebaseListAdapter(Query mRef, Class<T> mModelClass, int mLayout, Activity activity)
+    {
+        this(mRef, mModelClass, mLayout, activity, null);
+    }
+
+    //This is the real one
+    public FirebaseListAdapter(Query mRef, final Class<T> mModelClass, int mLayout, Activity activity, final String filterStr) {
+
         this.mRef = mRef;
         this.mModelClass = mModelClass;
         this.mLayout = mLayout;
@@ -59,7 +72,10 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
 
-                    T model = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
+                T model = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
+
+                if (!IsContainString(filterStr, model))
+                    return;
 
                 String modelName = dataSnapshot.getKey();
                 mModelKeys.put(modelName, model);
@@ -213,5 +229,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
     protected abstract void sortModels(List<T> mModels);
 
     protected abstract void setKey(String key, T model);
+
+    protected abstract boolean IsContainString(String filterStr, T model);
 
 }

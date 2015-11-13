@@ -5,19 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
@@ -26,10 +19,9 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
  */
 public class PostQuestion extends Activity {
 
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-    //public static final String ROOM_NAME = "ROOM_NAME";
 
     private String roomName;
+    private String Firebase_URL;
     private Firebase mFirebaseRef;
     private EditText titleInput;
     private EditText bodyInput;
@@ -52,11 +44,11 @@ public class PostQuestion extends Activity {
         Intent intent = getIntent();
         assert (intent != null);
         roomName = intent.getStringExtra(MainActivity.ROOM_NAME);
-
+        Firebase_URL = intent.getStringExtra(MainActivity.m_FirebaseURL);
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
 
-        mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
+        mFirebaseRef = new Firebase(Firebase_URL).child(roomName).child("questions");
 
         //todo: collaborate with the sendMessage() function, how to disable the button when some fields are empty;
         // Setup our input methods. Enter key on the keyboard or pushing the send button
