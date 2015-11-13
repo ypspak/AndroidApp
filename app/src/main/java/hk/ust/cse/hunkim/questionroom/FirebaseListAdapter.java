@@ -74,8 +74,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
                 T model = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
 
-                if (!IsContainString(filterStr, model))
-                    return;
+
 
                 String modelName = dataSnapshot.getKey();
                 mModelKeys.put(modelName, model);
@@ -86,6 +85,8 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
                 // bug seeded
                 // mModels.add(-1, model);
 
+                if (!IsContainString(filterStr, model))
+                    return;
                 // Insert into the correct location, based on previousChildName
                 if (previousChildName == null) {
                     mModels.add(0, model);
@@ -99,7 +100,6 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
                         mModels.add(nextIndex, model);
                     }
                 }
-
                 notifyDataSetChanged();
             }
 
@@ -181,9 +181,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
 
     @Override
-    public int getCount() {
-        return mModels.size();
-    }
+    public int getCount() { return mModels.size(); }
 
     @Override
     public Object getItem(int i) {
