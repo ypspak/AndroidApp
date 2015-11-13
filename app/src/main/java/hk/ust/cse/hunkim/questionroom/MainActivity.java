@@ -104,6 +104,7 @@ public class MainActivity extends ListActivity {
         mChatListAdapter = new QuestionListAdapter(
                 mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
                 this, R.layout.question, roomName);
+
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -113,7 +114,6 @@ public class MainActivity extends ListActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
-
 
         searchButton = (ImageButton) findViewById(R.id.search);
         searchButton.setOnClickListener(
@@ -182,8 +182,6 @@ public class MainActivity extends ListActivity {
                 // No-op
             }
             });
-
-
     }
 
     //todo: Leave it here, probably will work on this part later
@@ -240,7 +238,17 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        double orderValue = (double) dataSnapshot.getValue();
+                        //double orderValue = (double) dataSnapshot.getValue();
+                        double orderValue;
+                        if (dataSnapshot.getValue() instanceof Long) {
+                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
+                            Log.e("Type", "Long");
+                        }
+                        else
+                        {
+                            orderValue = (double) dataSnapshot.getValue();
+                            Log.e("Type", "Double");
+                        }
                         Log.e("Order update:", "" + orderValue);
 
                         orderRef.setValue(orderValue - 1);  //Need clarification, the higher value of order, the lower priorty sorted in firebase?
@@ -287,7 +295,16 @@ public class MainActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        double orderValue = (double) dataSnapshot.getValue();
+                        double orderValue;
+                        //double orderValue = (double) dataSnapshot.getValue();
+                        if (dataSnapshot.getValue() instanceof Long) {
+                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
+                        }
+                        else
+                        {
+                            orderValue = (double) dataSnapshot.getValue();
+                        }
+
                         Log.e("Order update:", "" + orderValue);
 
                         orderRef.setValue(orderValue + 1); //Need clarification, the higher value of order, the lower priorty sorted in firebase?

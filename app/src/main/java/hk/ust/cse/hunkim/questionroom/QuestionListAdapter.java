@@ -38,6 +38,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     public static final String REPLIED_QEUSTION = "REPLIEDQ";
     public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
+    private String filterStr;
     Activity activity;
     private int sortMethod;
 
@@ -54,6 +55,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         //Check whether activity is a class of MainActivity / SearchResultActivity by using instanceof keyword
         //By Peter Yeung 13/11/2015
         this.roomName = roomName;
+        this.filterStr = filterStr;
         if (activity instanceof MainActivity) {
             this.activity = (MainActivity) activity;
         }
@@ -106,8 +108,15 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        MainActivity m = (MainActivity) view.getContext();
-                        m.updateLike((String) view.getTag());
+                        if (view.getContext() instanceof MainActivity) {
+                            MainActivity m = (MainActivity) view.getContext();
+                            m.updateLike((String) view.getTag());
+                        }
+                        else if (view.getContext() instanceof SearchResultActivity)
+                        {
+                            SearchResultActivity m = (SearchResultActivity) view.getContext();
+                            m.updateLike((String) view.getTag());
+                        }
                     }
                 }
 
@@ -117,8 +126,15 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        MainActivity m = (MainActivity) view.getContext();
-                        m.updateDislike((String) view.getTag());
+                        if (view.getContext() instanceof MainActivity) {
+                            MainActivity m = (MainActivity) view.getContext();
+                            m.updateDislike((String) view.getTag());
+                        }
+                        else if (view.getContext() instanceof SearchResultActivity)
+                        {
+                            SearchResultActivity m = (SearchResultActivity) view.getContext();
+                            m.updateDislike((String) view.getTag());
+                        }
                     }
                 }
 
@@ -136,8 +152,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                 }
         );
 
-        String msgString = "" + question.getHead();
-        ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
+
 
         //Initialize the dbUtil, and check whether activity is a class of MainActivity/SearchResultActivity. If so, get the dbUtil.
         //Moreover, if the class is SearchResultActivity, I want to enable the multiline of the description
@@ -145,9 +160,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         DBUtil dbUtil = null;
         if (activity instanceof MainActivity) {
             dbUtil = ((MainActivity) activity).getDbutil();
+            ((TextView) view.findViewById(R.id.head)).setText(Html.fromHtml("" + question.getHead()));
         }
         else if (activity instanceof SearchResultActivity) {
             dbUtil = ((SearchResultActivity) activity).getDbutil();
+            if (question.getDesc().equals(""))
+                ((TextView) view.findViewById(R.id.desc)).setText(Html.fromHtml("Empty message."));
+            else
+                ((TextView) view.findViewById(R.id.desc)).setText(Html.fromHtml("" + replaceFilterStr(question.getDesc(), filterStr)));
+
+            ((TextView) view.findViewById(R.id.head)).setText(Html.fromHtml("" + replaceFilterStr(question.getHead(), filterStr)));
+
         }
 
         //If the dbUtil is null, then probably the activity is neither MainActivity or SearchResultActivity, i.e. exception. So we do assertion here
@@ -182,6 +205,27 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         return roomName;
     }
 
+
+    private String replaceFilterStr(String text, String filterStr) {
+        String prependText = "<b><font color=\"red\">";
+        String endText = "</font></b>";
+        String loweredText = text.toLowerCase();
+        String loweredfilterStr = filterStr.toLowerCase();
+        int initalPosition = 0;
+        int lengthIncrement = prependText.length() + endText.length();
+        int lengthfilterStr = filterStr.length();
+        initalPosition = loweredText.indexOf(loweredfilterStr, initalPosition);
+
+        while (initalPosition > -1)
+        {
+            text = text.substring(0, initalPosition) + prependText + text.substring(initalPosition, initalPosition + lengthfilterStr) + endText + text.substring(initalPosition + lengthfilterStr);
+            loweredText = text.toLowerCase();
+            initalPosition = loweredText.indexOf(loweredfilterStr, initalPosition + lengthIncrement);
+
+        }
+
+        return text;
+    }
     //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
     private String getDate(long postTime)
     {
@@ -225,9 +269,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         //Check header and then description
         if (filterStr == null)
             return true;
-        else if (model.getHead().toLowerCase().contains(filterStr))
+        else if (model.getHead().toLowerCase().contains(filterStr.toLowerCase()))
             return true;
-        else if (model.getDesc().toLowerCase().contains(filterStr))
+        else if (model.getDesc().toLowerCase().contains(filterStr.toLowerCase()))
             return true;
 
         return false;
