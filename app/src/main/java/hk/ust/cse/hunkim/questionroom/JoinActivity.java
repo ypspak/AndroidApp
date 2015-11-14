@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -20,6 +21,7 @@ public class JoinActivity extends Activity {
      */
     // UI references.
     private TextView roomNameView;
+    private Button createRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class JoinActivity extends Activity {
 
         // Set up the login form.
         roomNameView = (TextView) findViewById(R.id.room_name);
+        createRoom = (Button) findViewById(R.id.create_room);
 
         roomNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -37,6 +40,13 @@ public class JoinActivity extends Activity {
                     attemptJoin(textView);
                 }
                 return true;
+            }
+        });
+
+        createRoom.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), CreateRoomActivity.class);
+                startActivity(intent);
             }
         });
     }
