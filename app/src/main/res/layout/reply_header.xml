@@ -30,7 +30,7 @@
             android:onClick="Close" />
 
         <Button
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="COMP3111"
             android:id="@+id/head_reply"
@@ -41,7 +41,8 @@
             android:gravity="center_vertical|left"
             android:background="@drawable/complete_transparent_button"
             android:onClick="Close"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:layout_marginRight="10dp" />
 
     </RelativeLayout>
 
