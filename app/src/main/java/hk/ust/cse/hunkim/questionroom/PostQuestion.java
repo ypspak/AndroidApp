@@ -48,7 +48,7 @@ public class PostQuestion extends Activity {
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
 
-        mFirebaseRef = new Firebase(Firebase_URL).child(roomName).child("questions");
+        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("questions");
 
         //todo: collaborate with the sendMessage() function, how to disable the button when some fields are empty;
         // Setup our input methods. Enter key on the keyboard or pushing the send button
