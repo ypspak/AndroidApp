@@ -133,7 +133,7 @@ public class CreateRoomActivity extends Activity {
         String pw = passwordField.getText().toString();
         Firebase roomRef = roomListRef.child(roomName);
 
-        Room roomToAdd = new Room(roomName, isPrivate.isChecked(), pw);
+        Room roomToAdd = new Room(isPrivate.isChecked(), pw);
         roomRef.setValue(roomToAdd);
     }
 
