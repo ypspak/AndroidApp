@@ -5,13 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag;
+import hk.ust.cse.hunkim.questionroom.hashtag_extracter.Hashtag_extracter;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
@@ -23,11 +33,12 @@ public class PostQuestion extends Activity {
     private String roomName;
     private String Firebase_URL;
     private Firebase mFirebaseRef;
+    private Firebase mFirebaseRef_Hashtag;
     private EditText titleInput;
     private EditText bodyInput;
     private Button postQuestion;
     private Button cancel;
-
+    private Hashtag_extracter hashtag_extracter;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_question_popbox);
@@ -49,6 +60,7 @@ public class PostQuestion extends Activity {
         // Setup our Firebase mFirebaseRef
 
         mFirebaseRef = new Firebase(Firebase_URL).child(roomName).child("questions");
+        //mFirebaseRef_Hashtag = new Firebase(Firebase_URL).child(roomName).child("tags");
 
         //todo: collaborate with the sendMessage() function, how to disable the button when some fields are empty;
         // Setup our input methods. Enter key on the keyboard or pushing the send button
@@ -103,10 +115,62 @@ public class PostQuestion extends Activity {
             Question question = new Question(title,body);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(question);
+            PushHashTag(body);
             Close(view);
         }else {
             titleInput.setError(getString(R.string.error_field_required));
         }//warning to force user input title
+    }
+
+    private void PushHashTag(String body)
+    {
+        //Now push those hashtag
+        mFirebaseRef = new Firebase(Firebase_URL).child(roomName).child("tags");
+        hashtag_extracter = new Hashtag_extracter(body);
+        for (int i = 0; i < hashtag_extracter.getListCount(); i++) {
+            final String tagsName = hashtag_extracter.getListItem(i);
+            final Query mRef = mFirebaseRef.orderByChild("name").equalTo(tagsName).limitToFirst(1);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        Log.e("Hashtag", "Found none matching hashtag. Pushing it.");
+                        Hashtag pushTags = new Hashtag(tagsName);
+                        mFirebaseRef.push().setValue(pushTags);
+                    } else {
+
+                        String key = null;
+                        HashMap<String, HashMap<String, Object>> tags = (HashMap<String, HashMap<String, Object>>) dataSnapshot.getValue();
+                        for (Map.Entry<String, HashMap<String, Object>> entry : tags.entrySet()) {
+                            key = entry.getKey();
+                        }
+
+                        //I swear, this method is extremely bad.
+                        HashMap<String, Object> hashtags = tags.get(key);
+                        String name = (String) hashtags.get("name");
+                        Long used = (Long) hashtags.get("used");
+                        used++;
+                        hashtags.clear();
+                        hashtags.put("name", name);
+                        hashtags.put("used", used);
+
+                        tags.clear();
+                        tags.put(key, hashtags);
+
+                        //int used = (int) tags.get("used");
+                        //tags.put("used", used+1);
+                        mFirebaseRef.setValue(tags);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
     }
 
     public void Close(View view) {
