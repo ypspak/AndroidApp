@@ -65,7 +65,7 @@ public class ReplyActivity extends ListActivity {
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
         setTitle("Room Name:" + roomName);
-        replyContainerRef = new Firebase(FIREBASE_URL).child(roomName).child("replies");
+        replyContainerRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("replies");
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -83,7 +83,7 @@ public class ReplyActivity extends ListActivity {
 
     public void onStart() {
         super.onStart();
-        questionUrl = new Firebase(FIREBASE_URL).child(roomName).child("questions").child(key);
+        questionUrl = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions").child(key);
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
 

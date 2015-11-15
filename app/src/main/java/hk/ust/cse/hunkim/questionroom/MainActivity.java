@@ -70,7 +70,7 @@ public class MainActivity extends ListActivity {
 
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions");
 
         ImageButton postQ = (ImageButton) findViewById(R.id.postQuestion);
         postQ.setOnClickListener(new View.OnClickListener() {
