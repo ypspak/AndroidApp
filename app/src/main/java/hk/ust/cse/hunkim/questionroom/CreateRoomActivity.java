@@ -24,19 +24,20 @@ import hk.ust.cse.hunkim.questionroom.room.Room;
  */
 public class CreateRoomActivity extends Activity {
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-
+    // UI references.
     private EditText roomNameField;
     private EditText passwordField;
     private Button cancel;
     private Button createRoom;
     private CheckBox isPrivate;
+    //Variable references
     private Firebase roomListRef;
     private ValueEventListener checkExistenceListener;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_create_room);
-
 
         roomNameField = (EditText) findViewById(R.id.room_name);
         passwordField = (EditText) findViewById(R.id.password);
@@ -80,7 +81,8 @@ public class CreateRoomActivity extends Activity {
     protected void onStop() {
         super.onStop();
         String temp = roomNameField.getText().toString();
-        roomListRef.child(temp).removeEventListener(checkExistenceListener);
+        if(checkExistenceListener!=null)
+            roomListRef.child(temp).removeEventListener(checkExistenceListener);
     }
 
     private void attemptCreateRoom(final View v){
