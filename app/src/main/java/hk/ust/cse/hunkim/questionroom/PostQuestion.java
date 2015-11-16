@@ -135,7 +135,6 @@ public class PostQuestion extends Activity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.getChildrenCount() == 0) {
-                        Log.e("Hashtag", "Found none matching hashtag. Pushing it.");
                         Hashtag pushTags = new Hashtag(tagsName);
                         mFirebaseRef.push().setValue(pushTags);
                     } else {
@@ -143,23 +142,14 @@ public class PostQuestion extends Activity {
                         String key = null;
                         HashMap<String, HashMap<String, Object>> tags = (HashMap<String, HashMap<String, Object>>) dataSnapshot.getValue();
                         for (Map.Entry<String, HashMap<String, Object>> entry : tags.entrySet()) {
-                            key = entry.getKey();
+                            key = entry.getKey();   //Actually only iterate once.
                         }
 
                         //I swear, this method is extremely bad.
                         HashMap<String, Object> hashtags = tags.get(key);
-                        String name = (String) hashtags.get("name");
                         Long used = (Long) hashtags.get("used");
-                        used++;
-                        hashtags.clear();
-                        hashtags.put("name", name);
-                        hashtags.put("used", used);
+                        hashtags.put("used", used + 1);
 
-                        //tags.clear();
-                        //tags.put(key, hashtags);
-
-                        //int used = (int) tags.get("used");
-                        //tags.put("used", used+1);
                         mFirebaseRef.child(key).setValue(hashtags);
                     }
 
