@@ -48,6 +48,7 @@ public class MainActivity extends ListActivity {
 
     private String roomName;
     private Firebase mFirebaseRef;
+    private Firebase mFirebaseRef_Hashtag;
     private ImageButton sortButton; //Added by Marvin
     private ImageButton searchButton; //Added by Peter
     private int sortIndex;
@@ -80,7 +81,7 @@ public class MainActivity extends ListActivity {
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions");
-
+        mFirebaseRef_Hashtag = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("tags");
         ImageButton postQ = (ImageButton) findViewById(R.id.postQuestion);
         postQ.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,18 +319,17 @@ public class MainActivity extends ListActivity {
     private void PushHashTag(String body)
     {
         //Now push those hashtag
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("tags");
         hashtag_extracter = new Hashtag_extracter(body);
         for (int i = 0; i < hashtag_extracter.getListCount(); i++) {
             final String tagsName = hashtag_extracter.getListItem(i);
-            final Query mRef = mFirebaseRef.orderByChild("name").equalTo(tagsName).limitToFirst(1);
+            final Query mRef = mFirebaseRef_Hashtag.orderByChild("name").equalTo(tagsName).limitToFirst(1);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot.getChildrenCount() == 0) {
                         Hashtag pushTags = new Hashtag(tagsName);
-                        mFirebaseRef.push().setValue(pushTags);
+                        mFirebaseRef_Hashtag.push().setValue(pushTags);
                     } else {
 
                         String key = null;
@@ -343,7 +343,7 @@ public class MainActivity extends ListActivity {
                         Long used = (Long) hashtags.get("used");
                         hashtags.put("used", used + 1);
 
-                        mFirebaseRef.child(key).setValue(hashtags);
+                        mFirebaseRef_Hashtag.child(key).setValue(hashtags);
                     }
 
                 }
