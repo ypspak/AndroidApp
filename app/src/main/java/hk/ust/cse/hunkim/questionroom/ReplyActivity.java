@@ -294,7 +294,7 @@ public class ReplyActivity extends ListActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.getValue()!=null){
                                 String tempStr = (String) dataSnapshot.getValue();
-                                btn.setText("" + tempStr);
+                                btn.setText(Html.fromHtml("" + tempStr));
                             }
                     }
 

@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -266,10 +267,8 @@ public class SearchResultActivity extends ListActivity {
 
     public void setSearchResult(TextView view, String searchStr, int count)
     {
-        if (count == 1)
-            view.setText("There are " + count + " result for the search \"" + searchStr + "\".");
-        else if (count > 1)
-            view.setText("There are " + count + " results for the search \"" + searchStr + "\".");
+        if (count >= 1)
+            view.setText(Html.fromHtml("There are " + count + " result(s) for the search \"" + searchStr + "\"."));
         else
             view.setText("No results are found.");
     }
