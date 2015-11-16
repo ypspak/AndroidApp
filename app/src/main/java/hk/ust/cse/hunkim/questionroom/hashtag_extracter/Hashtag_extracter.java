@@ -19,7 +19,7 @@ public class Hashtag_extracter {
     public List<String> ExtractHashTag(String s)
     {
         List<String> list = new ArrayList<String>();
-        String[] Hashtag_str = s.split(" ");
+        String[] Hashtag_str = s.split("[^#a-zA-Z0-9']+");
 
         for (int i = 0; i < Hashtag_str.length; i++)
         {
