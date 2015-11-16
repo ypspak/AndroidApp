@@ -155,12 +155,12 @@ public class PostQuestion extends Activity {
                         hashtags.put("name", name);
                         hashtags.put("used", used);
 
-                        tags.clear();
-                        tags.put(key, hashtags);
+                        //tags.clear();
+                        //tags.put(key, hashtags);
 
                         //int used = (int) tags.get("used");
                         //tags.put("used", used+1);
-                        mFirebaseRef.setValue(tags);
+                        mFirebaseRef.child(key).setValue(hashtags);
                     }
 
                 }
