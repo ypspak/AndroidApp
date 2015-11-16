@@ -181,31 +181,6 @@ public class SearchResultActivity extends ListActivity {
                 }
         );
 
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //double orderValue = (double) dataSnapshot.getValue();
-                        double orderValue;
-                        if (dataSnapshot.getValue() instanceof Long) {
-                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
-                            Log.e("Type", "Long");
-                        } else {
-                            orderValue = (double) dataSnapshot.getValue();
-                            Log.e("Type", "Double");
-                        }
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue - 1);  //Need clarification, the higher value of order, the lower priorty sorted in firebase?
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
 
         // Update SQLite DB
         dbutil.put(key);
@@ -227,31 +202,6 @@ public class SearchResultActivity extends ListActivity {
 
                         //Add 1 value to the dislikeValue
                         dislikeRef.setValue(dislikeValue + 1);
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
-
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        double orderValue;
-                        //double orderValue = (double) dataSnapshot.getValue();
-                        if (dataSnapshot.getValue() instanceof Long) {
-                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
-                        } else {
-                            orderValue = (double) dataSnapshot.getValue();
-                        }
-
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue + 1); //Need clarification, the higher value of order, the lower priorty sorted in firebase?
                     }
 
                     @Override
