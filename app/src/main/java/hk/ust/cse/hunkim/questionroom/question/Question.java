@@ -25,7 +25,6 @@ public class Question{
 	completed: bool, // Was the question solved?
 	timestamp: date, // posting time of the question
 	tags: string, // string with all hashtags,e.g.: "#first #second"
-	order: double, // a value used for ordering
 	wholeMsgReply: string, // hack to store reply input (to be dropped)
 	replies: integer // number of replies
      */
@@ -38,7 +37,6 @@ public class Question{
     private long timestamp;
     private long lastTimestamp;
     private String tags;
-    private int order;
     private String wholeMsgReply; //todo: unused, gonna to delete
     private int replies;
 
@@ -81,8 +79,6 @@ public class Question{
     public long getTimestamp() {return timestamp; }
 
     public long getLastTimestamp(){return lastTimestamp;}
-
-    public int getOrder() { return order; }
 
     public String getKey() {return key; }
 
