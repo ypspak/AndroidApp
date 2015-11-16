@@ -97,7 +97,7 @@ public class SearchMainActivity extends ListActivity {
             @Override
             public void onChanged() {
                 super.onChanged();
-                listView.setSelection(mHashtagListAdapter.getCount() - 1);
+                //listView.setSelection(mHashtagListAdapter.getCount() - 1);    NO NEED TO SCROLL DOWN AFTER UPDATING/LOADING LISTVIEW (PETER YEUNG 2015/11/16)
             }
         });
 
