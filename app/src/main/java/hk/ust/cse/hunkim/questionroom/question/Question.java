@@ -3,7 +3,9 @@ package hk.ust.cse.hunkim.questionroom.question;
 import android.util.Log;
 
 import java.util.Date;
+import java.util.HashMap;
 
+import hk.ust.cse.hunkim.questionroom.hashtag_extracter.Hashtag_extracter;
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
 
 /**
@@ -37,7 +39,7 @@ public class Question{
     private boolean completed;
     private long timestamp;
     private long lastTimestamp;
-    private String tags;
+    private String[] tags = null;
     private int order;
     private String wholeMsgReply; //todo: unused, gonna to delete
     private int replies;
@@ -54,7 +56,7 @@ public class Question{
         this.completed = false;
         this.head = title;
         this.desc = body;
-        this.tags = "";
+        this.tags = (new Hashtag_extracter(title + " " + body).getArray());
         this.timestamp = this.lastTimestamp = new Date().getTime();
         /* Added by Peter Yeung, 2015/10/30
                     this.timestamp has to be changed to the following comment-out code (apply negative value)
@@ -88,7 +90,7 @@ public class Question{
 
     public int getReplies() { return replies; }
 
-    public String getTags() { return tags; }
+    public String[] getTags() { return tags; }
 
     public String getWholeMsgReply(){return wholeMsgReply;}//todo: can delete later
 

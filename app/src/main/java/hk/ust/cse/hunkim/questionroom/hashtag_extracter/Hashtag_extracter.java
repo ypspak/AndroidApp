@@ -1,6 +1,7 @@
 package hk.ust.cse.hunkim.questionroom.hashtag_extracter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,6 +46,7 @@ public class Hashtag_extracter {
     }
 
     public List<String> getList(){ return this.list; }
+    public String[] getArray() { return this.list.toArray(new String[list.size()]); }
     public boolean IsEmptyList() { return this.list.isEmpty();}
     public int getListCount() { return this.list.size();}
     public String getListItem(int i) { return this.list.get(i); }
