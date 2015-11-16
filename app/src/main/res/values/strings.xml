@@ -8,15 +8,19 @@
     <string name="action_join">Join</string>
     <string name="create_room">Create Room</string>
     <string name="error_exist_room">The room exists</string>
+    <string name="error_not_exist_room">The room doesn\'t exists</string>
     <string name="ifPrivate">Private Room?</string>
     <string name="action_join_short">Sign in</string>
     <string name="question_room">Question Room</string>
     <string name="question_room_descibe">This totally anonymous and\nreal-time updating question \nmoderated system permits\n students to ask more questions\n in a typical class setting.\n Simply join a question room\n using a simple name \n (such as comp3111).</string>
     <string name="cancel_action">Cancel</string>
+    <string name="submit_action">Submit</string>
+    <string name="error_incorrect_password">Invalid Password</string>
 
     <!--String related to enter a room-->
     <string name="error_invalid_room_name">Use only alphanumeric characters</string>
     <string name="error_field_required">This field is required</string>
+    <string name="requiring_for_password">Password is required for this room!</string>
 
     <!--String related to post question-->
     <string name="prompt_question_title">Please input a title</string>
