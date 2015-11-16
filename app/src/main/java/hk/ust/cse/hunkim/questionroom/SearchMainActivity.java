@@ -86,8 +86,8 @@ public class SearchMainActivity extends ListActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // When clicked, show a toast with the TextView text or do whatever you need.
-                searchText.setText(((TextView) view.findViewById(R.id.name)).getText());
-                searchButton.performClick();
+                String input = ((TextView) view.findViewById(R.id.name)).getText().toString();
+                EnterSearchResult(view, input);
                 //Log.e("POSITION", "Detect pressed and position is " + String.valueOf(position) + "with id = " + String.valueOf(id));
                 //Log.e("POSITION", "Its hashtag is = " + ((TextView) view.findViewById(R.id.name)).getText());
             }
@@ -128,14 +128,7 @@ public class SearchMainActivity extends ListActivity {
 
                         String input = searchText.getText().toString();
                         if (!TextUtils.isEmpty(input)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
-                            // Before creating our 'model', we have to replace substring so that prevent code injection
-                            input = input.replace("<", "&lt;");
-                            input = input.replace(">", "&gt;");
-                            Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
-                            intent.putExtra(ROOM_NAME, roomName);
-                            intent.putExtra(m_FirebaseURL, Firebase_URL);
-                            intent.putExtra(INPUT, input);
-                            view.getContext().startActivity(intent);
+                            EnterSearchResult(view, input);
                         } else {
                             searchText.setError(getString(R.string.error_field_required));
                         }//warning to force user input reply
@@ -154,6 +147,18 @@ public class SearchMainActivity extends ListActivity {
 //    public void onPause(){
 //
 //    }
+
+    public void EnterSearchResult(View view, String input)
+    {
+        // Before creating our 'model', we have to replace substring so that prevent code injection
+        input = input.replace("<", "&lt;");
+        input = input.replace(">", "&gt;");
+        Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
+        intent.putExtra(ROOM_NAME, roomName);
+        intent.putExtra(m_FirebaseURL, Firebase_URL);
+        intent.putExtra(INPUT, input);
+        view.getContext().startActivity(intent);
+    }
 
     @Override
     public void onStop() {
