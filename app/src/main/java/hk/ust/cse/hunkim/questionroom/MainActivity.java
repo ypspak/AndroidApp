@@ -25,12 +25,18 @@ import android.widget.Toast;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag;
+import hk.ust.cse.hunkim.questionroom.hashtag_extracter.Hashtag_extracter;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
@@ -47,6 +53,7 @@ public class MainActivity extends ListActivity {
     private int sortIndex;
     private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
+    private Hashtag_extracter hashtag_extracter;
 
     private DBUtil dbutil;
 
@@ -294,17 +301,59 @@ public class MainActivity extends ListActivity {
                     body = body.replace(">", "&gt;");
                     // Create our 'model', a Chat object
 
-                    Question question = new Question(title,body);
+                    Question question = new Question(title, body);
                     // Create a new, auto-generated child of that chat location, and save our chat data there
                     mFirebaseRef.push().setValue(question);
+                    PushHashTag(body);
                     dialog.dismiss();
-                }else {
+                } else {
                     titleInput.setError(getString(R.string.error_field_required));
                 }//warning to force user input title
             }
         });
         dialog.show();
         return;
+    }
+
+    private void PushHashTag(String body)
+    {
+        //Now push those hashtag
+        mFirebaseRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("tags");
+        hashtag_extracter = new Hashtag_extracter(body);
+        for (int i = 0; i < hashtag_extracter.getListCount(); i++) {
+            final String tagsName = hashtag_extracter.getListItem(i);
+            final Query mRef = mFirebaseRef.orderByChild("name").equalTo(tagsName).limitToFirst(1);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        Hashtag pushTags = new Hashtag(tagsName);
+                        mFirebaseRef.push().setValue(pushTags);
+                    } else {
+
+                        String key = null;
+                        HashMap<String, HashMap<String, Object>> tags = (HashMap<String, HashMap<String, Object>>) dataSnapshot.getValue();
+                        for (Map.Entry<String, HashMap<String, Object>> entry : tags.entrySet()) {
+                            key = entry.getKey();   //Actually only iterate once.
+                        }
+
+                        //I swear, this method is extremely bad.
+                        HashMap<String, Object> hashtags = tags.get(key);
+                        Long used = (Long) hashtags.get("used");
+                        hashtags.put("used", used + 1);
+
+                        mFirebaseRef.child(key).setValue(hashtags);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
     }
 
     public void Close(View view) {
