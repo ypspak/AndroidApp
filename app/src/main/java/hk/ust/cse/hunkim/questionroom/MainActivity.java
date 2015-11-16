@@ -1,11 +1,13 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -76,10 +78,7 @@ public class MainActivity extends ListActivity {
         postQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, PostQuestion.class);
-                intent.putExtra(ROOM_NAME, getRoomName());
-                intent.putExtra(m_FirebaseURL, FIREBASE_URL);
-                startActivity(intent);
+                postQuestion(view);
             }
         });
 
@@ -232,35 +231,6 @@ public class MainActivity extends ListActivity {
                     }
                 }
         );
-
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //double orderValue = (double) dataSnapshot.getValue();
-                        double orderValue;
-                        if (dataSnapshot.getValue() instanceof Long) {
-                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
-                            Log.e("Type", "Long");
-                        }
-                        else
-                        {
-                            orderValue = (double) dataSnapshot.getValue();
-                            Log.e("Type", "Double");
-                        }
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue - 1);  //Need clarification, the higher value of order, the lower priorty sorted in firebase?
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
-
         // Update SQLite DB
         dbutil.put(key);
     }
@@ -289,36 +259,52 @@ public class MainActivity extends ListActivity {
                     }
                 }
         );
-
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        double orderValue;
-                        //double orderValue = (double) dataSnapshot.getValue();
-                        if (dataSnapshot.getValue() instanceof Long) {
-                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
-                        }
-                        else
-                        {
-                            orderValue = (double) dataSnapshot.getValue();
-                        }
-
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue + 1); //Need clarification, the higher value of order, the lower priorty sorted in firebase?
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
-
         // Update SQLite DB
         dbutil.put(key);
+    }
+
+    //Operation for the Question Post Button
+    private void postQuestion(View view){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.post_question_popbox);
+        dialog.setTitle("Please input content");
+        final EditText titleInput = (EditText) dialog.findViewById(R.id.QuestionTitle);
+        final EditText bodyInput = (EditText) dialog.findViewById(R.id.QuestionBody);
+        Button cancel= (Button) dialog.findViewById(R.id.Cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        Button submit= (Button) dialog.findViewById(R.id.PostQuestion);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                titleInput.setError(null);
+                String title = titleInput.getText().toString();
+                String body = bodyInput.getText().toString();
+                if (!TextUtils.isEmpty(title)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
+                    // Before creating our 'model', we have to replace substring so that prevent code injection
+                    title = title.replace("<", "&lt;");
+                    title = title.replace(">", "&gt;");
+                    //todo: more outcome for preventing html attack for Q body
+                    // Before creating our 'model', we have to replace substring so that prevent code injection
+                    body = body.replace("<", "&lt;");
+                    body = body.replace(">", "&gt;");
+                    // Create our 'model', a Chat object
+
+                    Question question = new Question(title,body);
+                    // Create a new, auto-generated child of that chat location, and save our chat data there
+                    mFirebaseRef.push().setValue(question);
+                    dialog.dismiss();
+                }else {
+                    titleInput.setError(getString(R.string.error_field_required));
+                }//warning to force user input title
+            }
+        });
+        dialog.show();
+        return;
     }
 
     public void Close(View view) {
