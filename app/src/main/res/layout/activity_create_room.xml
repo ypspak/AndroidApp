@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/prompt_room_name"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"
+        style="@style/EditTextCustomHolo"/>
 
     <EditText
         android:id="@+id/password"
@@ -25,14 +26,16 @@
         android:hint="@string/prompt_password"
         android:maxLines="1"
         android:singleLine="true"
-        android:password="true" />
+        android:password="true"
+        style="@style/EditTextCustomHolo"/>
 
     <CheckBox
         android:id="@+id/checkbox_isPrivate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ifPrivate"
-        android:focusable="true" />
+        android:focusable="true"
+        android:buttonTint="@color/HeaderColor"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,25 +43,25 @@
         android:layout_alignParentBottom="true">
         <Button
             android:id="@+id/cancel_action"
-            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:onClick="attemptJoin"
             android:text="@string/cancel_action"
             android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            style="@style/ButtonCustomHolo"/>
 
         <Button
             android:id="@+id/create_room"
-            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:onClick="attemptJoin"
             android:text="@string/create_room"
             android:textStyle="bold"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            style="@style/ButtonCustomHolo"/>
     </LinearLayout>
 </LinearLayout>
 

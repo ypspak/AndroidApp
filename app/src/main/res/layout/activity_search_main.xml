@@ -82,7 +82,7 @@
             android:lines="1"
             android:singleLine="true"
             android:layout_toLeftOf="@+id/searchButton"
-            android:backgroundTint="@color/HeaderColor" />
+            style="@style/EditTextCustomHolo"/>
 
         <ImageButton
             android:id="@+id/searchButton"
@@ -92,7 +92,8 @@
             android:layout_gravity="right"
             android:layout_alignParentTop="true"
             android:layout_alignBottom="@+id/searchInput"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            style="@style/ButtonCustomHolo"/>
     </RelativeLayout>
 
 

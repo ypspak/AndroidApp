@@ -11,4 +11,16 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="EditTextCustomHolo" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/appcomponenttheme_edit_text_holo_light</item>
+        <item name="android:textSelectHandle">@drawable/appcomponenttheme_text_select_handle_middle</item>
+        <item name="android:textSelectHandleLeft">@drawable/appcomponenttheme_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/appcomponenttheme_text_select_handle_right</item>
+    </style>
+
+    <style name="ButtonCustomHolo" parent="android:Widget.Button">
+        <item name="android:background">@drawable/appcomponenttheme_btn_default_holo_light</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
 </resources>
