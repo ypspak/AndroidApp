@@ -71,7 +71,7 @@ public class SearchResultActivity extends ListActivity {
 
         this.sortIndex = 0;
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(Firebase_URL).child(roomName).child("questions");
+        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("questions");
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);

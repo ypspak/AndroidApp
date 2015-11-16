@@ -60,7 +60,7 @@ public class SearchMainActivity extends ListActivity {
 
         roomName = intent.getStringExtra(MainActivity.ROOM_NAME);
         Firebase_URL = intent.getStringExtra(MainActivity.m_FirebaseURL);
-        mFirebaseRef = new Firebase(Firebase_URL).child(roomName).child("tags");
+        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("tags");
 
     }
 
