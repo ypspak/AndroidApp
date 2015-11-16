@@ -28,7 +28,7 @@
 
     <!--String retated to sort function of quesiton list, they are in same sequence as in the menu-->
     <string name="sortNew">sort by new</string>
-    <string name="sortHot">sort by hot</string>
+    <string name="sortHot">sort by rank</string>
     <string name="sortLike">sort by like</string>
     <string name="sortDislike">sort by dislike</string>
     <string name="sortUpdate">sort by update</string>

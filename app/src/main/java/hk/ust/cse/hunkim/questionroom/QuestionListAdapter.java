@@ -282,10 +282,12 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         if(method==0){ //newest
             return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
         }else if(method==1){ //hot
-            if (question1.getOrder() == question2.getOrder()) {
+            if ((question1.getTimestamp()+21600000*(3*question1.getLike()+2*question1.getReplies()+question1.getDislike()))
+                    == (question2.getTimestamp()+21600000*(3*question2.getLike()+2*question2.getReplies()+question2.getDislike()))) {
                 return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
             }
-            return question2.getOrder() - question1.getOrder();
+            return (question1.getTimestamp()+21600000*(3*question1.getLike()+2*question1.getReplies()+question1.getDislike()))
+                    < (question2.getTimestamp()+21600000*(3*question2.getLike()+2*question2.getReplies()+question2.getDislike()))? 1:-1;
         }else if(method == 2) {//like
             if (question1.getLike() == question2.getLike()) {
                 return question1.getTimestamp() > question2.getTimestamp() ? 1 : -1;
