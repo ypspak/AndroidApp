@@ -32,7 +32,6 @@ public class CreateRoomFragment extends Fragment {
     private CheckBox isPrivate;
     //Variable references
     private Firebase roomListRef;
-    private ValueEventListener checkExistenceListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,9 +81,9 @@ public class CreateRoomFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        String temp = roomNameField.getText().toString();
-        if(checkExistenceListener!=null)
-            roomListRef.child(temp).removeEventListener(checkExistenceListener);
+//        String temp = roomNameField.getText().toString();
+//        if(checkExistenceListener!=null)
+//            roomListRef.child(temp).removeEventListener(checkExistenceListener);
     }
 
     private void attemptCreateRoom(final View v){
@@ -95,7 +94,7 @@ public class CreateRoomFragment extends Fragment {
         }
         roomNameField.setError(null);
         String input = roomNameField.getText().toString();
-        checkExistenceListener = roomListRef.child(input).addValueEventListener(new ValueEventListener() {
+        roomListRef.child(input).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
@@ -103,9 +102,9 @@ public class CreateRoomFragment extends Fragment {
                 } else {
                     CreateRoom();
                     roomNameField.setText("");
+                    roomNameField.clearFocus();
                     passwordField.setText("");
-                    roomNameField.setError(null);
-                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                    passwordField.clearFocus();
                     Toast.makeText(getActivity(), "The room is successfully created!", Toast.LENGTH_SHORT).show();
                 }
             }

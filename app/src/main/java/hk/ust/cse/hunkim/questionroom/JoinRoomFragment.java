@@ -30,7 +30,6 @@ public class JoinRoomFragment extends Fragment {
     //Variable references
     private Firebase roomListRef;
     private Firebase roomsRef;
-    private ValueEventListener checkExistenceListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,9 +63,6 @@ public class JoinRoomFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        String temp = roomNameField.getText().toString();
-        if(checkExistenceListener!=null)
-            roomListRef.child(temp).removeEventListener(checkExistenceListener);
     }
 
 
@@ -97,14 +93,14 @@ public class JoinRoomFragment extends Fragment {
     }
 
     private void existRoomAndJoin(String input, final View view){
-        checkExistenceListener = roomListRef.child(input).addValueEventListener(new ValueEventListener() {
+        roomListRef.child(input).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     roomNameField.setError(getString(R.string.error_not_exist_room));
                 } else {
                     assert (dataSnapshot.getValue(Room.class) != null);
-                    tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class) , view);
+                    tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class), view);
                 }
             }
 
