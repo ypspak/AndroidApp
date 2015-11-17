@@ -139,7 +139,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         Collections.sort(mModels, new Comparator<Reply>(){
             public int compare(Reply reply1, Reply reply2) {
                 if (reply1.getOrder() == reply2.getOrder()) {
-                    return reply1.getTimestamp() > reply2.getTimestamp() ? 1 : -1;
+                    return reply1.getTimestamp() < reply2.getTimestamp() ? 1 : -1;
                 }
                 return reply2.getOrder() - reply1.getOrder();
             }

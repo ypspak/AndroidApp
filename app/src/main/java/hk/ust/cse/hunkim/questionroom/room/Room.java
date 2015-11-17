@@ -13,6 +13,6 @@ public class Room {
         this.password = password;
     }
 
-    public boolean getIfPrivate(){ return isPrivate;}
+    public boolean getIsPrivate(){ return isPrivate;}
     public String getPassword(){return password;}
 }
