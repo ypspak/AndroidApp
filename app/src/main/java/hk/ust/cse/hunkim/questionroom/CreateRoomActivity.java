@@ -2,9 +2,7 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,7 +35,7 @@ public class CreateRoomActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
-        setContentView(R.layout.activity_create_room);
+        setContentView(R.layout.fragment_create_room);
 
         roomNameField = (EditText) findViewById(R.id.room_name);
         passwordField = (EditText) findViewById(R.id.password);

@@ -3,12 +3,8 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.firebase.client.Firebase;
@@ -26,7 +22,7 @@ public class RoomActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
-        setContentView(R.layout.activity_roomlist);
+        setContentView(R.layout.fragment_room_list);
         Intent intent = getIntent();
 
         listView = getListView();
