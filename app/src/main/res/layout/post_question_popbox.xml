@@ -1,67 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="30dp"
-        android:background="#ffffff"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:id="@+id/TitleField"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="5dp">
+    android:layout_width="fill_parent"
+    android:minWidth="@dimen/DialogMinWidth"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
         <EditText
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/QuestionTitle"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
             android:singleLine="true"
-            android:background="@null"
             android:hint="@string/prompt_question_title"
-            android:layout_gravity="center_horizontal"
-            android:maxLength="50" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="170dp"
-        android:background="#ffffff"
-        android:id="@+id/linearLayout2"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/TitleField">
+            android:maxLength="50"
+            style="@style/EditTextCustomHolo"/>
 
         <EditText
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/QuestionBody"
+            android:minLines="4"
+            android:maxLines="6"
             android:singleLine="false"
-            android:background="@null"
-            android:gravity="top" />
-    </RelativeLayout>
+            android:gravity="top"
+            style="@style/EditTextCustomHolo"/>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/PopupWindowColor"
-        android:layout_alignParentBottom="false"
-        android:layout_alignStart="@+id/linearLayout2"
-        android:layout_marginBottom="5dp"
-        android:id="@+id/buttons"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="15dp"
-        android:layout_below="@+id/linearLayout2">
+        android:layout_marginTop="5dp"
+        android:id="@+id/buttons">
 
         <Button
             android:layout_width="match_parent"
@@ -69,11 +41,7 @@
             android:layout_weight="1"
             android:text="@string/cancel_action"
             android:id="@+id/Cancel"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="0dp" />
+            style="@style/ButtonCustomHolo"/>
 
         <Button
             android:layout_width="match_parent"
@@ -82,10 +50,7 @@
             android:text="Confirm"
             android:id="@+id/PostQuestion"
             android:layout_alignTop="@+id/Cancel"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="0dp" />
+            style="@style/ButtonCustomHolo"/>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

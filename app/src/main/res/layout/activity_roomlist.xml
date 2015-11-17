@@ -3,17 +3,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
 
-    tools:context=".MainActivity">
+    tools:context=".RoomActivity">
 
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchfield_container"
-        android:transcriptMode="normal"
-        android:stackFromBottom="false" />
-
+        android:layout_below="@+id/listHeader"
+        android:transcriptMode="alwaysScroll" />
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -52,9 +50,9 @@
                 android:adjustViewBounds="true" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
-                android:text="Search"
+                android:text="Room List"
                 android:id="@+id/close"
                 android:textSize="18sp"
                 android:textColor="@color/HeaderText"
@@ -66,34 +64,6 @@
                 android:singleLine="true" />
         </RelativeLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchfield_container"
-        android:layout_below="@+id/listHeader">
-
-        <EditText
-            android:id="@+id/searchInput"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textShortMessage"
-            android:lines="1"
-            android:singleLine="true"
-            android:layout_toLeftOf="@+id/searchButton"
-            style="@style/EditTextCustomHolo"/>
-
-        <ImageButton
-            android:id="@+id/searchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send"
-            android:layout_gravity="right"
-            android:layout_alignParentTop="true"
-            android:layout_alignBottom="@+id/searchInput"
-            android:layout_alignParentEnd="true"
-            style="@style/ButtonCustomHolo"/>
     </RelativeLayout>
 
 
