@@ -14,6 +14,8 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import hk.ust.cse.hunkim.questionroom.room.Room;
+
 
 /**
  * A login screen that offers login via email/password.
@@ -111,12 +113,8 @@ public class JoinActivity extends Activity {
                 if (!dataSnapshot.exists()) {
                     roomNameField.setError(getString(R.string.error_not_exist_room));
                 } else {
-                    assert (dataSnapshot.child("ifPrivate").getValue() != null);
-                    boolean tempBool = (boolean) dataSnapshot.child("ifPrivate").getValue();
-                    assert (dataSnapshot.child("password").getValue() != null);
-                    String tempString = (String) dataSnapshot.child("password").getValue();
-
-                    tryJoin(dataSnapshot.getKey(), tempBool, tempString, view);
+                    assert (dataSnapshot.getValue(Room.class) != null);
+                    tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class) , view);
                 }
             }
 
@@ -127,8 +125,8 @@ public class JoinActivity extends Activity {
         });
     }
 
-    private void tryJoin(final String roomName, boolean isPrivate, final String password, View v){
-        if(!isPrivate){
+    private void tryJoin(final String roomName, final Room room, View v){
+        if(!room.getIsPrivate()){
             join(v,roomName);
         }
         else{
@@ -149,7 +147,7 @@ public class JoinActivity extends Activity {
                 public void onClick(View v) {
                     pwField.setError(null);
                     String tempPw = pwField.getText().toString();
-                    if(!password.equals(tempPw)){
+                    if(!room.getPassword().equals(tempPw)){
                         if(TextUtils.isEmpty(tempPw))
                             pwField.setError(getString(R.string.error_field_required));
                         else
