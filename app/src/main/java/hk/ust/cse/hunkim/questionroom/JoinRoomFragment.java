@@ -154,7 +154,6 @@ public class JoinRoomFragment extends Fragment {
     private void join(View v, String roomName){
         Intent intent = new Intent(v.getContext(), MainActivity.class);
         intent.putExtra(JoinActivity.ROOM_NAME, roomName);
-        Log.e("RRR", "roomName");
         intent.putExtra(JoinActivity.FIREBASE_URL, roomsRef.toString());
         startActivity(intent);
     }
