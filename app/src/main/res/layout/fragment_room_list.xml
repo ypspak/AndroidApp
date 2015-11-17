@@ -1,70 +1,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-
-    tools:context=".RoomActivity">
+    android:layout_height="fill_parent">
 
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/room_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/listHeader"
         android:transcriptMode="alwaysScroll" />
-
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:weightSum="1"
-        android:id="@+id/listHeader"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/HeaderColor">
-
-        <RelativeLayout
-            android:id="@+id/closebtn_container"
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:orientation="horizontal"
-            android:onClick="Close"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="0dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp">
-
-            <ImageView
-                android:id="@+id/gobackbtn"
-                android:layout_width="37dp"
-                android:layout_height="37dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/btn_goback"
-                android:scaleType="fitCenter"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="false"
-                android:layout_alignParentEnd="false"
-                android:layout_centerVertical="true"
-                android:cropToPadding="false"
-                android:adjustViewBounds="true" />
-
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:text="Room List"
-                android:id="@+id/close"
-                android:textSize="18sp"
-                android:textColor="@color/HeaderText"
-                android:layout_toRightOf="@+id/gobackbtn"
-                android:layout_marginLeft="2dp"
-                android:gravity="center_vertical|left"
-                android:background="@drawable/complete_transparent_button"
-                android:onClick="Close"
-                android:singleLine="true" />
-        </RelativeLayout>
-
-    </RelativeLayout>
 
 
 </RelativeLayout>
