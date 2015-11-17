@@ -28,17 +28,17 @@ import hk.ust.cse.hunkim.questionroom.room.Room;
  * Created by CAI on 21/10/2015.
  */
 public class RoomListAdapter extends FirebaseListAdapter<Room> {
-    RoomActivity activity;
+    JoinActivity activity;
     public RoomListAdapter(Query mRef, Activity activity, int mLayout) {
         super(mRef, Room.class, mLayout, activity);
-        assert (activity instanceof RoomActivity);
-        this.activity = (RoomActivity) activity;
+        assert (activity instanceof JoinActivity);
+        this.activity = (JoinActivity) activity;
     }
 
     @Override
     protected void populateView(View view, Room model) {
         Button roomBtn = (Button) view.findViewById(R.id.join_button);
-        RoomActivity m = (RoomActivity) view.getContext();
+        JoinActivity m = (JoinActivity) view.getContext();
         roomBtn.setText((String) view.getTag());
         roomBtn.setOnClickListener(
                 new View.OnClickListener() {
@@ -63,6 +63,6 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
 
     @Override
     protected boolean IsContainString(String filterStr, Room model) {
-        return false;
+        return true;
     }
 }
