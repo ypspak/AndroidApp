@@ -11,8 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/searchfield_container"
-        android:transcriptMode="normal"
-        android:stackFromBottom="false" />
+        android:transcriptMode="alwaysScroll" />
 
 
     <RelativeLayout

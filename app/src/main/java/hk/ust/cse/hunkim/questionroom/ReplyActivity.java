@@ -6,7 +6,6 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -322,7 +321,7 @@ public class ReplyActivity extends ListActivity {
                             }
                             else {
                                 String tempStr = (String) dataSnapshot.getValue();
-                                textView.setText(Html.fromHtml("" + tempStr));
+                                textView.setText("" + tempStr);
                             }
                         }
                     }
