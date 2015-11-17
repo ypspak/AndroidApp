@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -76,6 +77,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
                     public void onClick(View view) {
                         ReplyActivity m = (ReplyActivity) view.getContext();
                         m.updateOrder((String) view.getTag(), -1);
+                        Log.e("EEE", (String) view.getTag());
                     }
                 }
 

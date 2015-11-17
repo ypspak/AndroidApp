@@ -3,13 +3,19 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
-    <Button
-        android:id="@+id/privateRoom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageButton
+        android:id="@+id/is_private"
+        android:layout_width="@dimen/RoundButtonSize"
+        android:layout_height="@dimen/RoundButtonSize"
+        android:src="@drawable/private_room"
+        android:background="@drawable/round_button_1"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
         android:text="private?"
         android:layout_row="0"
-        android:layout_column="0"/>
+        android:layout_column="0"
+        android:layout_gravity="center_vertical"/>
+
     <TextView
         android:id="@+id/room_name"
         android:layout_width="wrap_content"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,6 +154,7 @@ public class JoinRoomFragment extends Fragment {
     private void join(View v, String roomName){
         Intent intent = new Intent(v.getContext(), MainActivity.class);
         intent.putExtra(JoinActivity.ROOM_NAME, roomName);
+        Log.e("RRR", "roomName");
         intent.putExtra(JoinActivity.FIREBASE_URL, roomsRef.toString());
         startActivity(intent);
     }

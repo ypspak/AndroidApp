@@ -37,18 +37,12 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
 
     @Override
     protected void populateView(View view, Room model) {
-        Button roomBtn = (Button) view.findViewById(R.id.join_button);
-        JoinActivity m = (JoinActivity) view.getContext();
-        roomBtn.setText((String) view.getTag());
-        roomBtn.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("FFF", "Functionality of each button works fine!");
-                    }
-                }
-
-        );
+        ImageButton isPrivate = (ImageButton) view.findViewById(R.id.is_private);
+        TextView roomName = (TextView) view.findViewById(R.id.room_name);
+        if(!model.getIsPrivate())
+            isPrivate.setVisibility(View.INVISIBLE);
+        else
+            isPrivate.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -64,5 +58,13 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
     @Override
     protected boolean IsContainString(String filterStr, Room model) {
         return true;
+    }
+
+    private void updatePrivateInd(){
+
+    }
+
+    private void updateRoomName(){
+
     }
 }
