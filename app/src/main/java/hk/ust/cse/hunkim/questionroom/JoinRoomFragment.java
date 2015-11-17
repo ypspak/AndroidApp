@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -52,7 +53,7 @@ public class JoinRoomFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         joinRoom.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 attemptJoin(v);
