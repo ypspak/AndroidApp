@@ -37,21 +37,12 @@ public class RoomListFragment extends Fragment {
         listView = (ListView)rootView.findViewById(R.id.room_list);
         listView.setAdapter(mRoomListAdapter);
 
-        mRoomListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                listView.setSelection(mRoomListAdapter.getCount() - 1);
-            }
-        });
-
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override

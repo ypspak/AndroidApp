@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -102,9 +103,13 @@ public class CreateRoomFragment extends Fragment {
                 } else {
                     CreateRoom();
                     roomNameField.setText("");
-                    roomNameField.clearFocus();
                     passwordField.setText("");
-                    passwordField.clearFocus();
+                    InputMethodManager inputManager =
+                            (InputMethodManager) getActivity().
+                                    getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(
+                            getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
                     Toast.makeText(getActivity(), "The room is successfully created!", Toast.LENGTH_SHORT).show();
                 }
             }
