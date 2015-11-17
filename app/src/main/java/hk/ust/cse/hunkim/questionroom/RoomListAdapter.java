@@ -63,6 +63,6 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
 
     @Override
     protected boolean IsContainString(String filterStr, Room model) {
-        return false;
+        return true;
     }
 }
