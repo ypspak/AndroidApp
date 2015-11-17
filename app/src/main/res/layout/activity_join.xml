@@ -41,6 +41,15 @@
         android:textStyle="bold"
         style="@style/ButtonCustomHolo" />
 
+    <Button
+        android:id="@+id/all_rooms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="All Rooms"
+        android:textStyle="bold"
+        style="@style/ButtonCustomHolo" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

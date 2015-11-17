@@ -25,6 +25,7 @@ public class JoinActivity extends Activity {
     private EditText roomNameField;
     private Button joinRoom;
     private Button createRoom;
+    private Button allRooms;
     private Dialog dialog;
     //Variable references
     private Firebase roomListRef;
@@ -38,6 +39,7 @@ public class JoinActivity extends Activity {
         roomNameField = (EditText) findViewById(R.id.room_name);
         joinRoom = (Button) findViewById(R.id.join_button);
         createRoom = (Button) findViewById(R.id.create_room);
+        allRooms = (Button) findViewById(R.id.all_rooms);
         roomListRef = new Firebase(FIREBASE_URL).child("roomList");
     }
 
@@ -54,6 +56,13 @@ public class JoinActivity extends Activity {
         createRoom.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateRoomActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        allRooms.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), RoomActivity.class);
                 startActivity(intent);
             }
         });
