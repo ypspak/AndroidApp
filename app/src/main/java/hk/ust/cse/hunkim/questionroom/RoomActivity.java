@@ -2,11 +2,13 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.firebase.client.Firebase;
@@ -20,7 +22,6 @@ public class RoomActivity extends ListActivity {
     private Firebase mFirebaseRef;
     private ListView listView;
     private RoomListAdapter mRoomListAdapter;
-    private ImageButton backBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,30 +31,30 @@ public class RoomActivity extends ListActivity {
 
         listView = getListView();
         mFirebaseRef = new Firebase(FIREBASE_URL).child("roomList");
-//        backBtn = (ImageButton) findViewById(R.id.gobackbtn);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-//        backBtn.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Close(view);
-//                    }
-//                }
-//        );
         mRoomListAdapter = new RoomListAdapter(
                 mFirebaseRef.orderByKey(),
                 this, R.layout.room);
 
         listView.setAdapter(mRoomListAdapter);
+
+        mRoomListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                listView.setSelection(mRoomListAdapter.getCount() - 1);
+            }
+        });
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        mRoomListAdapter.cleanup();
     }
 
     public void Close(View view) {
