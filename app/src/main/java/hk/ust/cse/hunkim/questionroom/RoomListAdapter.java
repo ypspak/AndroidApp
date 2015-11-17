@@ -5,7 +5,9 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -34,8 +36,19 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
     }
 
     @Override
-    protected void populateView(View v, Room model) {
+    protected void populateView(View view, Room model) {
+        Button roomBtn = (Button) view.findViewById(R.id.join_button);
+        RoomActivity m = (RoomActivity) view.getContext();
+        roomBtn.setText((String) view.getTag());
+        roomBtn.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.e("FFF", "Functionality of each button works fine!");
+                    }
+                }
 
+        );
     }
 
     @Override
