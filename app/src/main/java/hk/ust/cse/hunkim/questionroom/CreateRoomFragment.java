@@ -63,9 +63,13 @@ public class CreateRoomFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     passwordField.setEnabled(true);
+                    isPrivate.setTextColor(getResources().getColor(R.color.HeaderColor));
+                    passwordField.setHintTextColor(getResources().getColor(R.color.Join_Hint_Color));
                 } else {
                     passwordField.setEnabled(false);
                     passwordField.setText(null);
+                    isPrivate.setTextColor(getResources().getColor(R.color.Join_Disable_Color));
+                    passwordField.setHintTextColor(getResources().getColor(R.color.Join_Disable_Color));
                 }
             }
         });

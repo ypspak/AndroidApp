@@ -37,8 +37,6 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
-    private Firebase mFirebaseRef;
-    private ValueEventListener mConnectedListener;
     // Tab titles
     private String[] tabs = { "Join Room", "Room List", "Create Room" };
 
@@ -47,25 +45,6 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_join);
-         mFirebaseRef = new Firebase(FIREBASE_URL);
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null){
-                    boolean connected = (Boolean) dataSnapshot.getValue();
-                    if (connected) {
-                        Toast.makeText(JoinActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(JoinActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-        });
 
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -137,12 +116,6 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-    }
-
-    @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());
     }
@@ -155,6 +128,16 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     @Override
     public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
 

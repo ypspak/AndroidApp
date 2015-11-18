@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -37,7 +38,7 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
 
     @Override
     protected void populateView(View view, final Room model) {
-        ImageButton isPrivate = (ImageButton) view.findViewById(R.id.is_private);
+        ImageView isPrivate = (ImageView) view.findViewById(R.id.is_private);
         if(!model.getIsPrivate())
             isPrivate.setVisibility(View.INVISIBLE);
         else
@@ -53,7 +54,7 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
                     @Override
                     public void onClick(View view) {
                         JoinActivity m = (JoinActivity) view.getContext();
-                        m.tryJoin((String)view.getTag(),model);
+                        m.tryJoin((String) view.getTag(), model);
                     }
                 }
 
