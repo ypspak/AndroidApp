@@ -33,4 +33,7 @@
     <string name="sortDislike">sort by dislike</string>
     <string name="sortUpdate">sort by update</string>
 
+    <!--String related to searching-->
+    <string name="searchHint">Searching for?</string>
+
 </resources>

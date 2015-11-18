@@ -8,6 +8,8 @@
     <dimen name="QuestionRoundButtonSize">20dp</dimen>
     <dimen name="QuestionSendButtonSize">40dp</dimen>
 
+    <dimen name="ReplyRoundButtonSize">42dp </dimen>
+
     <dimen name="HeaderReturnBtnSize">37dp</dimen>
     <dimen name="HeaderIconSize"> 25dp</dimen>
 

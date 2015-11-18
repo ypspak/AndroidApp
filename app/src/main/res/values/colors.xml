@@ -22,4 +22,8 @@
 	<color name="ReplyOrderNeutral">#FFFFFF</color>
 	<!-- For text color in header_return_button.xml -->
 	<color name="ComTransBtnTextColor">#FFFFFF</color>
+
+	<!--For searching text view -->
+	<color name="SearchBackgroundTint">#FFFFFF</color>
+	<color name="SearchTextColor">#FFFFFF</color>
 </resources>
