@@ -53,7 +53,7 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
                     @Override
                     public void onClick(View view) {
                         JoinActivity m = (JoinActivity) view.getContext();
-                        m.tryJoin((String) view.getTag(), model);
+                        m.tryJoin((String)view.getTag(),model);
                     }
                 }
 
