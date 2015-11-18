@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -42,14 +43,12 @@ public class SearchMainActivity extends ListActivity {
     public static final String INPUT = "INPUT";
     private String roomName;
     private String Firebase_URL;
+    private Firebase mFirebaseRef;
     private EditText searchText;
     private ImageButton searchButton;
-    private int sortIndex;
+    private ValueEventListener mConnectedListener;
+    private HashtagListAdapter mHashtagListAdapter;
 
-
-    public int getSortIndex(){return sortIndex;}
-
-    public void setSortIndex(int i){sortIndex = i;}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,25 +60,7 @@ public class SearchMainActivity extends ListActivity {
 
         roomName = intent.getStringExtra(MainActivity.ROOM_NAME);
         Firebase_URL = intent.getStringExtra(MainActivity.m_FirebaseURL);
-        
-/*
-        this.sortIndex = 0;
-        // Make it a bit more reliable
-        roomName = intent.getStringExtra(JoinActivity.ROOM_NAME);
-
-        setTitle("Room name: " + roomName);
-        // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
-
-        ImageButton postQ = (ImageButton) findViewById(R.id.postQuestion);
-        postQ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, PostQuestion.class);
-                intent.putExtra(ROOM_NAME, getRoomName());
-                startActivity(intent);
-            }
-        });*/
+        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("tags");
 
     }
 
@@ -91,20 +72,32 @@ public class SearchMainActivity extends ListActivity {
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
         quitButton.setTransformationMethod(null);
+        searchText = (EditText) findViewById(R.id.searchInput);
+        searchText.setError(null);
 
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
         final ListView listView = getListView();
         // Tell our list adapter that we only want 200 messages at a time
-        /*mChatListAdapter = new QuestionListAdapter(
-                mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
-                this, R.layout.question, roomName);
-        listView.setAdapter(mChatListAdapter);
+        mHashtagListAdapter = new HashtagListAdapter(
+                mFirebaseRef.orderByChild("used").limitToFirst(10),
+                this, R.layout.hashtag_search, roomName);
+        listView.setAdapter(mHashtagListAdapter);
 
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // When clicked, show a toast with the TextView text or do whatever you need.
+                searchText.setText(((TextView) view.findViewById(R.id.name)).getText());
+                searchButton.performClick();
+                //Log.e("POSITION", "Detect pressed and position is " + String.valueOf(position) + "with id = " + String.valueOf(id));
+                //Log.e("POSITION", "Its hashtag is = " + ((TextView) view.findViewById(R.id.name)).getText());
+            }
+        });
+
+        mHashtagListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                listView.setSelection(mChatListAdapter.getCount() - 1);
+                //listView.setSelection(mHashtagListAdapter.getCount() - 1);    NO NEED TO SCROLL DOWN AFTER UPDATING/LOADING LISTVIEW (PETER YEUNG 2015/11/16)
             }
         });
 
@@ -126,15 +119,12 @@ public class SearchMainActivity extends ListActivity {
                 // No-op
             }
             });
-*/
+
         searchButton = (ImageButton) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        searchText = (EditText) findViewById(R.id.searchInput);
-                        searchText.setError(null);
 
                         String input = searchText.getText().toString();
                         if (!TextUtils.isEmpty(input)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
