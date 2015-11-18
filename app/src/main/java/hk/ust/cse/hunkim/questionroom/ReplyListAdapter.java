@@ -27,17 +27,16 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
  * Created by CAI on 21/10/2015.
  */
 public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
-    ReplyActivity activity;
+    Activity activity;
 
     public ReplyListAdapter(Query mRef, Activity activity, int mLayout) {
         super(mRef, Reply.class, mLayout, activity);
-        assert (activity instanceof ReplyActivity);
         this.activity = (ReplyActivity) activity;
     }
 
     @Override
     protected void populateView(View view, Reply reply) {
-        DBUtil dbUtil = activity.getDbutil();
+        DBUtil dbUtil = ((ReplyActivity)activity).getDbutil();
         int order = reply.getOrder();
 
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.ReplyLike);
@@ -113,8 +112,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
     }
 
     //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
-    private String getDate(long postTime)
-    {
+    private String getDate(long postTime){
         long currentTime = new Date().getTime();
         long timeResolution = 0;
         long timeDiff = currentTime-postTime;

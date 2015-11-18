@@ -49,7 +49,6 @@ public class ReplyActivity extends ListActivity {
     private ImageButton dislikePQB;
     private Firebase replyContainerRef;
     private Firebase questionUrl;
-    private ValueEventListener mConnectedListener;
     private ReplyListAdapter mChatListAdapter;
     private EditText inputText;
     private DBUtil dbutil;
@@ -147,30 +146,10 @@ public class ReplyActivity extends ListActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
-
-        mConnectedListener = replyContainerRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null){
-                    boolean connected = (Boolean) dataSnapshot.getValue();
-                    if (connected) {
-                        Toast.makeText(ReplyActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ReplyActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-        });
     }
 
     public void onStop() {
         super.onStop();
-        replyContainerRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 

@@ -52,7 +52,6 @@ public class MainActivity extends ListActivity {
     private ImageButton sortButton; //Added by Marvin
     private ImageButton searchButton; //Added by Peter
     private int sortIndex;
-    private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
     private Hashtag_extracter hashtag_extracter;
 
@@ -171,24 +170,6 @@ public class MainActivity extends ListActivity {
                         popup.show();//showing popup menu
                     }
                 });
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(MainActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-            });
     }
 
     //todo: Leave it here, probably will work on this part later
@@ -205,7 +186,6 @@ public class MainActivity extends ListActivity {
     @Override
     public void onStop() {
         super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 
