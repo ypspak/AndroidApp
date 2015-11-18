@@ -9,8 +9,13 @@ import android.graphics.PorterDuff;
 import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +48,11 @@ import hk.ust.cse.hunkim.questionroom.reply.Reply;
 public class ReplyActivity extends ListActivity {
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
+    /* Constant for pass by intent to SearchResultActivity */
+    public static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent, i.e. the left part of Map<string, int/string/double>
+    public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
+    public static final String INPUT = "INPUT";
+
 
     private int question_NumLike;
     private int question_NumDislike;
@@ -56,8 +66,10 @@ public class ReplyActivity extends ListActivity {
     private String roomName;
     private ImageButton likePQB;
     private ImageButton dislikePQB;
+
     private Firebase replyContainerRef;
     private Firebase questionUrl;
+
     private ReplyListAdapter mChatListAdapter;
     private EditText inputText;
     private DBUtil dbutil;
@@ -92,6 +104,12 @@ public class ReplyActivity extends ListActivity {
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
+
+        // Inflate the view and add it to the header
+        final ListView listView = getListView();
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup headerview =  (ViewGroup) inflater.inflate(R.layout.reply_header, listView, false);
+        listView.addHeaderView(headerview);
     }
 
     public void onStart() {
@@ -108,15 +126,12 @@ public class ReplyActivity extends ListActivity {
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
 
         final ListView listView = getListView();
+
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new ReplyListAdapter(
                 replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
                 this, R.layout.reply);
 
-        // Inflate the view and add it to the header
-        LayoutInflater inflater = getLayoutInflater();
-        ViewGroup headerview =  (ViewGroup) inflater.inflate(R.layout.reply_header, listView, false);
-        listView.addHeaderView(headerview);
 
         //For the like & dislike button in headerview
         likePQB = (ImageButton) findViewById(R.id.likeParentQuestion);
@@ -220,9 +235,54 @@ public class ReplyActivity extends ListActivity {
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
         dislikeText.setText("" + String.valueOf(question_NumDislike));
-        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
-        hashtagText.setText(question_Hashtag != null ?  (TextUtils.join(" ", question_Hashtag)) : "None");
+        SpecialArrayJoin(question_Hashtag);
+        //hashtagText.setText(question_Hashtag != null ?  (TextUtils.join(" ", question_Hashtag)) : "None");
         titleText.setTransformationMethod(null);
+    }
+
+    public void SpecialArrayJoin(String[] Hashtags)
+    {
+        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
+        if (Hashtags == null)
+        {
+            hashtagText.setText("None");
+            return;
+        }
+
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        int PreviousPosition = 0;
+        int CurrentPosition = 0;
+        for (int i = 0; i < Hashtags.length; i++)
+        {
+            final String SingleHashtags = Hashtags[i];
+
+            //Set the behavior of clicking it
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
+                    intent.putExtra(ROOM_NAME, roomName);
+                    intent.putExtra(m_FirebaseURL, FIREBASE_URL);
+                    intent.putExtra(INPUT, SingleHashtags);
+                    view.getContext().startActivity(intent);
+                }
+            };
+
+            //Set the color of the text
+            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.SpannableHashtagReply));
+
+            CurrentPosition += Hashtags[i].length();
+            sb.append(Hashtags[i]);
+            sb.setSpan(clickableSpan, PreviousPosition, CurrentPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sb.setSpan(foregroundColorSpan, PreviousPosition, CurrentPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sb.append(" ");
+            CurrentPosition++;
+            PreviousPosition = CurrentPosition; //Increment 1 for delimiter
+        }
+
+        hashtagText.setText(sb);
+        hashtagText.setMovementMethod(LinkMovementMethod.getInstance());
+
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
