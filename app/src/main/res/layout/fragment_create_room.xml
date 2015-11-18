@@ -15,7 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_room_name"
+        android:textColorHint="@color/Join_Hint_Color"
         android:maxLines="1"
+        android:textColor="@color/HeaderText"
         android:singleLine="true"
         style="@style/EditTextCustomHolo"/>
 
@@ -26,15 +28,19 @@
         android:hint="@string/prompt_password"
         android:maxLines="1"
         android:singleLine="true"
+        android:textColor="@color/HeaderText"
         android:password="true"
+        android:textColorHint="@color/Join_Disable_Color"
         style="@style/EditTextCustomHolo"/>
 
     <CheckBox
         android:id="@+id/checkbox_isPrivate"
+        android:textColorHint="@color/HeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ifPrivate"
         android:focusable="true"
+        android:textColor="@color/Join_Disable_Color"
         android:buttonTint="@color/HeaderColor"/>
 
     <LinearLayout

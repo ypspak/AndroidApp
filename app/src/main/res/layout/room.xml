@@ -3,7 +3,7 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="60dp">
-    <ImageButton
+    <ImageView
         android:id="@+id/is_private"
         android:layout_width="@dimen/RoundButtonSize"
         android:layout_height="@dimen/RoundButtonSize"
@@ -20,10 +20,12 @@
         android:id="@+id/room_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is Room Name"
+        android:text="Test"
         android:layout_gravity="center_vertical"
+        android:textColor="@color/HeaderText"
         android:paddingLeft="20dp"
         android:singleLine="true"
+        android:textSize="20dp"
         android:layout_weight="4"/>
     <Button
         android:id="@+id/join_button"
