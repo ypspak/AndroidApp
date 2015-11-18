@@ -84,6 +84,13 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     protected void populateView(View view, Question question) {
 
 
+        final int numLike = question.getLike();
+        final int numDislike = question.getDislike();
+        final int numReply = question.getReplies();
+        final String qHead = question.getHead();
+        final String qDesc = question.getDesc().equals("") ? "Empty message." : question.getDesc();
+        final Long qTimestamp = question.getTimestamp();
+
         // Map a Chat object to an entry in our listview
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.QuestionLike);
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.QuestionDislike);
@@ -147,6 +154,12 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
                         intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
                         intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra("NUM_LIKE", numLike);
+                        intent.putExtra("NUM_DISLIKE", numDislike);
+                        intent.putExtra("NUM_REPLY", numReply);
+                        intent.putExtra("HEAD", qHead);
+                        intent.putExtra("DESC", qDesc);
+                        intent.putExtra("TIMESTAMP", qTimestamp);
                         view.getContext().startActivity(intent);
                     }
                 }

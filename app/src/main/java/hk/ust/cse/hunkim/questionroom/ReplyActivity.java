@@ -44,6 +44,12 @@ public class ReplyActivity extends ListActivity {
     private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
 
+    private int question_NumLike;
+    private int question_NumDislike;
+    private int question_NumReply;
+    private String question_Head;
+    private String question_Desc;
+    private Long question_Timestamp;
     private String key;
     private String roomName;
     private ImageButton likePQB;
@@ -67,6 +73,14 @@ public class ReplyActivity extends ListActivity {
         //currently just for testing that I am entered the replying room corresponding to the question
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
+        question_NumLike = intent.getIntExtra("NUM_LIKE", 0);
+        question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
+        question_NumReply = intent.getIntExtra("NUM_REPLY", 0);
+        question_Head = intent.getStringExtra("HEAD");
+        question_Desc = intent.getStringExtra("DESC");
+        question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
+
+
         replyContainerRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("replies");
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -202,15 +216,15 @@ public class ReplyActivity extends ListActivity {
 
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.timetext));
+        timeText.setText("" + getDate(question_Timestamp));
         Button titleText = (Button) findViewById((R.id.head_reply));
+        titleText.setText("" + question_Head);
         TextView descText = (TextView) findViewById((R.id.desc));
+        descText.setText("" + question_Desc);
         TextView likeText = (TextView) findViewById((R.id.likeText));
+        likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
-        retrieveQuestionDetails("timestamp", timeText, true, true);
-        retrieveQuestionDetails("head", titleText);
-        retrieveQuestionDetails("desc", descText, false);
-        retrieveQuestionDetails("like", likeText, true);
-        retrieveQuestionDetails("dislike", dislikeText, true);
+        dislikeText.setText("" + String.valueOf(question_NumDislike));
         titleText.setTransformationMethod(null);
     }
 
@@ -282,62 +296,6 @@ public class ReplyActivity extends ListActivity {
 
         // Update SQLite DB
         dbutil.put(key);
-    }
-
-    //Helper function
-    public void retrieveQuestionDetails(final String childName, final TextView textView, final boolean IsNumber)
-    {
-        retrieveQuestionDetails(childName, textView, IsNumber, false);
-    }
-
-    public void retrieveQuestionDetails(final String childName, final Button btn)
-    {
-        final Firebase childRef = questionUrl.child(childName);
-        childRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.getValue()!=null){
-                                String tempStr = (String) dataSnapshot.getValue();
-                                btn.setText(Html.fromHtml("" + tempStr));
-                            }
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
-    }
-    public void retrieveQuestionDetails(final String childName, final TextView textView, final boolean IsNumber, final boolean IsDate)
-    {
-        final Firebase childRef = questionUrl.child(childName);
-        childRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getValue()!=null){
-                            if (IsNumber) {
-                                long tempNum = (long) dataSnapshot.getValue();
-                                if (IsDate)
-                                    textView.setText("" + getDate(tempNum));
-                                else
-                                    textView.setText("" + String.valueOf(tempNum));
-                            }
-                            else {
-                                String tempStr = (String) dataSnapshot.getValue();
-                                textView.setText(Html.fromHtml("" + tempStr));
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
     }
 
     public void updateQuestionReply() {
