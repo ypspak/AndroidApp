@@ -36,15 +36,11 @@ public class Reply{
         return order;
     }
 
-    public String getKey(){
-        return key;
-    }
-
     public String getParentID() {return parentID;}
 
+    public String getKey() {return key; }
     //modifier of each attribute, timestamp is supposed to be unable to modified
-
     public void setKey(String key) {
-        this.key=key;
+        this.key = key;
     }
 }

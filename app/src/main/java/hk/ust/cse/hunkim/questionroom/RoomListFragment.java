@@ -46,8 +46,8 @@ public class RoomListFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        super.onDestroyView();
         mRoomListAdapter.cleanup();
     }
 }

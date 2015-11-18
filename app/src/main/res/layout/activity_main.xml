@@ -9,9 +9,9 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/listHeader"
-        android:transcriptMode="alwaysScroll" />
+        android:transcriptMode="normal" />
 
 
     <RelativeLayout

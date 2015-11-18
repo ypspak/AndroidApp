@@ -51,8 +51,8 @@ public class MainActivity extends ListActivity {
     private Firebase mFirebaseRef_Hashtag;
     private ImageButton sortButton; //Added by Marvin
     private ImageButton searchButton; //Added by Peter
+    private ImageButton postQ;
     private int sortIndex;
-    private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
     private Hashtag_extracter hashtag_extracter;
 
@@ -82,13 +82,7 @@ public class MainActivity extends ListActivity {
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions");
         mFirebaseRef_Hashtag = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("tags");
-        ImageButton postQ = (ImageButton) findViewById(R.id.postQuestion);
-        postQ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                postQuestion(view);
-            }
-        });
+        postQ = (ImageButton) findViewById(R.id.postQuestion);
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
@@ -99,6 +93,12 @@ public class MainActivity extends ListActivity {
     public void onStart() {
         super.onStart();
 
+        postQ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postQuestion(view);
+            }
+        });
         //GUI design initialization <26/10/2015 by Peter Yeung>
         //This is due to Android default, all buttons are come with capitalized.
         Button quitButton = (Button) findViewById(R.id.close);
@@ -113,6 +113,12 @@ public class MainActivity extends ListActivity {
                 this, R.layout.question, roomName);
 
         listView.setAdapter(mChatListAdapter);
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                listView.smoothScrollToPositionFromTop(0,0);
+//            }
+//        });
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -171,24 +177,6 @@ public class MainActivity extends ListActivity {
                         popup.show();//showing popup menu
                     }
                 });
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(MainActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-            });
     }
 
     //todo: Leave it here, probably will work on this part later
@@ -205,7 +193,6 @@ public class MainActivity extends ListActivity {
     @Override
     public void onStop() {
         super.onStop();
-        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 
