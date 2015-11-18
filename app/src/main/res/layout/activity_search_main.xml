@@ -67,10 +67,11 @@
         </RelativeLayout>
 
         <EditText
+            android:imeOptions="actionSearch"
             android:id="@+id/searchInput"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="textShortMessage"
+            android:inputType="text"
             android:lines="1"
             android:singleLine="true"
             style="@style/EditTextCustomHolo"
