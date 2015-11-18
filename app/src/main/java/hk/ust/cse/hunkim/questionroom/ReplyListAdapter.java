@@ -76,7 +76,6 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
                     public void onClick(View view) {
                         ReplyActivity m = (ReplyActivity) view.getContext();
                         m.updateOrder((String) view.getTag(), -1);
-                        Log.e("EEE", (String) view.getTag());
                     }
                 }
 

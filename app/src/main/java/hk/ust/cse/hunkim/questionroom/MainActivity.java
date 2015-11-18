@@ -113,6 +113,12 @@ public class MainActivity extends ListActivity {
                 this, R.layout.question, roomName);
 
         listView.setAdapter(mChatListAdapter);
+//        listView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                listView.smoothScrollToPositionFromTop(0,0);
+//            }
+//        });
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override

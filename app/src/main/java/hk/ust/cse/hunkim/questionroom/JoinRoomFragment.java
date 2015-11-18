@@ -101,7 +101,8 @@ public class JoinRoomFragment extends Fragment {
                     roomNameField.setError(getString(R.string.error_not_exist_room));
                 } else {
                     assert (dataSnapshot.getValue(Room.class) != null);
-                    tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class), view);
+                    JoinActivity m = (JoinActivity) view.getContext();
+                    m.tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class));
                 }
             }
 
@@ -110,52 +111,6 @@ public class JoinRoomFragment extends Fragment {
                 // No-op
             }
         });
-    }
-
-    private void tryJoin(final String roomName, final Room room, View v){
-        if(!room.getIsPrivate()){
-            join(v,roomName);
-        }
-        else{
-            final Dialog dialog = new Dialog(getActivity());
-            dialog.setContentView(R.layout.password_join_room_dialog);
-            dialog.setTitle("Password Required");
-            final EditText pwField = (EditText) dialog.findViewById(R.id.password);
-            Button cancel= (Button) dialog.findViewById(R.id.cancel);
-            cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            Button submit= (Button) dialog.findViewById(R.id.submit);
-            submit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    pwField.setError(null);
-                    String tempPw = pwField.getText().toString();
-                    if(!room.getPassword().equals(tempPw)){
-                        if(TextUtils.isEmpty(tempPw))
-                            pwField.setError(getString(R.string.error_field_required));
-                        else
-                            pwField.setError(getString(R.string.error_incorrect_password));
-                    }else{
-
-                        dialog.dismiss();
-                        join(v,roomName);
-                    }
-                }
-            });
-            dialog.show();
-            return;
-        }
-    }
-
-    private void join(View v, String roomName){
-        Intent intent = new Intent(v.getContext(), MainActivity.class);
-        intent.putExtra(JoinActivity.ROOM_NAME, roomName);
-        intent.putExtra(JoinActivity.FIREBASE_URL, roomsRef.toString());
-        startActivity(intent);
     }
 
     private boolean isEmailValid(String room_name) {
