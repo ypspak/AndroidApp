@@ -1,6 +1,7 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -65,17 +67,10 @@ public class ReplyActivity extends ListActivity {
         //currently just for testing that I am entered the replying room corresponding to the question
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
-        setTitle("Room Name:" + roomName);
         replyContainerRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("replies");
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage();
-            }
-        });
+        setTitle("Room Name:" + roomName);
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
@@ -85,7 +80,14 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions").child(key);
-
+        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
 
         final ListView listView = getListView();
@@ -93,6 +95,14 @@ public class ReplyActivity extends ListActivity {
         mChatListAdapter = new ReplyListAdapter(
                 replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
                 this, R.layout.reply);
+
+        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                listView.setSelection(mChatListAdapter.getCount() - 1);
+            }
+        });
 
         // Inflate the view and add it to the header
         LayoutInflater inflater = getLayoutInflater();
