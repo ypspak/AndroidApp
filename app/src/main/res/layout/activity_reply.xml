@@ -36,7 +36,8 @@
             android:inputType="textMultiLine"
             android:singleLine="false"
             style="@style/EditTextCustomHolo"
-            android:maxLines="3" />
+            android:maxLines="3"
+            android:scrollbars="vertical"/>
 
         <ImageButton
             android:id="@+id/sendButton"
