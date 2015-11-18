@@ -110,14 +110,6 @@ public class ReplyActivity extends ListActivity {
                 replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
                 this, R.layout.reply);
 
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                //listView.setSelection(mChatListAdapter.getCount() - 1);
-            }
-        });
-
         // Inflate the view and add it to the header
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup headerview =  (ViewGroup) inflater.inflate(R.layout.reply_header, listView, false);
@@ -158,7 +150,7 @@ public class ReplyActivity extends ListActivity {
             @Override
             public void onChanged() {
                 super.onChanged();
-                listView.setSelection(mChatListAdapter.getCount() - 1);
+                //listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
     }
