@@ -39,10 +39,13 @@
 
         <ImageButton
             android:id="@+id/sendButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send"
-            style="@style/ButtonCustomHolo"/>
+            android:layout_width="@dimen/ReplySendButtonSize"
+            android:layout_height="@dimen/ReplySendButtonSize"
+            android:src="@drawable/create"
+            style="@style/ButtonCustomHolo"
+            android:scaleType="fitXY"
+            android:background="@drawable/round_button_2"
+            android:padding="5dp" />
 
     </LinearLayout>
 
