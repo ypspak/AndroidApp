@@ -1,10 +1,12 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.TextUtils;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -198,9 +201,16 @@ public class ReplyActivity extends ListActivity {
             replyContainerRef.push().setValue(reply);
             inputText.setText("");
             updateQuestionReply();
+            inputText.requestFocus();
         }else {
             inputText.setError(getString(R.string.error_field_required));
         }//warning to force user input reply
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     public void UpdateHeader() {
@@ -230,7 +240,7 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getValue()!=null){
+                        if (dataSnapshot.getValue() != null) {
                             long orderValue = (long) dataSnapshot.getValue();
                             Log.e("Order update:", "" + orderValue);
 
@@ -244,6 +254,14 @@ public class ReplyActivity extends ListActivity {
                     }
                 }
         );
+
+        EditText reply = (EditText) findViewById(R.id.replyInput);
+        reply.requestFocus();
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+        }
 
         // Update SQLite DB
         dbutil.put(key);
@@ -261,7 +279,7 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getValue()!=null){
+                        if (dataSnapshot.getValue() != null) {
                             long orderValue = (long) dataSnapshot.getValue();
                             Log.e("Order update:", "" + orderValue);
                             orderRef.setValue(orderValue + 1);
