@@ -50,7 +50,6 @@ public class ReplyActivity extends ListActivity {
     private ImageButton dislikePQB;
     private Firebase replyContainerRef;
     private Firebase questionUrl;
-    private ValueEventListener mConnectedListener;
     private ReplyListAdapter mChatListAdapter;
     private EditText inputText;
     private DBUtil dbutil;
@@ -68,17 +67,10 @@ public class ReplyActivity extends ListActivity {
         //currently just for testing that I am entered the replying room corresponding to the question
         key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
         roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
-        setTitle("Room Name:" + roomName);
         replyContainerRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("replies");
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage();
-            }
-        });
+        setTitle("Room Name:" + roomName);
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
@@ -88,7 +80,14 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions").child(key);
-
+        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
         // Setup our view and list adapter. Ensure it scrolls to the bottom as data changes
 
         final ListView listView = getListView();
@@ -96,6 +95,14 @@ public class ReplyActivity extends ListActivity {
         mChatListAdapter = new ReplyListAdapter(
                 replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
                 this, R.layout.reply);
+
+        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                listView.setSelection(mChatListAdapter.getCount() - 1);
+            }
+        });
 
         // Inflate the view and add it to the header
         LayoutInflater inflater = getLayoutInflater();
@@ -140,30 +147,10 @@ public class ReplyActivity extends ListActivity {
                 listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
-
-        mConnectedListener = replyContainerRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null){
-                    boolean connected = (Boolean) dataSnapshot.getValue();
-                    if (connected) {
-                        Toast.makeText(ReplyActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ReplyActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-        });
     }
 
     public void onStop() {
         super.onStop();
-        replyContainerRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         mChatListAdapter.cleanup();
     }
 

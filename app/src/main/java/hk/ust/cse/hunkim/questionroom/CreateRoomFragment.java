@@ -1,11 +1,13 @@
 package hk.ust.cse.hunkim.questionroom;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.os.SystemClock;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -20,10 +22,9 @@ import com.firebase.client.ValueEventListener;
 import hk.ust.cse.hunkim.questionroom.room.Room;
 
 /**
- * Created by CAI on 15/11/2015.
+ * Created by CAI on 17/11/2015.
  */
-public class CreateRoomActivity extends Activity {
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+public class CreateRoomFragment extends Fragment {
     // UI references.
     private EditText roomNameField;
     private EditText passwordField;
@@ -32,24 +33,31 @@ public class CreateRoomActivity extends Activity {
     private CheckBox isPrivate;
     //Variable references
     private Firebase roomListRef;
-    private ValueEventListener checkExistenceListener;
 
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Firebase.setAndroidContext(this);
-        setContentView(R.layout.activity_create_room);
-
-        roomNameField = (EditText) findViewById(R.id.room_name);
-        passwordField = (EditText) findViewById(R.id.password);
-        cancel = (Button) findViewById(R.id.cancel_action);
-        createRoom = (Button) findViewById(R.id.create_room);
-        isPrivate = (CheckBox) findViewById(R.id.checkbox_isPrivate);
-        passwordField.setEnabled(false);
-        roomListRef = new Firebase(FIREBASE_URL).child("roomList");
+        Firebase.setAndroidContext(getActivity());
     }
 
     @Override
-    protected void onStart() {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.fragment_create_room, container, false);
+        roomNameField = (EditText) rootView.findViewById(R.id.room_name);
+        passwordField = (EditText) rootView.findViewById(R.id.password);
+        cancel = (Button) rootView.findViewById(R.id.cancel_action);
+        createRoom = (Button) rootView.findViewById(R.id.create_room);
+        isPrivate = (CheckBox) rootView.findViewById(R.id.checkbox_isPrivate);
+        passwordField.setEnabled(false);
+        roomListRef = new Firebase(JoinActivity.FIREBASE_URL).child("roomList");
+        return rootView;
+    }
+
+
+    @Override
+    public void onStart() {
         super.onStart();
         isPrivate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -69,20 +77,14 @@ public class CreateRoomActivity extends Activity {
                 attemptCreateRoom(v);
             }
         });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Close(v);
-            }
-        });
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
-        String temp = roomNameField.getText().toString();
-        if(checkExistenceListener!=null)
-            roomListRef.child(temp).removeEventListener(checkExistenceListener);
+//        String temp = roomNameField.getText().toString();
+//        if(checkExistenceListener!=null)
+//            roomListRef.child(temp).removeEventListener(checkExistenceListener);
     }
 
     private void attemptCreateRoom(final View v){
@@ -93,16 +95,22 @@ public class CreateRoomActivity extends Activity {
         }
         roomNameField.setError(null);
         String input = roomNameField.getText().toString();
-        checkExistenceListener = roomListRef.child(input).addValueEventListener(new ValueEventListener() {
+        roomListRef.child(input).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     roomNameField.setError(getString(R.string.error_exist_room));
                 } else {
-                    roomNameField.setError(null);
                     CreateRoom();
-                    Close(v);
-                    Toast.makeText(CreateRoomActivity.this, "The room is successfully created!", Toast.LENGTH_SHORT).show();
+                    roomNameField.setText("");
+                    passwordField.setText("");
+                    InputMethodManager inputManager =
+                            (InputMethodManager) getActivity().
+                                    getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(
+                            getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    Toast.makeText(getActivity(), "The room is successfully created!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -141,9 +149,5 @@ public class CreateRoomActivity extends Activity {
 
     private boolean isEmailValid(String input) {
         return !input.matches("^.*[^a-zA-Z0-9 ].*$");
-    }
-
-    public void Close(View view) {
-        finish();
     }
 }

@@ -41,16 +41,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-        <Button
-            android:id="@+id/cancel_action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:onClick="attemptJoin"
-            android:text="@string/cancel_action"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            style="@style/ButtonCustomHolo"/>
 
         <Button
             android:id="@+id/create_room"

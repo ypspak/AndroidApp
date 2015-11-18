@@ -36,17 +36,8 @@
         </activity>
 
         <activity
-            android:name=".CreateRoomActivity"
-            android:label="@string/app_name" >
-        </activity>
-
-        <activity
             android:name=".ReplyActivity"
-            android:label="@string/app_name" >
-        </activity>
-
-        <activity
-            android:name=".RoomActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:label="@string/app_name" >
         </activity>
 

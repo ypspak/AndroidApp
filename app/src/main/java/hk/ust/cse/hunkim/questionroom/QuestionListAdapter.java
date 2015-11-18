@@ -39,8 +39,8 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     public static final String ROOM_NAME = "ROOMNAME";
     private String roomName;
     private String filterStr;
-    Activity activity;
     private int sortMethod;
+    Activity activity;
 
     //Without filter
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {

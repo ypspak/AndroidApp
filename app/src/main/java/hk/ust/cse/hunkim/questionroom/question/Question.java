@@ -82,13 +82,13 @@ public class Question{
 
     public long getLastTimestamp(){return lastTimestamp;}
 
-    public String getKey() {return key; }
-
     public int getReplies() { return replies; }
 
     public String[] getTags() { return tags; }
 
     public String getWholeMsgReply(){return wholeMsgReply;}//todo: can delete later
+
+    public String getKey() {return key; }
 
     public void setKey(String key) {
         this.key = key;

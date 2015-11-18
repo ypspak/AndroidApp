@@ -28,23 +28,32 @@ import hk.ust.cse.hunkim.questionroom.room.Room;
  * Created by CAI on 21/10/2015.
  */
 public class RoomListAdapter extends FirebaseListAdapter<Room> {
-    RoomActivity activity;
+    JoinActivity activity;
     public RoomListAdapter(Query mRef, Activity activity, int mLayout) {
         super(mRef, Room.class, mLayout, activity);
-        assert (activity instanceof RoomActivity);
-        this.activity = (RoomActivity) activity;
+        assert (activity instanceof JoinActivity);
+        this.activity = (JoinActivity) activity;
     }
 
     @Override
-    protected void populateView(View view, Room model) {
-        Button roomBtn = (Button) view.findViewById(R.id.join_button);
-        RoomActivity m = (RoomActivity) view.getContext();
-        roomBtn.setText((String) view.getTag());
-        roomBtn.setOnClickListener(
+    protected void populateView(View view, final Room model) {
+        ImageButton isPrivate = (ImageButton) view.findViewById(R.id.is_private);
+        if(!model.getIsPrivate())
+            isPrivate.setVisibility(View.INVISIBLE);
+        else
+            isPrivate.setVisibility(View.VISIBLE);
+
+        TextView roomName = (TextView) view.findViewById(R.id.room_name);
+        roomName.setText(model.getKey());
+
+        Button joinRoom = (Button) view.findViewById(R.id.join_button);
+        joinRoom.setTag(model.getKey());
+        joinRoom.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e("FFF", "Functionality of each button works fine!");
+                        JoinActivity m = (JoinActivity) view.getContext();
+                        m.tryJoin((String)view.getTag(),model);
                     }
                 }
 
@@ -58,11 +67,15 @@ public class RoomListAdapter extends FirebaseListAdapter<Room> {
 
     @Override
     protected void setKey(String key, Room model) {
-
+        model.setKey(key);
     }
 
     @Override
     protected boolean IsContainString(String filterStr, Room model) {
-        return false;
+        return true;
+    }
+
+    private void updateRoomName(){
+
     }
 }

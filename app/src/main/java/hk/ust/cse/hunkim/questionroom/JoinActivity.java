@@ -1,13 +1,24 @@
 package hk.ust.cse.hunkim.questionroom;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.support.v7.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -20,101 +31,33 @@ import hk.ust.cse.hunkim.questionroom.room.Room;
 /**
  * A login screen that offers login via email/password.
  */
-public class JoinActivity extends Activity {
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
+public class JoinActivity extends AppCompatActivity implements ActionBar.TabListener {
+    public static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
     public static final String ROOM_NAME = "Room_name";
-    // UI references.
-    private EditText roomNameField;
-    private Button joinRoom;
-    private Button createRoom;
-    private Button allRooms;
-    private Dialog dialog;
-    //Variable references
-    private Firebase roomListRef;
-    private ValueEventListener checkExistenceListener;
+
+    private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private Firebase mFirebaseRef;
+    private ValueEventListener mConnectedListener;
+    // Tab titles
+    private String[] tabs = { "Join Room", "Room List", "Create Room" };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_join);
-
-        roomNameField = (EditText) findViewById(R.id.room_name);
-        joinRoom = (Button) findViewById(R.id.join_button);
-        createRoom = (Button) findViewById(R.id.create_room);
-        allRooms = (Button) findViewById(R.id.all_rooms);
-        roomListRef = new Firebase(FIREBASE_URL).child("roomList");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        joinRoom.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                attemptJoin(v);
-            }
-        });
-
-        createRoom.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), CreateRoomActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        allRooms.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), RoomActivity.class);
-                startActivity(intent);
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        String temp = roomNameField.getText().toString();
-        if(checkExistenceListener!=null)
-            roomListRef.child(temp).removeEventListener(checkExistenceListener);
-    }
-
-
-    public void attemptJoin(View view) {
-        roomNameField.setError(null);
-
-        // Store values at the time of the login attempt.
-        String room_name = roomNameField.getText().toString();
-
-        boolean cancel = false;
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(room_name)) {
-            roomNameField.setError(getString(R.string.error_field_required));
-
-            cancel = true;
-        } else if (!isEmailValid(room_name)) {
-            roomNameField.setError(getString(R.string.error_invalid_room_name));
-            cancel = true;
-        }
-
-        if (cancel) {
-            roomNameField.setText("");
-            roomNameField.requestFocus();
-            return;
-        }
-        existRoomAndJoin(room_name, view);
-    }
-
-    private void existRoomAndJoin(String input, final View view){
-        checkExistenceListener = roomListRef.child(input).addValueEventListener(new ValueEventListener() {
+         mFirebaseRef = new Firebase(FIREBASE_URL);
+        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    roomNameField.setError(getString(R.string.error_not_exist_room));
-                } else {
-                    assert (dataSnapshot.getValue(Room.class) != null);
-                    tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class) , view);
+                if(dataSnapshot.getValue()!=null){
+                    boolean connected = (Boolean) dataSnapshot.getValue();
+                    if (connected) {
+                        Toast.makeText(JoinActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(JoinActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -123,11 +66,34 @@ public class JoinActivity extends Activity {
                 // No-op
             }
         });
+
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(mAdapter);
+        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                actionBar.setSelectedNavigationItem(position);
+            }
+        });
+
+        for (String tab_name : tabs) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setText(tab_name)
+                            .setTabListener(this));
+        }
+
     }
 
-    private void tryJoin(final String roomName, final Room room, View v){
+    public void tryJoin(final String roomName, final Room room){
         if(!room.getIsPrivate()){
-            join(v,roomName);
+            join(roomName);
         }
         else{
             final Dialog dialog = new Dialog(this);
@@ -155,7 +121,7 @@ public class JoinActivity extends Activity {
                     }else{
 
                         dialog.dismiss();
-                        join(v,roomName);
+                        join(roomName);
                     }
                 }
             });
@@ -164,16 +130,31 @@ public class JoinActivity extends Activity {
         }
     }
 
-    private void join(View v, String roomName){
-        Intent intent = new Intent(v.getContext(), MainActivity.class);
+    private void join(String roomName){
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(ROOM_NAME, roomName);
         startActivity(intent);
     }
 
-    private boolean isEmailValid(String room_name) {
-        // http://stackoverflow.com/questions/8248277
-        // Make sure alphanumeric characters
-        return !room_name.matches("^.*[^a-zA-Z0-9 ].*$");
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+
     }
 }
 
