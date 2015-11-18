@@ -50,6 +50,8 @@ public class ReplyActivity extends ListActivity {
     private String question_Head;
     private String question_Desc;
     private Long question_Timestamp;
+    private String[] question_Hashtag;
+
     private String key;
     private String roomName;
     private ImageButton likePQB;
@@ -79,6 +81,7 @@ public class ReplyActivity extends ListActivity {
         question_Head = intent.getStringExtra("HEAD");
         question_Desc = intent.getStringExtra("DESC");
         question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
+        question_Hashtag = intent.getStringArrayExtra("TAGS");
 
 
         replyContainerRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("replies");
@@ -217,6 +220,8 @@ public class ReplyActivity extends ListActivity {
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
         dislikeText.setText("" + String.valueOf(question_NumDislike));
+        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
+        hashtagText.setText(question_Hashtag != null ?  (TextUtils.join(" ", question_Hashtag)) : "None");
         titleText.setTransformationMethod(null);
     }
 

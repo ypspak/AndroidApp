@@ -90,6 +90,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         final String qHead = question.getHead();
         final String qDesc = question.getDesc().equals("") ? "Empty message." : question.getDesc();
         final Long qTimestamp = question.getTimestamp();
+        final String[] qTags = question.getTags();
 
         // Map a Chat object to an entry in our listview
         ImageButton likeButton = (ImageButton) view.findViewById(R.id.QuestionLike);
@@ -160,6 +161,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                         intent.putExtra("HEAD", qHead);
                         intent.putExtra("DESC", qDesc);
                         intent.putExtra("TIMESTAMP", qTimestamp);
+                        intent.putExtra("TAGS", qTags);
                         view.getContext().startActivity(intent);
                     }
                 }
