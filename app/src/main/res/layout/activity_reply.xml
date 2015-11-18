@@ -17,7 +17,8 @@
         android:stackFromBottom="false"
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/listFooter" />
+        android:layout_above="@+id/listFooter"
+        android:transcriptMode="normal" />
 
     <LinearLayout
         android:id="@+id/listFooter"
