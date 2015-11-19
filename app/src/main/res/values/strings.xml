@@ -36,5 +36,6 @@
 
     <!--String related to searching-->
     <string name="searchHint">Searching for?</string>
+    <string name="search_no_result">No result is found.</string>
 
 </resources>

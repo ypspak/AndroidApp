@@ -5,14 +5,16 @@
     <color name="welcome_body_color">#505050</color>
     <color name="try_it_button_background">#FF3C3223</color>
     <color name="welcome_background">#FF8C00</color>
-
     <color name="join_activity_background">#FF272926</color>
-	<!--For PopupWindow color-->
+	<color name="Join_Hint_Color">#aea9a2</color>
+	<color name="Join_Disable_Color">#746d62</color>
+
+	<!--For MainActivity color-->
 	<color name="HeaderColor">#FF8C00</color>
-    <color name="Join_Hint_Color">#aea9a2</color>
-    <color name="Join_Disable_Color">#746d62</color>
 	<color name="HeaderText">#FFFFFF</color>
 	<color name="SubHeaderColor">#FFB732</color>
+	<color name="question_list_title">#000000</color>
+	<color name="question_list_desc">#505050</color>
 	<!-- For transparent_button.xml -->
 	<color name="Transparent">#00FFFFFF</color>
 	<color name="SemiTransparent">#60FFFFFF</color>

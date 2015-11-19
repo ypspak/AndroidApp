@@ -59,7 +59,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         }
         else if (activity instanceof SearchResultActivity)
             this.activity = (SearchResultActivity) activity;
-
     }
 
 
@@ -181,6 +180,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         if (activity instanceof MainActivity) {
             dbUtil = ((MainActivity) activity).getDbutil();
             ((TextView) view.findViewById(R.id.head)).setText(Html.fromHtml("" + question.getHead()));
+            ((TextView) view.findViewById(R.id.desc)).setText(Html.fromHtml("" + question.getDesc()));
         }
         else if (activity instanceof SearchResultActivity) {
             dbUtil = ((SearchResultActivity) activity).getDbutil();
