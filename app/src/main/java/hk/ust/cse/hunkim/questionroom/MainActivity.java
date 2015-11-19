@@ -293,7 +293,7 @@ public class MainActivity extends ListActivity {
                     Question question = new Question(title, body);
                     // Create a new, auto-generated child of that chat location, and save our chat data there
                     mFirebaseRef.push().setValue(question);
-                    PushHashTag(body);
+                    PushHashTag(body + " " + title);
                     dialog.dismiss();
                 } else {
                     titleInput.setError(getString(R.string.error_field_required));
