@@ -11,6 +11,8 @@ import android.widget.TextView;
 /**
  * Created by CAI on 2/11/2015.
  */
+
+/*
 public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyActivity> {
     private EditText replyInput;
     private ImageButton sendButton;
@@ -108,3 +110,4 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         assertEquals("There s not error message from the reply input", null, replyInput.getError());
     }
 }
+*/
