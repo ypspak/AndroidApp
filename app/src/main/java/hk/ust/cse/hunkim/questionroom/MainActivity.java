@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -104,6 +105,15 @@ public class MainActivity extends ListActivity {
                 this, R.layout.question, roomName);
 
         listView.setAdapter(mChatListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //String input = ((TextView) view.findViewById(R.id.name)).getText().toString();
+                //EnterSearchResult(view, input);
+                ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
+                replyButton.performClick();
+            }
+        });
 //        listView.post(new Runnable() {
 //            @Override
 //            public void run() {
