@@ -12,6 +12,8 @@
     <string name="action_join_short">Sign in</string>
     <string name="question_room">Question Room</string>
     <string name="question_room_descibe">This totally anonymous and\nreal-time updating question \nmoderated system permits\n students to ask more questions\n in a typical class setting.</string>
+    <string name="input_join_room">Input room name below to join!</string>
+
     <string name="cancel_action">Cancel</string>
     <string name="submit_action">Submit</string>
     <string name="error_incorrect_password">Invalid Password</string>
