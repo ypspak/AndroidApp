@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -18,7 +15,7 @@ import com.firebase.client.ValueEventListener;
 /**
  * Created by CAI on 18/11/2015.
  */
-public class WelcomeAcitivity extends Activity{
+public class WelcomeActivity extends Activity{
     public static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
 
     private Button enter;
@@ -96,7 +93,7 @@ public class WelcomeAcitivity extends Activity{
 
     private void connected(){
         if(this.isInFront=false){
-            Toast.makeText(WelcomeAcitivity.this, "Reconnected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WelcomeActivity.this, "Reconnected", Toast.LENGTH_SHORT).show();
         }else{
             enter.setVisibility(View.VISIBLE);
         }
@@ -104,7 +101,7 @@ public class WelcomeAcitivity extends Activity{
 
     private void waitingConnect(){
         if(this.isInFront=false){
-            Toast.makeText(WelcomeAcitivity.this, "Lost connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WelcomeActivity.this, "Lost connection", Toast.LENGTH_SHORT).show();
         }else{
 
         }
