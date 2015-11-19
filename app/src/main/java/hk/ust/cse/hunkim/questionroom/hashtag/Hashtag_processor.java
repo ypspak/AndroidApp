@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -80,8 +81,9 @@ public class Hashtag_processor {
             PreviousPosition = CurrentPosition; //Increment 1 for delimiter
         }
 
-        hashtagText.setText(sb);
-        hashtagText.setMovementMethod(LinkMovementMethod.getInstance());
-
+        if (hashtagText != null) {
+            hashtagText.setText(sb);
+            hashtagText.setMovementMethod(LinkMovementMethod.getInstance());
+        }
     }
 }

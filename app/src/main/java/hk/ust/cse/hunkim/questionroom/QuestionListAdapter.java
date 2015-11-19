@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag_processor;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
 
@@ -41,6 +45,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     private String roomName;
     private String filterStr;
     private int sortMethod;
+    private Hashtag_processor hashtag_processor;
     Activity activity;
 
     //Without filter
@@ -102,11 +107,15 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         TextView likeNumText = (TextView) view.findViewById((R.id.likenumber));
         TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
         TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
+        TextView hashtagText = (TextView) view.findViewById(R.id.hashtagText);
 
         timeText.setText("Last updated: " + new TimeManager(question.getLastTimestamp()).getDate());
         likeNumText.setText("" + question.getLike());
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());
+
+        hashtag_processor = new Hashtag_processor(view, hashtagText, roomName, question.getTags(), 3);
+        hashtag_processor.HashtagTextJoin();
 
         likeButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
