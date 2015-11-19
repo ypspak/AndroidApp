@@ -30,4 +30,11 @@
 	<color name="ReplyOrderNeutral">#FFFFFF</color>
 	<!-- For text color in header_return_button.xml -->
 	<color name="ComTransBtnTextColor">#FFFFFF</color>
+
+	<!--For searching text view -->
+	<color name="SearchBackgroundTint">#FFFFFF</color>
+	<color name="SearchTextColor">#FFFFFF</color>
+
+	<!--For Spannable Text in in ReplyActivity for searching -->
+	<color name="SpannableHashtagReply">#5A595B</color>
 </resources>

@@ -17,8 +17,8 @@
         android:layout_marginRight="10dp" />
 
     <TextView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/ReplyRoundButtonSize"
+        android:layout_height="@dimen/ReplyRoundButtonSize"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="-420"
         android:id="@+id/order"
@@ -30,12 +30,13 @@
         android:layout_marginTop="0dp"
         android:gravity="center"
         android:layout_marginLeft="5dp"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:layout_marginRight="10dp"
         android:background="@drawable/round_button_1"
         android:textColor="#ffffff"
         android:layout_rowSpan="2"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:textStyle="bold" />
 
     <ImageButton
         android:layout_width="@dimen/RoundButtonSize"
@@ -43,7 +44,7 @@
         android:id="@+id/ReplyLike"
         android:src="@drawable/like"
         android:background="@drawable/round_button_1"
-        android:padding="5dp"
+        android:padding="6dp"
         android:scaleType="fitCenter"
         android:layout_row="1"
         android:layout_column="1"
@@ -58,7 +59,7 @@
         android:id="@+id/ReplyDislike"
         android:src="@drawable/dislike"
         android:background="@drawable/round_button_1"
-        android:padding="5dp"
+        android:padding="6dp"
         android:scaleType="fitCenter"
         android:layout_row="1"
         android:layout_column="2"

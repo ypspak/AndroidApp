@@ -6,6 +6,7 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -180,31 +181,6 @@ public class SearchResultActivity extends ListActivity {
                 }
         );
 
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //double orderValue = (double) dataSnapshot.getValue();
-                        double orderValue;
-                        if (dataSnapshot.getValue() instanceof Long) {
-                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
-                            Log.e("Type", "Long");
-                        } else {
-                            orderValue = (double) dataSnapshot.getValue();
-                            Log.e("Type", "Double");
-                        }
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue - 1);  //Need clarification, the higher value of order, the lower priorty sorted in firebase?
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
 
         // Update SQLite DB
         dbutil.put(key);
@@ -235,41 +211,14 @@ public class SearchResultActivity extends ListActivity {
                 }
         );
 
-        final Firebase orderRef = mFirebaseRef.child(key).child("order");
-        orderRef.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        double orderValue;
-                        //double orderValue = (double) dataSnapshot.getValue();
-                        if (dataSnapshot.getValue() instanceof Long) {
-                            orderValue = ((Long) (dataSnapshot.getValue())).doubleValue();
-                        } else {
-                            orderValue = (double) dataSnapshot.getValue();
-                        }
-
-                        Log.e("Order update:", "" + orderValue);
-
-                        orderRef.setValue(orderValue + 1); //Need clarification, the higher value of order, the lower priorty sorted in firebase?
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
-
         // Update SQLite DB
         dbutil.put(key);
     }
 
     public void setSearchResult(TextView view, String searchStr, int count)
     {
-        if (count == 1)
-            view.setText("There are " + count + " result for the search \"" + searchStr + "\".");
-        else if (count > 1)
-            view.setText("There are " + count + " results for the search \"" + searchStr + "\".");
+        if (count >= 1)
+            view.setText(Html.fromHtml("There are " + count + " result(s) for the search \"" + searchStr + "\"."));
         else
             view.setText("No results are found.");
     }

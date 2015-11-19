@@ -124,7 +124,7 @@ public class MainActivity extends ListActivity {
             @Override
             public void onChanged() {
                 super.onChanged();
-                listView.setSelection(mChatListAdapter.getCount() - 1);
+                //listView.setSelection(mChatListAdapter.getCount() - 1);
             }
         });
 
