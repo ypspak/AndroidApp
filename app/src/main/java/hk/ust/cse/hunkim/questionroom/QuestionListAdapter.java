@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +24,9 @@ import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag_processor;
 import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
 
 /**
  * @author greg
@@ -40,6 +45,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     private String roomName;
     private String filterStr;
     private int sortMethod;
+    private Hashtag_processor hashtag_processor;
     Activity activity;
 
     //Without filter
@@ -101,11 +107,15 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         TextView likeNumText = (TextView) view.findViewById((R.id.likenumber));
         TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
         TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
+        TextView hashtagText = (TextView) view.findViewById(R.id.hashtagText);
 
-        timeText.setText("Last updated: " + getDate(question.getLastTimestamp()));
+        timeText.setText("Last updated: " + new TimeManager(question.getLastTimestamp()).getDate());
         likeNumText.setText("" + question.getLike());
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());
+
+        hashtag_processor = new Hashtag_processor(view, hashtagText, roomName, question.getTags(), 3);
+        hashtag_processor.HashtagTextJoin();
 
         likeButton.setTag(question.getKey()); // Set tag for button
         dislikeButton.setTag(question.getKey());
@@ -188,9 +198,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         }
 
-        //If the dbUtil is null, then probably the activity is neither MainActivity or SearchResultActivity, i.e. exception. So we do assertion here
-        //By Peter Yeung 13/11/2015
-        assert(dbUtil != null);
 
         // check if we already clicked
         boolean clickable = !dbUtil.contains(question.getKey());
@@ -241,29 +248,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         return text;
     }
-    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
-    private String getDate(long postTime)
-    {
-        long currentTime = new Date().getTime();
-        long timeResolution = 0;
-        long timeDiff = currentTime-postTime;
-        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
-            return "Just now";
-        }
 
-        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
-            timeResolution = DateUtils.SECOND_IN_MILLIS;
-        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
-            timeResolution = DateUtils.MINUTE_IN_MILLIS;
-        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
-            timeResolution = DateUtils.HOUR_IN_MILLIS;
-        }else{
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
-            Date date = (new Date(postTime));
-            return df.format(date);
-        }
-        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
-    }
     @Override
     protected void sortModels(List<Question> mModels) {
         Collections.sort(mModels, new Comparator<Question>(){

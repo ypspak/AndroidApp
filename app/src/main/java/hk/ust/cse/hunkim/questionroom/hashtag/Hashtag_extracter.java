@@ -1,4 +1,4 @@
-package hk.ust.cse.hunkim.questionroom.hashtag_extracter;
+package hk.ust.cse.hunkim.questionroom.hashtag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,20 +47,6 @@ public class Hashtag_extracter {
 
     public List<String> getList(){ return this.list; }
     public String[] getArray() { return this.list.toArray(new String[list.size()]); }
-    public boolean IsEmptyList() { return this.list.isEmpty();}
     public int getListCount() { return this.list.size();}
     public String getListItem(int i) { return this.list.get(i); }
-    //This function will be remade as pushing all firebase values
-    //The possible types returned by getValue() are Boolean, String, Long, Double, Map<String, Object>, and List<Object>.
-    //If no data exists at the location, the snapshot will return null.
-    public void ListAllItems(List<String> list)
-    {
-        if (list.isEmpty())
-            System.out.println("Empty List.");
-        else
-        {
-            for (int i = 0; i < list.size(); i++)
-                System.out.println(list.get(i));
-        }
-    }
 }
