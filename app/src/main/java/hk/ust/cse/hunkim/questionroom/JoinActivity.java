@@ -132,7 +132,7 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     private void join(String roomName){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(ROOM_NAME, roomName);
-        intent.putExtra("BASE_URL", roomsRef.toString());
+        intent.putExtra("ROOM_BASE_URL", roomsRef.child(roomName).toString());
         intent.putExtra("ROOM_NAME", roomName);
         startActivity(intent);
     }

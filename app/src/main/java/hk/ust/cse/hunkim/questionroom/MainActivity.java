@@ -38,7 +38,7 @@ public class MainActivity extends ListActivity {
     public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
 
     private String roomName;
-    private String baseUrl;
+    private String roomBaseUrl;
     private Firebase mFirebaseRef;
     private Firebase mFirebaseRef_Hashtag;
     private ImageButton sortButton; //Added by Marvin
@@ -56,6 +56,10 @@ public class MainActivity extends ListActivity {
 
     public int getSortIndex(){return sortIndex;}
 
+    public String getRoomName(){return roomName;}
+
+    public String getRoomBaseUrl(){return roomBaseUrl;}
+
     public void setSortIndex(int i){sortIndex = i;}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +73,12 @@ public class MainActivity extends ListActivity {
         this.sortIndex = 0;
         // Make it a bit more reliable
         roomName = intent.getStringExtra("ROOM_NAME");
-        baseUrl = intent.getStringExtra("BASE_URL");
+        roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
+
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(baseUrl).child(roomName).child("questions");
-        mFirebaseRef_Hashtag = new Firebase(baseUrl).child(roomName).child("tags");
+        mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
+        mFirebaseRef_Hashtag = new Firebase(roomBaseUrl).child("tags");
         postQ = (ImageButton) findViewById(R.id.postQuestion);
 
         // get the DB Helper
@@ -102,7 +107,7 @@ public class MainActivity extends ListActivity {
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new QuestionListAdapter(
                 mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
-                this, R.layout.question, roomName);
+                this, R.layout.question);
 
         listView.setAdapter(mChatListAdapter);
 //        listView.post(new Runnable() {
@@ -202,8 +207,6 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         long likeValue = (long) dataSnapshot.getValue();
-                        Log.e("Like update:", "" + likeValue);
-
                         //Add 1 value to the echoValue
                         likeRef.setValue(likeValue + 1);
                     }
@@ -230,8 +233,6 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         long dislikeValue = (long) dataSnapshot.getValue();
-                        Log.e("Dislike update:", "" + dislikeValue);
-
                         //Add 1 value to the dislikeValue
                         dislikeRef.setValue(dislikeValue + 1);
                     }
@@ -250,7 +251,6 @@ public class MainActivity extends ListActivity {
     private void postQuestion(View view){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.post_question_popbox);
-        dialog.setTitle("Please input content");
         final EditText titleInput = (EditText) dialog.findViewById(R.id.QuestionTitle);
         final EditText bodyInput = (EditText) dialog.findViewById(R.id.QuestionBody);
         Button cancel= (Button) dialog.findViewById(R.id.Cancel);
