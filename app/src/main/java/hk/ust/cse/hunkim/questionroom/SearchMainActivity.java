@@ -135,6 +135,23 @@ public class SearchMainActivity extends ListActivity {
                     }
                 }
         );
+
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String input = searchText.getText().toString();
+
+                    if (TextUtils.isEmpty(input))
+                        searchText.setError(getString(R.string.error_field_required));
+                    else {
+                        EnterSearchResult(view, input);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     //todo: Leave it here, probably will work on this part later
