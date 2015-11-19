@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal">
@@ -123,10 +124,11 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_row="2"
         android:layout_column="0"
-        android:layout_columnSpan="7">
+        android:layout_columnSpan="7"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -135,7 +137,8 @@
             android:text="Hashtags: "
             android:id="@+id/textView"
             android:layout_marginLeft="10dp"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:textStyle="italic" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -147,7 +150,8 @@
             android:layout_column="0"
             android:layout_columnSpan="7"
             android:textSize="12sp"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textStyle="italic" />
     </LinearLayout>
 
 </GridLayout>
