@@ -66,7 +66,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:layout_below="@+id/tags_pos" />
+            android:layout_below="@+id/hashtags" />
 
         <ImageButton
             android:layout_width="@dimen/RoundButtonSize"
@@ -81,7 +81,7 @@
             android:layout_toRightOf="@+id/likeText"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
-            android:layout_below="@+id/tags_pos"
+            android:layout_below="@+id/hashtags"
             android:layout_marginRight="5dp" />
 
         <TextView
@@ -122,7 +122,8 @@
             android:layout_alignBottom="@+id/dislikeParentQuestion"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/hashtags" />
 
         <TextView
             android:layout_width="wrap_content"

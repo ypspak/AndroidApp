@@ -36,7 +36,7 @@ public class Hashtag_extracter {
     {
         s = s.replaceAll("[^#A-Za-z0-9]", "");	//Clear all the non-alphanumeric characters
         int firstHashtagIndex = s.indexOf("#");	//Find the first hashtag location
-        if (firstHashtagIndex > -1)	//If it is found (i.e. != -1), then perform the following, otherwise null
+        if (firstHashtagIndex == 0)	//If it is found and at the first position of text (i.e. != -1), then perform the following, otherwise null
         {
             if (s.indexOf("#", firstHashtagIndex + 1) == -1 && s.length() != 1)	//Ensure there is only 1 hashtag
                 return s.toLowerCase();	//Must make it all lower case, otherwise #A and #a will be two different things

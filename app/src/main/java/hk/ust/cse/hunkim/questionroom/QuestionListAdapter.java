@@ -201,7 +201,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         likeButton.setEnabled(clickable);
         dislikeButton.setClickable(clickable);
         dislikeButton.setEnabled(clickable);
-        view.setClickable(clickable);
+
+        //This line is actually problematic and useless. In fact, it even makes our listview listener does not work.
+        //view.setClickable(clickable);
 
 
         // http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button

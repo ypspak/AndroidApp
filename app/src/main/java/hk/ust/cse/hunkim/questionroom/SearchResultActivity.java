@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -102,6 +103,16 @@ public class SearchResultActivity extends ListActivity {
                 mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
                 this, R.layout.question_search, searchInput);
         listView.setAdapter(mChatListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //String input = ((TextView) view.findViewById(R.id.name)).getText().toString();
+                //EnterSearchResult(view, input);
+                ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
+                replyButton.performClick();
+            }
+        });
+
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -110,25 +121,6 @@ public class SearchResultActivity extends ListActivity {
                 setSearchResult((TextView) findViewById(R.id.searchResult), searchInput, mChatListAdapter.getCount()); //This is the base case for having results.
             }
         });
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(SearchResultActivity.this, "Search completed", Toast.LENGTH_SHORT).show();
-                    setSearchResult((TextView) findViewById(R.id.searchResult), searchInput, mChatListAdapter.getCount()); //This also needed, it is for no result
-                } else {
-                    Toast.makeText(SearchResultActivity.this, "Disconnected from Firebase. Searching cannot be done.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-            });
     }
 
     //todo: Leave it here, probably will work on this part later
