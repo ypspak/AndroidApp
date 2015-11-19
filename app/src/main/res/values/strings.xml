@@ -23,7 +23,7 @@
 
     <!--String related to post question-->
     <string name="prompt_question_title">Please input a title</string>
-    <string name="prompt_question_body">Content ...</string>
+    <string name="prompt_question_body">Content (You may leave it blank)</string>
 
     <!--String retated to sort function of quesiton list, they are in same sequence as in the menu-->
     <string name="sortNew">sort by new</string>
