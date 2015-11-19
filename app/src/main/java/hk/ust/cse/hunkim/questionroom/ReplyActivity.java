@@ -40,7 +40,9 @@ import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag_processor;
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
+import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
 
 /**
  * Created by CAI on 21/10/2015.
@@ -62,6 +64,7 @@ public class ReplyActivity extends ListActivity {
     private Long question_Timestamp;
     private String[] question_Hashtag;
 
+    private Hashtag_processor hashtag_processor;
     private String key;
     private String roomName;
     private ImageButton likePQB;
@@ -226,7 +229,7 @@ public class ReplyActivity extends ListActivity {
 
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.timetext));
-        timeText.setText("" + getDate(question_Timestamp));
+        timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
         Button titleText = (Button) findViewById((R.id.head_reply));
         titleText.setText("" + question_Head);
         TextView descText = (TextView) findViewById((R.id.desc));
@@ -235,12 +238,20 @@ public class ReplyActivity extends ListActivity {
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
         dislikeText.setText("" + String.valueOf(question_NumDislike));
-        SpecialArrayJoin(question_Hashtag);
+        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
+
+        if (question_Hashtag == null)
+            hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, roomName, question_Hashtag, 0);
+        else
+            hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, roomName, question_Hashtag, question_Hashtag.length);
+
+        hashtag_processor.HashtagTextJoin();
+        //HashtagTextJoin(question_Hashtag);
         //hashtagText.setText(question_Hashtag != null ?  (TextUtils.join(" ", question_Hashtag)) : "None");
         titleText.setTransformationMethod(null);
     }
 
-    public void SpecialArrayJoin(String[] Hashtags)
+    public void HashtagTextJoin(String[] Hashtags)
     {
         TextView hashtagText = (TextView) findViewById(R.id.hashtags);
         if (Hashtags == null)
@@ -379,29 +390,6 @@ public class ReplyActivity extends ListActivity {
         );
     }
 
-    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
-    private String getDate(long postTime)
-    {
-        long currentTime = new Date().getTime();
-        long timeResolution = 0;
-        long timeDiff = currentTime-postTime;
-        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
-            return "Just now";
-        }
-
-        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
-            timeResolution = DateUtils.SECOND_IN_MILLIS;
-        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
-            timeResolution = DateUtils.MINUTE_IN_MILLIS;
-        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
-            timeResolution = DateUtils.HOUR_IN_MILLIS;
-        }else{
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
-            Date date = (new Date(postTime));
-            return df.format(date);
-        }
-        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
-    }
 
     public void Close(View view) {
         finish();
