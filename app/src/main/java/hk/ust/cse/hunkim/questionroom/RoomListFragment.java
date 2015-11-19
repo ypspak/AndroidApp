@@ -14,6 +14,7 @@ import com.firebase.client.Firebase;
  * Created by CAI on 17/11/2015.
  */
 public class RoomListFragment extends Fragment {
+    private String baseUrl;
     private Firebase mFirebaseRef;
     private ListView listView;
     private RoomListAdapter mRoomListAdapter;
@@ -22,7 +23,8 @@ public class RoomListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(getActivity());
-        mFirebaseRef = new Firebase(JoinActivity.FIREBASE_URL).child("roomList");
+        baseUrl = getArguments().getString("BASE_URL");
+        mFirebaseRef = new Firebase(baseUrl).child("roomList");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

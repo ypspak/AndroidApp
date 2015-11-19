@@ -1,5 +1,6 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,10 +28,15 @@ public class JoinRoomFragment extends Fragment {
     // UI references.
     private EditText roomNameField;
     private Button joinRoom;
-    private Dialog dialog;
     //Variable references
+    private String baseURL;
     private Firebase roomListRef;
     private Firebase roomsRef;
+
+    @SuppressLint("ValidFragment")
+    public void JoinRoomFragment(String baseURL){
+        this.baseURL = baseURL;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,12 +47,14 @@ public class JoinRoomFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_join_room, container, false);
+
         roomNameField = (EditText) rootView.findViewById(R.id.room_name);
         joinRoom = (Button) rootView.findViewById(R.id.join_button);
-        roomListRef = new Firebase(JoinActivity.FIREBASE_URL).child("roomList");
-        roomsRef = new Firebase(JoinActivity.FIREBASE_URL).child("rooms");
+
+        roomListRef = new Firebase(baseURL).child("roomList");
+        roomsRef = new Firebase(baseURL).child("rooms");
+
         return rootView;
     }
 
@@ -101,8 +109,7 @@ public class JoinRoomFragment extends Fragment {
                     roomNameField.setError(getString(R.string.error_not_exist_room));
                 } else {
                     assert (dataSnapshot.getValue(Room.class) != null);
-                    JoinActivity m = (JoinActivity) view.getContext();
-                    m.tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class));
+                    ((JoinActivity) view.getContext()).tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class));
                 }
             }
 

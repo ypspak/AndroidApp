@@ -1,5 +1,6 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -8,8 +9,10 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by CAI on 17/11/2015.
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-    public TabsPagerAdapter(FragmentManager fm) {
+    private  String baseUrl;
+    public TabsPagerAdapter(FragmentManager fm, String baseUrl) {
         super(fm);
+        this.baseUrl = baseUrl;
     }
 
     @Override
@@ -17,13 +20,25 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 // Top Rated fragment activity
-                return new JoinRoomFragment();
+                Bundle temp0 = new Bundle(2);
+                temp0.putString("BASE_URL", baseUrl);
+                JoinRoomFragment fragment0 = new JoinRoomFragment();
+                fragment0.setArguments(temp0);
+                return fragment0;
             case 1:
                 // Games fragment activity
-                return new RoomListFragment();
+                Bundle temp1 = new Bundle(2);
+                temp1.putString("BASE_URL", baseUrl);
+                RoomListFragment fragment1 = new RoomListFragment();
+                fragment1.setArguments(temp1);
+                return fragment1;
             case 2:
                 // Movies fragment activity
-                return new CreateRoomFragment();
+                Bundle temp2 = new Bundle(2);
+                temp2.putString("BASE_URL", baseUrl);
+                CreateRoomFragment fragment2 = new CreateRoomFragment();
+                fragment2.setArguments(temp2);
+                return fragment2;
         }
 
         return null;
