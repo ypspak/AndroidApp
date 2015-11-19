@@ -40,27 +40,19 @@ import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
 public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
-    public static final String REPLIED_QEUSTION = "REPLIEDQ";
-    public static final String ROOM_NAME = "ROOMNAME";
-    private String roomName;
     private String filterStr;
     private int sortMethod;
     private Hashtag_processor hashtag_processor;
     Activity activity;
 
     //Without filter
-    public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
-        this(ref, activity, layout, roomName, null);
+    public QuestionListAdapter(Query ref, Activity activity, int layout) {
+        this(ref, activity, layout, null);
     }
     //Filter function
-    public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName, String filterStr) {
+    public QuestionListAdapter(Query ref, Activity activity, int layout, String filterStr) {
         super(ref, Question.class, layout, activity, filterStr);
 
-        //Originally only MainActivity is allowed.
-        //However, I want to reuse this class for search function. Therefore, we use instanceof here
-        //Check whether activity is a class of MainActivity / SearchResultActivity by using instanceof keyword
-        //By Peter Yeung 13/11/2015
-        this.roomName = roomName;
         this.filterStr = filterStr;
         if (activity instanceof MainActivity) {
             this.activity = (MainActivity) activity;
@@ -114,7 +106,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());
 
-        hashtag_processor = new Hashtag_processor(view, hashtagText, roomName, question.getTags(), 3);
+        hashtag_processor = new Hashtag_processor(view, hashtagText, question.getTags(), 3);
         hashtag_processor.HashtagTextJoin();
 
         likeButton.setTag(question.getKey()); // Set tag for button
@@ -163,8 +155,11 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
-                        intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
-                        intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra("PUSHED_ID", (String) view.getTag());
+                        intent.putExtra("ROOM_NAME", ((MainActivity) view.getContext()).getRoomName());
+                        Log.e("EEE",((MainActivity) view.getContext()).getRoomName());
+
+                        intent.putExtra("ROOM_BASE_URL", ((MainActivity)view.getContext()).getRoomBaseUrl());
                         intent.putExtra("NUM_LIKE", numLike);
                         intent.putExtra("NUM_DISLIKE", numDislike);
                         intent.putExtra("NUM_REPLY", numReply);
@@ -224,11 +219,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         view.setTag(question.getKey());  // store key in the view
     }
-
-    private String getRoomName(){
-        return roomName;
-    }
-
 
     private String replaceFilterStr(String text, String filterStr) {
         String prependText = "<b><font color=\"red\">";

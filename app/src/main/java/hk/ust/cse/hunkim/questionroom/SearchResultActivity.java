@@ -38,9 +38,8 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class SearchResultActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private String roomName;
     private String searchInput;
-    private String Firebase_URL;
+    private String roomBaseUrl;
     private Firebase mFirebaseRef;
     private QuestionListAdapter mChatListAdapter;
     private ValueEventListener mConnectedListener;
@@ -63,9 +62,8 @@ public class SearchResultActivity extends ListActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_search_result);
         Intent intent = getIntent();
-        roomName = intent.getStringExtra(SearchMainActivity.ROOM_NAME);
-        searchInput = intent.getStringExtra(SearchMainActivity.INPUT);
-        Firebase_URL = intent.getStringExtra(SearchMainActivity.m_FirebaseURL);
+        searchInput = intent.getStringExtra("SEARCH_INPUT");
+        roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
 
         //Log.e("Test", roomName);
         //Log.e("Test", searchInput);
@@ -73,7 +71,7 @@ public class SearchResultActivity extends ListActivity {
 
         this.sortIndex = 0;
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("questions");
+        mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
@@ -103,7 +101,7 @@ public class SearchResultActivity extends ListActivity {
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new QuestionListAdapter(
                 mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
-                this, R.layout.question_search, roomName, searchInput);
+                this, R.layout.question_search, searchInput);
         listView.setAdapter(mChatListAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

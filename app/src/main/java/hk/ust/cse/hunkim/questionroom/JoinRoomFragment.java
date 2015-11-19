@@ -46,7 +46,6 @@ public class JoinRoomFragment extends Fragment {
 
         baseUrl = ((JoinActivity)rootView.getContext()).getBaseUrl();
         roomListRef = new Firebase(baseUrl).child("roomList");
-        roomsRef = new Firebase(baseUrl).child("rooms");
 
         return rootView;
     }

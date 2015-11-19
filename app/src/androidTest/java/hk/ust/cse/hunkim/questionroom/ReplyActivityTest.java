@@ -35,8 +35,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     protected void setUp() throws Exception{
         super.setUp();
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra(QuestionListAdapter.ROOM_NAME, "TestRoom");
-        mStartIntent.putExtra(QuestionListAdapter.REPLIED_QEUSTION, "TestQuestionKey");
+//        mStartIntent.putExtra(QuestionListAdapter.ROOM_NAME, "TestRoom");
+//        mStartIntent.putExtra(QuestionListAdapter.REPLIED_QEUSTION, "TestQuestionKey");
         setActivityIntent(mStartIntent);
         replyInput = (EditText) getActivity().findViewById(R.id.replyInput);
         sendButton = (ImageButton) getActivity().findViewById(R.id.sendButton);
