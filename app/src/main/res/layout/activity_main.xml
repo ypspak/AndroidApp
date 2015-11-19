@@ -96,18 +96,6 @@
         <ImageButton
             android:layout_width="@dimen/HeaderIconSize"
             android:layout_height="@dimen/HeaderIconSize"
-            android:id="@+id/account"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/round_button_transparent"
-            android:src="@drawable/account"
-            android:scaleType="fitXY"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_alignBottom="@+id/search"
-            android:layout_alignParentEnd="true" />
-        <ImageButton
-            android:layout_width="@dimen/HeaderIconSize"
-            android:layout_height="@dimen/HeaderIconSize"
             android:id="@+id/search"
             android:layout_gravity="center_vertical"
             android:background="@drawable/round_button_transparent"
@@ -128,7 +116,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_toLeftOf="@+id/account" />
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
