@@ -39,6 +39,7 @@ public class RoomListFragment extends Fragment {
 
         listView = (ListView)rootView.findViewById(R.id.room_list);
         listView.setAdapter(mRoomListAdapter);
+        listView.setFastScrollEnabled(true);
 
         return rootView;
     }
