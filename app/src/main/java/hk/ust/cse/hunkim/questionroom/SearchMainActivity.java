@@ -3,22 +3,16 @@ package hk.ust.cse.hunkim.questionroom;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.DataSetObserver;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,22 +21,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import hk.ust.cse.hunkim.questionroom.db.DBHelper;
-import hk.ust.cse.hunkim.questionroom.db.DBUtil;
-import hk.ust.cse.hunkim.questionroom.question.Question;
-import hk.ust.cse.hunkim.questionroom.reply.Reply;
-
 public class SearchMainActivity extends ListActivity {
 
-    // TODO: change this to your own Firebase URL
-
-    public static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent, i.e. the left part of Map<string, int/string/double>
-    public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
-    public static final String INPUT = "INPUT";
-    private String roomName;
-    private String Firebase_URL;
+    private String roomBaseUrl;
     private Firebase mFirebaseRef;
     private EditText searchText;
     private ImageButton searchButton;
@@ -58,9 +39,8 @@ public class SearchMainActivity extends ListActivity {
         setContentView(R.layout.activity_search_main);
         Intent intent = getIntent();
 
-        roomName = intent.getStringExtra(MainActivity.ROOM_NAME);
-        Firebase_URL = intent.getStringExtra(MainActivity.m_FirebaseURL);
-        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("tags");
+        roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
+        mFirebaseRef = new Firebase(roomBaseUrl).child("tags");
 
     }
 
@@ -80,7 +60,7 @@ public class SearchMainActivity extends ListActivity {
         // Tell our list adapter that we only want 200 messages at a time
         mHashtagListAdapter = new HashtagListAdapter(
                 mFirebaseRef.orderByChild("used").limitToFirst(10),
-                this, R.layout.hashtag_search, roomName);
+                this, R.layout.hashtag_search);
         listView.setAdapter(mHashtagListAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -171,9 +151,8 @@ public class SearchMainActivity extends ListActivity {
         input = input.replace("<", "&lt;");
         input = input.replace(">", "&gt;");
         Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
-        intent.putExtra(ROOM_NAME, roomName);
-        intent.putExtra(m_FirebaseURL, Firebase_URL);
-        intent.putExtra(INPUT, input);
+        intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
+        intent.putExtra("SEARCH_INPUT", input);
         view.getContext().startActivity(intent);
     }
 
@@ -183,10 +162,6 @@ public class SearchMainActivity extends ListActivity {
         //mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
         //mChatListAdapter.cleanup();
     }
-
-    /*private String getRoomName(){
-        return roomName;
-    }*/
 
     public void Close(View view) {
         finish();

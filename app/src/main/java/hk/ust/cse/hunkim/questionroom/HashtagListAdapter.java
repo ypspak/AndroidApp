@@ -34,24 +34,21 @@ import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag;
 public class HashtagListAdapter extends FirebaseListAdapter<Hashtag> {
 
     // The mUsername for this client. We use this to indicate which messages originated from this user
-    public static final String ROOM_NAME = "ROOMNAME";
-    private String roomName;
     private String filterStr;
     SearchMainActivity activity;
 
     //Without filter
-    public HashtagListAdapter(Query ref, Activity activity, int layout, String roomName) {
-        this(ref, activity, layout, roomName, null);
+    public HashtagListAdapter(Query ref, Activity activity, int layout) {
+        this(ref, activity, layout, null);
     }
     //Filter function
-    public HashtagListAdapter(Query ref, Activity activity, int layout, String roomName, String filterStr) {
+    public HashtagListAdapter(Query ref, Activity activity, int layout, String filterStr) {
         super(ref, Hashtag.class, layout, activity, filterStr);
 
         //Originally only MainActivity is allowed.
         //However, I want to reuse this class for search function. Therefore, we use instanceof here
         //Check whether activity is a class of MainActivity / SearchResultActivity by using instanceof keyword
         //By Peter Yeung 13/11/2015
-        this.roomName = roomName;
         this.filterStr = filterStr;
     }
 
@@ -79,10 +76,6 @@ public class HashtagListAdapter extends FirebaseListAdapter<Hashtag> {
         timesText.setText("There are currently " + hashtag.getUsed() + " questions related in this room.");
 
         view.setTag(hashtag.getKey());  // store key in the view
-    }
-
-    private String getRoomName(){
-        return roomName;
     }
 
     @Override

@@ -31,12 +31,6 @@ import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag_extracter;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
-
-    // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-    public static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent
-    public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
-
     private String roomName;
     private String roomBaseUrl;
     private Firebase mFirebaseRef;
@@ -131,8 +125,8 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), SearchMainActivity.class);
-                        intent.putExtra(ROOM_NAME, roomName);
-                        intent.putExtra(m_FirebaseURL, FIREBASE_URL);
+//                        intent.putExtra("ROOM_NAME", roomName);
+                        intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
                         view.getContext().startActivity(intent);
                     }
                 }
