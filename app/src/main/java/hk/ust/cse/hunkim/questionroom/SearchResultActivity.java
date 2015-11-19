@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -104,6 +105,16 @@ public class SearchResultActivity extends ListActivity {
                 mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
                 this, R.layout.question_search, roomName, searchInput);
         listView.setAdapter(mChatListAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //String input = ((TextView) view.findViewById(R.id.name)).getText().toString();
+                //EnterSearchResult(view, input);
+                ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
+                replyButton.performClick();
+            }
+        });
+
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
