@@ -3,6 +3,7 @@ package hk.ust.cse.hunkim.questionroom;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +39,6 @@ public class CreateRoomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(getActivity());
-        baseUrl = getArguments().getString("BASE_URL");
-        roomListRef = new Firebase(baseUrl).child("roomList");
     }
 
     @Override
@@ -52,6 +51,9 @@ public class CreateRoomFragment extends Fragment {
         passwordField = (EditText) rootView.findViewById(R.id.password);
         createRoom = (Button) rootView.findViewById(R.id.create_room);
         isPrivate = (CheckBox) rootView.findViewById(R.id.checkbox_isPrivate);
+
+        baseUrl = ((JoinActivity)rootView.getContext()).getBaseUrl();
+        roomListRef = new Firebase(baseUrl).child("roomList");
 
         passwordField.setEnabled(false);
 

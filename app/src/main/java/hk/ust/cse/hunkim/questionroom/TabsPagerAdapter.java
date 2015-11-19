@@ -9,10 +9,8 @@ import android.support.v4.app.FragmentPagerAdapter;
  * Created by CAI on 17/11/2015.
  */
 public class TabsPagerAdapter extends FragmentPagerAdapter {
-    private  String baseUrl;
-    public TabsPagerAdapter(FragmentManager fm, String baseUrl) {
+    public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.baseUrl = baseUrl;
     }
 
     @Override
@@ -20,25 +18,13 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 // Top Rated fragment activity
-                Bundle temp0 = new Bundle(2);
-                temp0.putString("BASE_URL", baseUrl);
-                JoinRoomFragment fragment0 = new JoinRoomFragment();
-                fragment0.setArguments(temp0);
-                return fragment0;
+                return new JoinRoomFragment();
             case 1:
                 // Games fragment activity
-                Bundle temp1 = new Bundle(2);
-                temp1.putString("BASE_URL", baseUrl);
-                RoomListFragment fragment1 = new RoomListFragment();
-                fragment1.setArguments(temp1);
-                return fragment1;
+                return new RoomListFragment();
             case 2:
                 // Movies fragment activity
-                Bundle temp2 = new Bundle(2);
-                temp2.putString("BASE_URL", baseUrl);
-                CreateRoomFragment fragment2 = new CreateRoomFragment();
-                fragment2.setArguments(temp2);
-                return fragment2;
+                return new CreateRoomFragment();
         }
 
         return null;

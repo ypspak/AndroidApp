@@ -49,8 +49,8 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
         setContentView(R.layout.activity_join);
 
         Intent intent = getIntent();
-        baseUrl = intent.getStringExtra("BASE_URL");
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager(),baseUrl);
+        baseUrl = intent.getStringExtra("ROOT_URL");
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(false);
@@ -146,5 +146,8 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
         startActivity(intent);
     }
 
+    public String getBaseUrl(){
+        return baseUrl;
+    }
 }
 

@@ -3,6 +3,7 @@ package hk.ust.cse.hunkim.questionroom;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,16 @@ public class RoomListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(getActivity());
-        baseUrl = getArguments().getString("BASE_URL");
-        mFirebaseRef = new Firebase(baseUrl).child("roomList");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_room_list, container, false);
+
+        baseUrl = ((JoinActivity)rootView.getContext()).getBaseUrl();
+
+        mFirebaseRef = new Firebase(baseUrl).child("roomList");
 
         mRoomListAdapter = new RoomListAdapter(
                 mFirebaseRef.orderByKey(),

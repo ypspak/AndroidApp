@@ -1,8 +1,5 @@
 package hk.ust.cse.hunkim.questionroom;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -29,14 +26,9 @@ public class JoinRoomFragment extends Fragment {
     private EditText roomNameField;
     private Button joinRoom;
     //Variable references
-    private String baseURL;
+    private String baseUrl;
     private Firebase roomListRef;
     private Firebase roomsRef;
-
-    @SuppressLint("ValidFragment")
-    public void JoinRoomFragment(String baseURL){
-        this.baseURL = baseURL;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,8 +44,9 @@ public class JoinRoomFragment extends Fragment {
         roomNameField = (EditText) rootView.findViewById(R.id.room_name);
         joinRoom = (Button) rootView.findViewById(R.id.join_button);
 
-        roomListRef = new Firebase(baseURL).child("roomList");
-        roomsRef = new Firebase(baseURL).child("rooms");
+        baseUrl = ((JoinActivity)rootView.getContext()).getBaseUrl();
+        roomListRef = new Firebase(baseUrl).child("roomList");
+        roomsRef = new Firebase(baseUrl).child("rooms");
 
         return rootView;
     }
