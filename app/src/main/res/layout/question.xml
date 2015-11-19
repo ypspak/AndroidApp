@@ -106,7 +106,8 @@
             android:id="@+id/hashtagText"
             android:textSize="12sp"
             android:singleLine="true"
-            android:textStyle="italic" />
+            android:textStyle="italic"
+            android:layout_marginLeft="10dp"/>
     <TextView
         android:id="@+id/timetext"
         android:layout_width="wrap_content"
