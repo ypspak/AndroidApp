@@ -42,7 +42,6 @@ public class SearchResultActivity extends ListActivity {
     private String roomBaseUrl;
     private Firebase mFirebaseRef;
     private QuestionListAdapter mChatListAdapter;
-    private ValueEventListener mConnectedListener;
     private int sortIndex;
 
     private DBUtil dbutil;
@@ -112,12 +111,12 @@ public class SearchResultActivity extends ListActivity {
                 replyButton.performClick();
             }
         });
-
+        //The list is already formed
+        ((TextView) findViewById(R.id.searchResult)).setText(R.string.search_no_result);
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                //listView.setSelection(mChatListAdapter.getCount() - 1);  NO NEED TO SCROLL DOWN AFTER UPDATING/LOADING LISTVIEW (PETER YEUNG 2015/11/16)
                 setSearchResult((TextView) findViewById(R.id.searchResult), searchInput, mChatListAdapter.getCount()); //This is the base case for having results.
             }
         });
@@ -137,8 +136,6 @@ public class SearchResultActivity extends ListActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-        //mChatListAdapter.cleanup();
     }
 
     /*private String getRoomName(){
@@ -207,10 +204,7 @@ public class SearchResultActivity extends ListActivity {
 
     public void setSearchResult(TextView view, String searchStr, int count)
     {
-        if (count >= 1)
             view.setText(Html.fromHtml("There are " + count + " result(s) for the search \"" + searchStr + "\"."));
-        else
-            view.setText("No results are found.");
     }
     public void Close(View view) {
         finish();
