@@ -38,12 +38,10 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class SearchResultActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
-    private String roomName;
     private String searchInput;
-    private String Firebase_URL;
+    private String roomBaseUrl;
     private Firebase mFirebaseRef;
     private QuestionListAdapter mChatListAdapter;
-    private ValueEventListener mConnectedListener;
     private int sortIndex;
 
     private DBUtil dbutil;
@@ -63,9 +61,8 @@ public class SearchResultActivity extends ListActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_search_result);
         Intent intent = getIntent();
-        roomName = intent.getStringExtra(SearchMainActivity.ROOM_NAME);
-        searchInput = intent.getStringExtra(SearchMainActivity.INPUT);
-        Firebase_URL = intent.getStringExtra(SearchMainActivity.m_FirebaseURL);
+        searchInput = intent.getStringExtra("SEARCH_INPUT");
+        roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
 
         //Log.e("Test", roomName);
         //Log.e("Test", searchInput);
@@ -73,7 +70,7 @@ public class SearchResultActivity extends ListActivity {
 
         this.sortIndex = 0;
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(Firebase_URL).child("rooms").child(roomName).child("questions");
+        mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
@@ -103,7 +100,7 @@ public class SearchResultActivity extends ListActivity {
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new QuestionListAdapter(
                 mFirebaseRef.orderByChild("timestamp").limitToFirst(200),
-                this, R.layout.question_search, roomName, searchInput);
+                this, R.layout.question_search, searchInput);
         listView.setAdapter(mChatListAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,12 +111,12 @@ public class SearchResultActivity extends ListActivity {
                 replyButton.performClick();
             }
         });
-
+        //The list is already formed
+        ((TextView) findViewById(R.id.searchResult)).setText(R.string.search_no_result);
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
-                //listView.setSelection(mChatListAdapter.getCount() - 1);  NO NEED TO SCROLL DOWN AFTER UPDATING/LOADING LISTVIEW (PETER YEUNG 2015/11/16)
                 setSearchResult((TextView) findViewById(R.id.searchResult), searchInput, mChatListAdapter.getCount()); //This is the base case for having results.
             }
         });
@@ -139,8 +136,6 @@ public class SearchResultActivity extends ListActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-        //mChatListAdapter.cleanup();
     }
 
     /*private String getRoomName(){
@@ -209,10 +204,7 @@ public class SearchResultActivity extends ListActivity {
 
     public void setSearchResult(TextView view, String searchStr, int count)
     {
-        if (count >= 1)
             view.setText(Html.fromHtml("There are " + count + " result(s) for the search \"" + searchStr + "\"."));
-        else
-            view.setText("No results are found.");
     }
     public void Close(View view) {
         finish();

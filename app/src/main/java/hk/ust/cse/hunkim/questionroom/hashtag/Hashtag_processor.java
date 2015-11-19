@@ -1,5 +1,6 @@
 package hk.ust.cse.hunkim.questionroom.hashtag;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -10,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import hk.ust.cse.hunkim.questionroom.MainActivity;
 import hk.ust.cse.hunkim.questionroom.R;
+import hk.ust.cse.hunkim.questionroom.ReplyActivity;
 import hk.ust.cse.hunkim.questionroom.SearchResultActivity;
 
 /**
@@ -18,23 +21,16 @@ import hk.ust.cse.hunkim.questionroom.SearchResultActivity;
  */
 public class Hashtag_processor {
 
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-    private static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent, i.e. the left part of Map<string, int/string/double>
-    private static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
-    private static final String INPUT = "INPUT";
-
     private View view;
     private TextView hashtagText;
-    private String roomName;
     private String[] Hashtags;
     private int NumTagsShown = 0;
 
 
-    public Hashtag_processor(View view, TextView hashtagText, String roomName, String[] Hashtags, int NumTagsShown)
+    public Hashtag_processor(View view, TextView hashtagText, String[] Hashtags, int NumTagsShown)
     {
         this.view = view;
         this.hashtagText = hashtagText;
-        this.roomName = roomName;
         this.Hashtags = Hashtags;
 
         if (Hashtags != null)
@@ -62,9 +58,12 @@ public class Hashtag_processor {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
-                    intent.putExtra(ROOM_NAME, roomName);
-                    intent.putExtra(m_FirebaseURL, FIREBASE_URL);
-                    intent.putExtra(INPUT, SingleHashtags);
+                    if((view.getContext())instanceof MainActivity){
+                        intent.putExtra("ROOM_BASE_URL", ((MainActivity)view.getContext()).getRoomBaseUrl());
+                    }else if ((view.getContext())instanceof ReplyActivity){
+                        intent.putExtra("ROOM_BASE_URL", ((ReplyActivity)view.getContext()).getRoomBaseUrl());
+                    }
+                    intent.putExtra("SEARCH_INPUT", SingleHashtags);
                     view.getContext().startActivity(intent);
                 }
             };

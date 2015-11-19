@@ -48,14 +48,6 @@ import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
  * Created by CAI on 21/10/2015.
  */
 public class ReplyActivity extends ListActivity {
-    private static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-
-    /* Constant for pass by intent to SearchResultActivity */
-    public static final String ROOM_NAME = "ROOM_NAME"; //This is used as VARIABLE name for sending value of variable through intent, i.e. the left part of Map<string, int/string/double>
-    public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
-    public static final String INPUT = "INPUT";
-
-
     private int question_NumLike;
     private int question_NumDislike;
     private int question_NumReply;
@@ -67,6 +59,7 @@ public class ReplyActivity extends ListActivity {
     private Hashtag_processor hashtag_processor;
     private String key;
     private String roomName;
+    private String roomBaseUrl;
     private ImageButton likePQB;
     private ImageButton dislikePQB;
 
@@ -81,6 +74,7 @@ public class ReplyActivity extends ListActivity {
         return dbutil;
     }
 
+    public String getRoomBaseUrl(){return roomBaseUrl;}
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply);
@@ -88,8 +82,9 @@ public class ReplyActivity extends ListActivity {
         Intent intent = getIntent();
 
         //currently just for testing that I am entered the replying room corresponding to the question
-        key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
-        roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
+        key = intent.getStringExtra("PUSHED_ID");
+        roomName = intent.getStringExtra("ROOM_NAME");
+        roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
         question_NumLike = intent.getIntExtra("NUM_LIKE", 0);
         question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
         question_NumReply = intent.getIntExtra("NUM_REPLY", 0);
@@ -99,7 +94,7 @@ public class ReplyActivity extends ListActivity {
         question_Hashtag = intent.getStringArrayExtra("TAGS");
 
 
-        replyContainerRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("replies");
+        replyContainerRef = new Firebase(roomBaseUrl).child("replies");
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setTitle("Room Name:" + roomName);
@@ -117,7 +112,7 @@ public class ReplyActivity extends ListActivity {
 
     public void onStart() {
         super.onStart();
-        questionUrl = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions").child(key);
+        questionUrl = new Firebase(roomBaseUrl).child("questions").child(key);
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -241,9 +236,9 @@ public class ReplyActivity extends ListActivity {
         TextView hashtagText = (TextView) findViewById(R.id.hashtags);
 
         if (question_Hashtag == null)
-            hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, roomName, question_Hashtag, 0);
+            hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, question_Hashtag, 0);
         else
-            hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, roomName, question_Hashtag, question_Hashtag.length);
+            hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, question_Hashtag, question_Hashtag.length);
 
         hashtag_processor.HashtagTextJoin();
         //HashtagTextJoin(question_Hashtag);
@@ -272,9 +267,8 @@ public class ReplyActivity extends ListActivity {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
-                    intent.putExtra(ROOM_NAME, roomName);
-                    intent.putExtra(m_FirebaseURL, FIREBASE_URL);
-                    intent.putExtra(INPUT, SingleHashtags);
+                    intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
+                    intent.putExtra("HASH_TAG", SingleHashtags);
                     view.getContext().startActivity(intent);
                 }
             };
