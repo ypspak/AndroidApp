@@ -112,25 +112,6 @@ public class SearchResultActivity extends ListActivity {
                 setSearchResult((TextView) findViewById(R.id.searchResult), searchInput, mChatListAdapter.getCount()); //This is the base case for having results.
             }
         });
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(SearchResultActivity.this, "Search completed", Toast.LENGTH_SHORT).show();
-                    setSearchResult((TextView) findViewById(R.id.searchResult), searchInput, mChatListAdapter.getCount()); //This also needed, it is for no result
-                } else {
-                    Toast.makeText(SearchResultActivity.this, "Disconnected from Firebase. Searching cannot be done.", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-            });
     }
 
     //todo: Leave it here, probably will work on this part later
