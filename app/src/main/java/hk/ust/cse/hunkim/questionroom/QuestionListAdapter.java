@@ -22,6 +22,7 @@ import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
 
 /**
  * @author greg
@@ -102,7 +103,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
         TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
 
-        timeText.setText("Last updated: " + getDate(question.getLastTimestamp()));
+        timeText.setText("Last updated: " + new TimeManager(question.getLastTimestamp()).getDate());
         likeNumText.setText("" + question.getLike());
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());
@@ -241,29 +242,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         return text;
     }
-    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
-    private String getDate(long postTime)
-    {
-        long currentTime = new Date().getTime();
-        long timeResolution = 0;
-        long timeDiff = currentTime-postTime;
-        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
-            return "Just now";
-        }
 
-        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
-            timeResolution = DateUtils.SECOND_IN_MILLIS;
-        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
-            timeResolution = DateUtils.MINUTE_IN_MILLIS;
-        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
-            timeResolution = DateUtils.HOUR_IN_MILLIS;
-        }else{
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
-            Date date = (new Date(postTime));
-            return df.format(date);
-        }
-        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
-    }
     @Override
     protected void sortModels(List<Question> mModels) {
         Collections.sort(mModels, new Comparator<Question>(){

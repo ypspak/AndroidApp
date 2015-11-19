@@ -1,12 +1,8 @@
 package hk.ust.cse.hunkim.questionroom.question;
 
-import android.util.Log;
-
 import java.util.Date;
-import java.util.HashMap;
 
-import hk.ust.cse.hunkim.questionroom.hashtag_extracter.Hashtag_extracter;
-import hk.ust.cse.hunkim.questionroom.reply.Reply;
+import hk.ust.cse.hunkim.questionroom.hashtag.Hashtag_extracter;
 
 /**
  * Created by hunkim on 7/16/15.
