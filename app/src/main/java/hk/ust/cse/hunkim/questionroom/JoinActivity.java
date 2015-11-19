@@ -1,16 +1,14 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.support.v7.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,6 +26,7 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private String baseUrl;
+    private Firebase roomsRef;
 
     // Tab titles
     private String[] tabs = { "Join Room", "Room List", "Create Room" };
@@ -40,6 +39,7 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
 
         Intent intent = getIntent();
         baseUrl = intent.getStringExtra("ROOT_URL");
+        roomsRef = new Firebase(baseUrl).child("rooms");
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         final ActionBar actionBar = getSupportActionBar();
@@ -97,7 +97,6 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
         else{
             final Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.password_join_room_dialog);
-            dialog.setTitle("Password Required");
             final EditText pwField = (EditText) dialog.findViewById(R.id.password);
             Button cancel= (Button) dialog.findViewById(R.id.cancel);
             cancel.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +132,8 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     private void join(String roomName){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(ROOM_NAME, roomName);
+        intent.putExtra("BASE_URL", roomsRef.toString());
+        intent.putExtra("ROOM_NAME", roomName);
         startActivity(intent);
     }
 

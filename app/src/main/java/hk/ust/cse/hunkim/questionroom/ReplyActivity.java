@@ -67,6 +67,7 @@ public class ReplyActivity extends ListActivity {
     private Hashtag_processor hashtag_processor;
     private String key;
     private String roomName;
+    private String roomBaseUrl;
     private ImageButton likePQB;
     private ImageButton dislikePQB;
 
@@ -88,8 +89,9 @@ public class ReplyActivity extends ListActivity {
         Intent intent = getIntent();
 
         //currently just for testing that I am entered the replying room corresponding to the question
-        key = intent.getStringExtra(QuestionListAdapter.REPLIED_QEUSTION);
-        roomName = intent.getStringExtra(QuestionListAdapter.ROOM_NAME);
+        key = intent.getStringExtra("PUSHED_ID");
+        roomName = intent.getStringExtra("ROOM_NAME");
+        roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
         question_NumLike = intent.getIntExtra("NUM_LIKE", 0);
         question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
         question_NumReply = intent.getIntExtra("NUM_REPLY", 0);

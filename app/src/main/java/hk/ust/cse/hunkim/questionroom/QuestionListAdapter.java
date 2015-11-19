@@ -163,8 +163,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
-                        intent.putExtra(REPLIED_QEUSTION, (String) view.getTag());
-                        intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra("PUSHED_ID", (String) view.getTag());
+                        intent.putExtra("ROOM_NAME", getRoomName());
+                        intent.putExtra("ROOM_BASE_URL", getRoomName());
                         intent.putExtra("NUM_LIKE", numLike);
                         intent.putExtra("NUM_DISLIKE", numDislike);
                         intent.putExtra("NUM_REPLY", numReply);

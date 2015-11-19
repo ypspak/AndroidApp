@@ -38,6 +38,7 @@ public class MainActivity extends ListActivity {
     public static final String m_FirebaseURL = "FIREBASE_URL"; //This is used as VARIABLE name for sending value of variable through intent
 
     private String roomName;
+    private String baseUrl;
     private Firebase mFirebaseRef;
     private Firebase mFirebaseRef_Hashtag;
     private ImageButton sortButton; //Added by Marvin
@@ -67,12 +68,12 @@ public class MainActivity extends ListActivity {
 
         this.sortIndex = 0;
         // Make it a bit more reliable
-        roomName = intent.getStringExtra(JoinActivity.ROOM_NAME);
-
+        roomName = intent.getStringExtra("ROOM_NAME");
+        baseUrl = intent.getStringExtra("BASE_URL");
         setTitle("Room name: " + roomName);
         // Setup our Firebase mFirebaseRef
-        mFirebaseRef = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("questions");
-        mFirebaseRef_Hashtag = new Firebase(FIREBASE_URL).child("rooms").child(roomName).child("tags");
+        mFirebaseRef = new Firebase(baseUrl).child(roomName).child("questions");
+        mFirebaseRef_Hashtag = new Firebase(baseUrl).child(roomName).child("tags");
         postQ = (ImageButton) findViewById(R.id.postQuestion);
 
         // get the DB Helper
@@ -125,7 +126,7 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), SearchMainActivity.class);
-                        intent.putExtra(ROOM_NAME, getRoomName());
+                        intent.putExtra(ROOM_NAME, roomName);
                         intent.putExtra(m_FirebaseURL, FIREBASE_URL);
                         view.getContext().startActivity(intent);
                     }
@@ -185,10 +186,6 @@ public class MainActivity extends ListActivity {
     public void onStop() {
         super.onStop();
         mChatListAdapter.cleanup();
-    }
-
-    private String getRoomName(){
-        return roomName;
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
