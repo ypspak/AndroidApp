@@ -198,9 +198,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         }
 
-        //If the dbUtil is null, then probably the activity is neither MainActivity or SearchResultActivity, i.e. exception. So we do assertion here
-        //By Peter Yeung 13/11/2015
-        assert(dbUtil != null);
 
         // check if we already clicked
         boolean clickable = !dbUtil.contains(question.getKey());
