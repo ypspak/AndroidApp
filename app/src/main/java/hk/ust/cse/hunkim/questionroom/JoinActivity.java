@@ -1,29 +1,20 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.support.v7.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import hk.ust.cse.hunkim.questionroom.room.Room;
 
@@ -32,11 +23,12 @@ import hk.ust.cse.hunkim.questionroom.room.Room;
  * A login screen that offers login via email/password.
  */
 public class JoinActivity extends AppCompatActivity implements ActionBar.TabListener {
-    public static final String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
     public static final String ROOM_NAME = "Room_name";
 
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
+    private String baseUrl;
+
     // Tab titles
     private String[] tabs = { "Join Room", "Room List", "Create Room" };
 
@@ -46,6 +38,8 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_join);
 
+        Intent intent = getIntent();
+        baseUrl = intent.getStringExtra("ROOT_URL");
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         final ActionBar actionBar = getSupportActionBar();
@@ -70,6 +64,32 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
 
     }
 
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    //function used for joining a room, currently used by join_room_fragment & room_list_fragment
     public void tryJoin(final String roomName, final Room room){
         if(!room.getIsPrivate()){
             join(roomName);
@@ -109,35 +129,15 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
         }
     }
 
+    //sub-function of the upper one
     private void join(String roomName){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra(ROOM_NAME, roomName);
         startActivity(intent);
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        this.finish();
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    public String getBaseUrl(){
+        return baseUrl;
     }
 }
 

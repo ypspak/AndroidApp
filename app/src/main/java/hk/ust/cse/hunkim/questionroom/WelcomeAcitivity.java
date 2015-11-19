@@ -33,7 +33,7 @@ public class WelcomeAcitivity extends Activity{
         enter = (Button) findViewById(R.id.try_button);
         enter.setVisibility(View.INVISIBLE);
         mFirebaseRef = new Firebase(FIREBASE_URL);
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+        mConnectedListener = mFirebaseRef.child(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue()!=null){
@@ -59,6 +59,7 @@ public class WelcomeAcitivity extends Activity{
         enter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent nextActivity = new Intent(v.getContext(),JoinActivity.class);
+                nextActivity.putExtra("ROOT_URL", FIREBASE_URL);
                 startActivity(nextActivity);
             }
         });

@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,10 +27,10 @@ public class CreateRoomFragment extends Fragment {
     // UI references.
     private EditText roomNameField;
     private EditText passwordField;
-    private Button cancel;
     private Button createRoom;
     private CheckBox isPrivate;
     //Variable references
+    private String baseUrl;
     private Firebase roomListRef;
 
     @Override
@@ -45,13 +44,17 @@ public class CreateRoomFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_create_room, container, false);
+
         roomNameField = (EditText) rootView.findViewById(R.id.room_name);
         passwordField = (EditText) rootView.findViewById(R.id.password);
-        cancel = (Button) rootView.findViewById(R.id.cancel_action);
         createRoom = (Button) rootView.findViewById(R.id.create_room);
         isPrivate = (CheckBox) rootView.findViewById(R.id.checkbox_isPrivate);
+
+        baseUrl = ((JoinActivity)rootView.getContext()).getBaseUrl();
+        roomListRef = new Firebase(baseUrl).child("roomList");
+
         passwordField.setEnabled(false);
-        roomListRef = new Firebase(JoinActivity.FIREBASE_URL).child("roomList");
+
         return rootView;
     }
 
@@ -83,14 +86,7 @@ public class CreateRoomFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-//        String temp = roomNameField.getText().toString();
-//        if(checkExistenceListener!=null)
-//            roomListRef.child(temp).removeEventListener(checkExistenceListener);
-    }
-
+    //function will triggered if click the createRoom button
     private void attemptCreateRoom(final View v){
         if(!isValidInput(roomNameField)) return;
         if(isPrivate.isChecked()){
@@ -125,6 +121,7 @@ public class CreateRoomFragment extends Fragment {
         });
     }
 
+    //sub function of attemptCreateRoom, checking if the input is valide for create a room
     private boolean isValidInput(EditText editView){
         editView.setError(null);
         String input = editView.getText().toString();
@@ -142,6 +139,12 @@ public class CreateRoomFragment extends Fragment {
         return true;
     }
 
+    //sub function of attemptCreateRoom, checking if the input only have alpha / number
+    private boolean isEmailValid(String input) {
+        return !input.matches("^.*[^a-zA-Z0-9 ].*$");
+    }
+
+    //sub function of attemptCreateRoom, really create a room
     private void CreateRoom(){
         String roomName = roomNameField.getText().toString();
         String pw = passwordField.getText().toString();
@@ -149,9 +152,5 @@ public class CreateRoomFragment extends Fragment {
 
         Room roomToAdd = new Room(isPrivate.isChecked(), pw);
         roomRef.setValue(roomToAdd);
-    }
-
-    private boolean isEmailValid(String input) {
-        return !input.matches("^.*[^a-zA-Z0-9 ].*$");
     }
 }
