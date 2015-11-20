@@ -4,7 +4,8 @@
     android:descendantFocusability="blocksDescendants"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -113,7 +114,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|right"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp">
         <ImageView
             android:src="@drawable/updated"
             android:layout_width="@dimen/QuestionRoundButtonSize"
@@ -125,7 +127,6 @@
             android:layout_height="wrap_content"
             android:text="2015/10/25 19:31"
             android:textStyle="italic"
-            android:textSize="12sp"
-            android:layout_marginRight="10dp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>
