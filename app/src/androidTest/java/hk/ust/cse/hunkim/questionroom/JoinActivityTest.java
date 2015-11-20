@@ -7,6 +7,7 @@ import android.test.TouchUtils;
 import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.junit.Test;
 import static android.support.test.espresso.Espresso.onView;
@@ -23,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  * http://developer.android.com/training/testing.html
  */
 public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActivity> {
+    Intent mStartIntent;
     JoinActivity activity;
     EditText roomNameEditText;
     Button joinButton;
@@ -37,15 +39,58 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
     protected void setUp() throws Exception {
         super.setUp();
 
-        //Obtain all basic information, it's actually act like constructor
+        mStartIntent = new Intent(Intent.ACTION_MAIN);
+        mStartIntent.putExtra("ROOT_URL", "https://cmkquestionsdb.firebaseio.com/");
+        setActivityIntent(mStartIntent);
         activity = getActivity();
-        roomNameEditText =
-                (EditText) activity.findViewById(R.id.room_name);
-        joinButton =
-                (Button) activity.findViewById(R.id.join_button);
 
     }
 
+    public void testCreatingNonExistenceRoom() throws Throwable {
+
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(MainActivity.class.getName(), null, false);
+
+        EditText roomNameField = (EditText) activity.findViewById(R.id.room_name);
+        Button joinRoom = (Button) activity.findViewById(R.id.join_button);
+
+        //Case 1
+        TouchUtils.clickView(this, joinRoom);
+        MainActivity mainActivity = (MainActivity) receiverActivityMonitor
+                .waitForActivityWithTimeout(TIMEOUT_IN_MS);
+        assertNull("MainActivity should be null.", mainActivity);
+
+        //Case 2
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                EditText roomNameField = (EditText) activity.findViewById(R.id.room_name);
+                roomNameField.setText("#123");
+            }
+        });
+
+        TouchUtils.clickView(this, joinRoom);
+        mainActivity = (MainActivity) receiverActivityMonitor
+                .waitForActivityWithTimeout(TIMEOUT_IN_MS);
+        assertNull("MainActivity should be null.", mainActivity);
+
+        //Case 3
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                EditText roomNameField = (EditText) activity.findViewById(R.id.room_name);
+                roomNameField.setText("1234567832134578732134567");
+            }
+        });
+
+        TouchUtils.clickView(this, joinRoom);
+        mainActivity = (MainActivity) receiverActivityMonitor
+                .waitForActivityWithTimeout(TIMEOUT_IN_MS);
+        assertNull("MainActivity should be null.", mainActivity);
+
+    }
+/*
     public void testCreatingActivity_EmptyString() throws Exception {
 
         //Create and add an ActivityMonitor to monitor interaction between the system and the
@@ -193,5 +238,5 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         //Unregister monitor for ReceiverActivity
         getInstrumentation().removeMonitor(receiverActivityMonitor);
         getInstrumentation().waitForIdleSync();
-    }
+    }*/
 }
