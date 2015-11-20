@@ -28,7 +28,6 @@ public class SearchMainActivity extends ListActivity {
     private Firebase mFirebaseRef;
     private EditText searchText;
     private ImageButton searchButton;
-    private ValueEventListener mConnectedListener;
     private HashtagListAdapter mHashtagListAdapter;
 
     @Override
@@ -82,25 +81,6 @@ public class SearchMainActivity extends ListActivity {
                 //listView.setSelection(mHashtagListAdapter.getCount() - 1);    NO NEED TO SCROLL DOWN AFTER UPDATING/LOADING LISTVIEW (PETER YEUNG 2015/11/16)
             }
         });
-
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(SearchMainActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SearchMainActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-            });
 
         searchButton = (ImageButton) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(
@@ -162,8 +142,6 @@ public class SearchMainActivity extends ListActivity {
     @Override
     public void onStop() {
         super.onStop();
-        //mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-        //mChatListAdapter.cleanup();
     }
 
     public void Close(View view) {
