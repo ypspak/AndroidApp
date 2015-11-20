@@ -73,7 +73,7 @@ public class HashtagListAdapter extends FirebaseListAdapter<Hashtag> {
         TextView timesText = (TextView) view.findViewById((R.id.times));
 
         hashtagText.setText(""  + hashtag.getName());
-        timesText.setText("# " + hashtag.getUsed() + " questions related in the room");
+        timesText.setText("# " + hashtag.getUsed() + " related questions in the room");
 
         view.setTag(hashtag.getKey());  // store key in the view
     }
