@@ -25,7 +25,7 @@ public class WelcomeActivityTest extends ActivityInstrumentationTestCase2<Welcom
 
     Intent mStartIntent;
     WelcomeActivity activity;
-    int TIMEOUT_IN_MS = 5000;
+    private static final int TIMEOUT_IN_MS = 5000;
     public WelcomeActivityTest() {
         super(WelcomeActivity.class);
     }
@@ -41,18 +41,14 @@ public class WelcomeActivityTest extends ActivityInstrumentationTestCase2<Welcom
     }
 
     @MediumTest
-    public void testExitActivity() throws Exception {
+    public void testWelcomeActivity_Enter() throws Exception {
 
         Button enterButton = (Button) activity.findViewById(R.id.try_button);
         Instrumentation inst = new Instrumentation();
         Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
                 .addMonitor(JoinActivity.class.getName(), null, false);
 
-        try {
-            Thread.sleep(30000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(TIMEOUT_IN_MS);
 
         TouchUtils.clickView(this, enterButton);
 
@@ -62,4 +58,30 @@ public class WelcomeActivityTest extends ActivityInstrumentationTestCase2<Welcom
         assertNotNull("joinActivity should be not null.", joinActivity);
         getInstrumentation().removeMonitor(receiverActivityMonitor);
     }
+
+    /*public void testWelcomeActivity_Exit() throws Throwable {
+
+        Button enterButton = (Button) activity.findViewById(R.id.try_button);
+
+        Instrumentation inst = new Instrumentation();
+        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
+                .addMonitor(JoinActivity.class.getName(), null, false);
+
+        final WelcomeActivity runActivity = activity;
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                runActivity.onBackPressed();
+            }
+        });
+
+        TouchUtils.clickView(this, enterButton);
+
+        JoinActivity joinActivity = (JoinActivity) receiverActivityMonitor
+                .waitForActivityWithTimeout(TIMEOUT_IN_MS);
+
+        assertNull("joinActivity should be null.", joinActivity);
+        assertNotNull("welcomeActivity should still not be null.", activity);
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+    }*/
 }
