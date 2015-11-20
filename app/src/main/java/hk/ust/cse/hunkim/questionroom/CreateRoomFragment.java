@@ -45,8 +45,8 @@ public class CreateRoomFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_create_room, container, false);
 
-        roomNameField = (EditText) rootView.findViewById(R.id.room_name);
-        passwordField = (EditText) rootView.findViewById(R.id.password);
+        roomNameField = (EditText) rootView.findViewById(R.id.create_room_name);
+        passwordField = (EditText) rootView.findViewById(R.id.create_password);
         createRoom = (Button) rootView.findViewById(R.id.create_room);
         isPrivate = (CheckBox) rootView.findViewById(R.id.checkbox_isPrivate);
 
@@ -130,7 +130,7 @@ public class CreateRoomFragment extends Fragment {
             return false;
         }
 
-        if (editView.getId()==R.id.room_name) {
+        if (editView.getId()==R.id.create_room_name) {
             if(!isEmailValid(input)){
                 editView.setError(getString(R.string.error_invalid_room_name));
                 return false;
