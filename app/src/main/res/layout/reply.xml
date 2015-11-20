@@ -1,87 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    <TextView
-        android:id="@+id/replyMsg"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:text="Reply messageReply messageReply messageReply messageReply messageReply messageReply message"
-        android:layout_row="0"
-        android:layout_column="1"
-        android:layout_columnSpan="3"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginRight="10dp" />
-
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
     <TextView
         android:layout_width="@dimen/ReplyRoundButtonSize"
         android:layout_height="@dimen/ReplyRoundButtonSize"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="-420"
         android:id="@+id/order"
-        android:layout_row="0"
-        android:layout_column="0"
         android:padding="5dp"
-        android:layout_margin="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
         android:gravity="center"
-        android:layout_marginLeft="5dp"
         android:textSize="15sp"
-        android:layout_marginRight="10dp"
         android:background="@drawable/round_button_1"
         android:textColor="#ffffff"
-        android:layout_rowSpan="2"
-        android:layout_gravity="center_vertical"
-        android:textStyle="bold" />
-
-    <ImageButton
-        android:layout_width="@dimen/RoundButtonSize"
-        android:layout_height="@dimen/RoundButtonSize"
-        android:id="@+id/ReplyLike"
-        android:src="@drawable/like"
-        android:background="@drawable/round_button_1"
-        android:padding="6dp"
-        android:scaleType="fitCenter"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp" />
-
-    <ImageButton
-        android:layout_width="@dimen/RoundButtonSize"
-        android:layout_height="@dimen/RoundButtonSize"
-        android:id="@+id/ReplyDislike"
-        android:src="@drawable/dislike"
-        android:background="@drawable/round_button_1"
-        android:padding="6dp"
-        android:scaleType="fitCenter"
-        android:layout_row="1"
-        android:layout_column="2"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:id="@+id/timetext"
-        android:layout_width="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_row="1"
-        android:layout_column="3"
-        android:text="Time Created:"
-        android:layout_rowWeight="0"
-        android:gravity="center_vertical|left"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
-        android:textStyle="italic"
-        android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="10dp"
-        android:textSize="12sp" />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/replyMsg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Reply messageReply messageReply messageReply messageReply messageReply messageReply message"
+            android:layout_margin="10dp" />
 
-</GridLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_vertical">
+            <ImageButton
+                android:layout_width="@dimen/RoundButtonSize"
+                android:layout_height="@dimen/RoundButtonSize"
+                android:id="@+id/ReplyLike"
+                android:src="@drawable/like"
+                android:background="@drawable/round_button_1"
+                android:padding="6dp"
+                android:scaleType="fitCenter" />
+
+            <ImageButton
+                android:layout_width="@dimen/RoundButtonSize"
+                android:layout_height="@dimen/RoundButtonSize"
+                android:id="@+id/ReplyDislike"
+                android:src="@drawable/dislike"
+                android:background="@drawable/round_button_1"
+                android:padding="6dp"
+                android:scaleType="fitCenter"
+                android:layout_marginLeft="10dp"/>
+
+            <TextView
+                android:id="@+id/timetext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time Created:"
+                android:gravity="right"
+                android:textStyle="italic"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
