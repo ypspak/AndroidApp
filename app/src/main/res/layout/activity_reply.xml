@@ -56,19 +56,22 @@
         android:transcriptMode="disabled" />
 
     <LinearLayout
+        android:background="@color/reply_background_color"
         android:id="@+id/listFooter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
         android:gravity="center_vertical">
 
         <EditText
             android:id="@+id/replyInput"
+            android:textColor="@color/reply_input"
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColorHint="@color/HeaderText"
             android:inputType="textMultiLine"
             android:singleLine="false"
             style="@style/EditTextCustomHolo"
@@ -84,7 +87,7 @@
             android:scaleType="fitXY"
             android:background="@drawable/round_button_2"
             android:padding="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_margin="5dp"
             android:layout_gravity="center_vertical" />
 
     </LinearLayout>
