@@ -89,7 +89,7 @@ public class ReplyActivity extends ListActivity {
         question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
         question_NumReply = intent.getIntExtra("NUM_REPLY", 0);
         question_Head = intent.getStringExtra("HEAD");
-        question_Desc = intent.getStringExtra("DESC");
+        question_Desc = intent.getStringExtra("DESC").replace("\n", "<br>");
         question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
         question_Hashtag = intent.getStringArrayExtra("TAGS");
 
@@ -204,6 +204,7 @@ public class ReplyActivity extends ListActivity {
             // Before creating our 'model', we have to replace substring so that prevent code injection
             input = input.replace("<", "&lt;");
             input = input.replace(">", "&gt;");
+            input = input.replace("\n", "<br>");
             // Create our 'model', a Chat object
             Reply reply = new Reply(input, key);
             // Create a new, auto-generated child of that chat location, and save our chat data there
@@ -226,9 +227,9 @@ public class ReplyActivity extends ListActivity {
         TextView timeText = (TextView) findViewById((R.id.timetext));
         timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
         Button titleText = (Button) findViewById((R.id.head_reply));
-        titleText.setText("" + question_Head);
+        titleText.setText(Html.fromHtml("" + question_Head));
         TextView descText = (TextView) findViewById((R.id.desc));
-        descText.setText("" + question_Desc);
+        descText.setText(Html.fromHtml("" + question_Desc));
         TextView likeText = (TextView) findViewById((R.id.likeText));
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
