@@ -42,7 +42,7 @@ public class Hashtag_processor {
     {
         if (Hashtags == null)
         {
-            hashtagText.setText("None");
+            hashtagText.setText("");
             return;
         }
 

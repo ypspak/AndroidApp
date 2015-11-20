@@ -100,7 +100,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
         TextView hashtagText = (TextView) view.findViewById(R.id.hashtagText);
 
-        timeText.setText("Last updated: " + new TimeManager(question.getLastTimestamp()).getDate());
+        timeText.setText("" + new TimeManager(question.getLastTimestamp()).getDate());
         likeNumText.setText("" + question.getLike());
         dislikeNumText.setText("" + question.getDislike());
         replyNumText.setText("" + question.getReplies());
