@@ -85,7 +85,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         final int numDislike = question.getDislike();
         final int numReply = question.getReplies();
         final String qHead = question.getHead();
-        final String qDesc = question.getDesc().equals("") ? "Empty message." : question.getDesc();
+        final String qDesc = question.getDesc().equals("") ? "" : question.getDesc();
         final Long qTimestamp = question.getTimestamp();
         final String[] qTags = question.getTags();
 
