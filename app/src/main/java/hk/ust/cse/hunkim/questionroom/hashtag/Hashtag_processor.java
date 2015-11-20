@@ -42,7 +42,7 @@ public class Hashtag_processor {
     {
         if (Hashtags == null)
         {
-            hashtagText.setText("None");
+            hashtagText.setText("");
             return;
         }
 
@@ -62,9 +62,13 @@ public class Hashtag_processor {
                         intent.putExtra("ROOM_BASE_URL", ((MainActivity)view.getContext()).getRoomBaseUrl());
                     }else if ((view.getContext())instanceof ReplyActivity){
                         intent.putExtra("ROOM_BASE_URL", ((ReplyActivity)view.getContext()).getRoomBaseUrl());
+                    }else if((view.getContext())instanceof SearchResultActivity){
+                        intent.putExtra("ROOM_BASE_URL", ((SearchResultActivity) view.getContext()).getRoomBaseUrl());
                     }
                     intent.putExtra("SEARCH_INPUT", SingleHashtags);
                     view.getContext().startActivity(intent);
+                    if((view.getContext())instanceof SearchResultActivity)
+                        ((SearchResultActivity)view.getContext()).finish();
                 }
             };
 

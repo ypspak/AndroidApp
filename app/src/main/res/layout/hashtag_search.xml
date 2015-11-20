@@ -1,42 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_margin="10dp">
 
-    <TextView
-        android:id="@+id/name"
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:text="Hashtag name"
-        android:layout_rowWeight="0"
-        android:gravity="center_vertical|left"
-        android:layout_marginTop="10dp"
-        android:maxLength="80"
-        android:layout_columnSpan="7"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:textStyle="bold"
-        android:textColor="@color/SubHeaderColor"
-        android:textSize="18dp" />
-
-    <TextView
+        android:src="@drawable/tag"
+        android:layout_margin="10dp"/>
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Appeard # times in this room."
-        android:id="@+id/times"
-        android:layout_row="1"
-        android:layout_column="0"
-        android:layout_columnSpan="7"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="left|center_vertical"
-        android:maxLines="3"
-        android:layout_marginRight="10dp"
-        android:singleLine="false" />
+        android:orientation="vertical"
+        android:layout_margin="10dp">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Hashtag name"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            android:textColor="@color/SubHeaderColor"
+            android:layout_marginBottom="5dp"
+            android:textSize="18dp" />
 
-</GridLayout>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Appeard # times in this room."
+            android:id="@+id/times" />
+    </LinearLayout>
+</LinearLayout>

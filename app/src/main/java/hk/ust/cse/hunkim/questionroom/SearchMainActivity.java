@@ -24,10 +24,10 @@ import com.firebase.client.ValueEventListener;
 public class SearchMainActivity extends ListActivity {
 
     private String roomBaseUrl;
+    private String roomName;
     private Firebase mFirebaseRef;
     private EditText searchText;
     private ImageButton searchButton;
-    private ValueEventListener mConnectedListener;
     private HashtagListAdapter mHashtagListAdapter;
 
     @Override
@@ -39,6 +39,7 @@ public class SearchMainActivity extends ListActivity {
         setContentView(R.layout.activity_search_main);
         Intent intent = getIntent();
 
+        roomName = intent.getStringExtra("ROOM_NAME");
         roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
         mFirebaseRef = new Firebase(roomBaseUrl).child("tags");
 
@@ -81,25 +82,6 @@ public class SearchMainActivity extends ListActivity {
             }
         });
 
-
-        // Finally, a little indication of connection status
-        mConnectedListener = mFirebaseRef.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean connected = (Boolean) dataSnapshot.getValue();
-                if (connected) {
-                    Toast.makeText(SearchMainActivity.this, "Connected to Firebase", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(SearchMainActivity.this, "Disconnected from Firebase", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                // No-op
-            }
-            });
-
         searchButton = (ImageButton) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(
                 new View.OnClickListener() {
@@ -107,7 +89,7 @@ public class SearchMainActivity extends ListActivity {
                     public void onClick(View view) {
 
                         String input = searchText.getText().toString();
-                        if (!TextUtils.isEmpty(input)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
+                        if (!TextUtils.isEmpty(input)) {
                             EnterSearchResult(view, input);
                         } else {
                             searchText.setError(getString(R.string.error_field_required));
@@ -134,33 +116,23 @@ public class SearchMainActivity extends ListActivity {
         });
     }
 
-    //todo: Leave it here, probably will work on this part later
-//    @Override
-//    public void onResume(){
-//
-//    }
-//
-//    @Override
-//    public void onPause(){
-//
-//    }
-
     public void EnterSearchResult(View view, String input)
     {
         // Before creating our 'model', we have to replace substring so that prevent code injection
         input = input.replace("<", "&lt;");
         input = input.replace(">", "&gt;");
         Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
+        intent.putExtra("ROOM_NAME", roomName);
         intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
         intent.putExtra("SEARCH_INPUT", input);
         view.getContext().startActivity(intent);
+        if(view.getContext() instanceof SearchResultActivity)
+            finish();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        //mFirebaseRef.getRoot().child(".info/connected").removeEventListener(mConnectedListener);
-        //mChatListAdapter.cleanup();
     }
 
     public void Close(View view) {

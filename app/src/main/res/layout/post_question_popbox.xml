@@ -15,7 +15,6 @@
             android:id="@+id/QuestionTitle"
             android:singleLine="true"
             android:hint="@string/prompt_question_title"
-            android:maxLength="50"
             style="@style/EditTextCustomHolo"/>
 
         <EditText

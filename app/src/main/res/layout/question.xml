@@ -4,7 +4,8 @@
     android:descendantFocusability="blocksDescendants"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -15,16 +16,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:layout_margin="5dp"
-            android:src="@android:drawable/ic_menu_help" />
+            android:src="@drawable/app_icon" />
         <TextView
             android:id="@+id/head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello! This is COMP3111 Layout Testing (Prototype)"
+            android:text="1000000000100000000010000000001000000000100000000010000000001000000000"
             android:textStyle="bold"
             android:layout_margin="5dp"
             android:textSize="15dp"
-            android:maxLines="2"
             android:textColor="@color/question_list_title" />
     </LinearLayout>
     <TextView
@@ -34,6 +34,8 @@
         android:text="Hello! This is COMP3111 Layout Testing (Prototype)"
         android:layout_margin="10dp"
         android:maxLines="4"
+        android:ellipsize="end"
+        android:scrollHorizontally="true"
         android:textColor="@color/question_list_desc" />
 
     <LinearLayout
@@ -108,17 +110,23 @@
             android:singleLine="true"
             android:textStyle="italic"
             android:layout_marginLeft="10dp"/>
-    <TextView
-        android:id="@+id/timetext"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Created: 2015/10/25 19:31"
-        android:layout_rowWeight="0"
-        android:gravity="center_vertical|left"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textStyle="italic"
-        android:layout_gravity="center_vertical|right"
-        android:textSize="12sp"
-        android:layout_marginRight="10dp" />
+        android:gravity="center_vertical|right"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp">
+        <ImageView
+            android:src="@drawable/updated"
+            android:layout_width="@dimen/update_of_time"
+            android:layout_height="@dimen/update_of_time"
+            android:layout_marginRight="3dp" />
+        <TextView
+            android:id="@+id/timetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2015/10/25 19:31"
+            android:textStyle="italic"
+            android:textSize="12sp" />
+    </LinearLayout>
 </LinearLayout>
