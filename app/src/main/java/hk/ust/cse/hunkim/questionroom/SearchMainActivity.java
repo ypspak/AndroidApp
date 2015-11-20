@@ -89,7 +89,7 @@ public class SearchMainActivity extends ListActivity {
                     public void onClick(View view) {
 
                         String input = searchText.getText().toString();
-                        if (!TextUtils.isEmpty(input)) { //todo: limitation on length of title, more outcome for preventing html attack for Q title
+                        if (!TextUtils.isEmpty(input)) {
                             EnterSearchResult(view, input);
                         } else {
                             searchText.setError(getString(R.string.error_field_required));
@@ -115,17 +115,6 @@ public class SearchMainActivity extends ListActivity {
             }
         });
     }
-
-    //todo: Leave it here, probably will work on this part later
-//    @Override
-//    public void onResume(){
-//
-//    }
-//
-//    @Override
-//    public void onPause(){
-//
-//    }
 
     public void EnterSearchResult(View view, String input)
     {

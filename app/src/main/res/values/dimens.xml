@@ -5,6 +5,7 @@
 
     <!--For normal size round_button .xml -->
     <dimen name="RoundButtonSize">30dp</dimen>
+    <dimen name="update_of_time">15dp</dimen>
     <dimen name="QuestionRoundButtonSize">20dp</dimen>
     <dimen name="QuestionSendButtonSize">40dp</dimen>
 

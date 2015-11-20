@@ -118,8 +118,8 @@
         android:layout_marginRight="10dp">
         <ImageView
             android:src="@drawable/updated"
-            android:layout_width="@dimen/QuestionRoundButtonSize"
-            android:layout_height="@dimen/QuestionRoundButtonSize"
+            android:layout_width="@dimen/update_of_time"
+            android:layout_height="@dimen/update_of_time"
             android:layout_marginRight="3dp" />
         <TextView
             android:id="@+id/timetext"
