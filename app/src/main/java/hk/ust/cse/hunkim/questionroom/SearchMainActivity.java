@@ -126,6 +126,8 @@ public class SearchMainActivity extends ListActivity {
         intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
         intent.putExtra("SEARCH_INPUT", input);
         view.getContext().startActivity(intent);
+        if(view.getContext() instanceof SearchResultActivity)
+            finish();
     }
 
     @Override

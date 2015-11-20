@@ -36,8 +36,6 @@ import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class SearchResultActivity extends ListActivity {
-
-    // TODO: change this to your own Firebase URL
     private String searchInput;
     private String roomName;
     private String roomBaseUrl;
@@ -71,12 +69,7 @@ public class SearchResultActivity extends ListActivity {
         searchInput = intent.getStringExtra("SEARCH_INPUT");
         roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
 
-        //Log.e("Test", roomName);
-        //Log.e("Test", searchInput);
-        //Log.e("Test", Firebase_URL);
-
-        this.sortIndex = 0;
-        // Setup our Firebase mFirebaseRef
+        this.sortIndex = 1;
         mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
 
         // get the DB Helper
@@ -145,9 +138,6 @@ public class SearchResultActivity extends ListActivity {
         super.onStop();
     }
 
-    /*private String getRoomName(){
-        return roomName;
-    }*/
     //Update Like here. For every person who have liked, their key is stored at database.
     public void updateLike(String key) {
 
