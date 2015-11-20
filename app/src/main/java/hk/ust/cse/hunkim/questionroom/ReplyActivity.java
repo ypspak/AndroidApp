@@ -247,50 +247,6 @@ public class ReplyActivity extends ListActivity {
         titleText.setTransformationMethod(null);
     }
 
-    public void HashtagTextJoin(String[] Hashtags)
-    {
-        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
-        if (Hashtags == null)
-        {
-            hashtagText.setText("None");
-            return;
-        }
-
-        SpannableStringBuilder sb = new SpannableStringBuilder();
-        int PreviousPosition = 0;
-        int CurrentPosition = 0;
-        for (int i = 0; i < Hashtags.length; i++)
-        {
-            final String SingleHashtags = Hashtags[i];
-
-            //Set the behavior of clicking it
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
-                    intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
-                    intent.putExtra("HASH_TAG", SingleHashtags);
-                    view.getContext().startActivity(intent);
-                }
-            };
-
-            //Set the color of the text
-            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.SpannableHashtagReply));
-
-            CurrentPosition += Hashtags[i].length();
-            sb.append(Hashtags[i]);
-            sb.setSpan(clickableSpan, PreviousPosition, CurrentPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sb.setSpan(foregroundColorSpan, PreviousPosition, CurrentPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sb.append(" ");
-            CurrentPosition++;
-            PreviousPosition = CurrentPosition; //Increment 1 for delimiter
-        }
-
-        hashtagText.setText(sb);
-        hashtagText.setMovementMethod(LinkMovementMethod.getInstance());
-
-    }
-
     //Update Like here. For every person who have liked, their key is stored at database.
     public void updateOrder(String key, final int value) {
 
