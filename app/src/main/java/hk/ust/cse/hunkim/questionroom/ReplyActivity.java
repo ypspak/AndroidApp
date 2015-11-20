@@ -319,13 +319,13 @@ public class ReplyActivity extends ListActivity {
                 }
         );
 
-        EditText reply = (EditText) findViewById(R.id.replyInput);
+        /*EditText reply = (EditText) findViewById(R.id.replyInput);
         reply.requestFocus();
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
-        }
+        }*/
 
         // Update SQLite DB
         dbutil.put(key);
