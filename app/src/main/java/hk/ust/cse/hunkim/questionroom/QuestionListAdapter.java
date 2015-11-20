@@ -155,10 +155,14 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), ReplyActivity.class);
                         intent.putExtra("PUSHED_ID", (String) view.getTag());
-                        intent.putExtra("ROOM_NAME", ((MainActivity) view.getContext()).getRoomName());
-                        Log.e("EEE",((MainActivity) view.getContext()).getRoomName());
+                        if(view.getContext() instanceof MainActivity){
+                            intent.putExtra("ROOM_NAME", ((MainActivity) view.getContext()).getRoomName());
+                            intent.putExtra("ROOM_BASE_URL", ((MainActivity)view.getContext()).getRoomBaseUrl());
+                        }else if(view.getContext() instanceof SearchResultActivity){
+                            intent.putExtra("ROOM_NAME", ((SearchResultActivity) view.getContext()).getRoomName());
+                            intent.putExtra("ROOM_BASE_URL", ((SearchResultActivity)view.getContext()).getRoomBaseUrl());
+                        }
 
-                        intent.putExtra("ROOM_BASE_URL", ((MainActivity)view.getContext()).getRoomBaseUrl());
                         intent.putExtra("NUM_LIKE", numLike);
                         intent.putExtra("NUM_DISLIKE", numDislike);
                         intent.putExtra("NUM_REPLY", numReply);

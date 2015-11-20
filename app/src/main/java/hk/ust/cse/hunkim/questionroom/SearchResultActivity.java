@@ -39,6 +39,7 @@ public class SearchResultActivity extends ListActivity {
 
     // TODO: change this to your own Firebase URL
     private String searchInput;
+    private String roomName;
     private String roomBaseUrl;
     private Firebase mFirebaseRef;
     private QuestionListAdapter mChatListAdapter;
@@ -53,6 +54,10 @@ public class SearchResultActivity extends ListActivity {
     public int getSortIndex(){return sortIndex;}
 
     public void setSortIndex(int i){sortIndex = i;}
+
+    public String getRoomName(){return roomName;}
+
+    public String getRoomBaseUrl(){return roomBaseUrl;}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,8 @@ public class SearchResultActivity extends ListActivity {
         Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_search_result);
         Intent intent = getIntent();
+
+        roomName = intent.getStringExtra("ROOM_NAME");
         searchInput = intent.getStringExtra("SEARCH_INPUT");
         roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
 

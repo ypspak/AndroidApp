@@ -135,7 +135,7 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(view.getContext(), SearchMainActivity.class);
-//                        intent.putExtra("ROOM_NAME", roomName);
+                        intent.putExtra("ROOM_NAME", roomName);
                         intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
                         view.getContext().startActivity(intent);
                     }

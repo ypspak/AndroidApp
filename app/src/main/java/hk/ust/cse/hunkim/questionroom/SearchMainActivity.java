@@ -24,6 +24,7 @@ import com.firebase.client.ValueEventListener;
 public class SearchMainActivity extends ListActivity {
 
     private String roomBaseUrl;
+    private String roomName;
     private Firebase mFirebaseRef;
     private EditText searchText;
     private ImageButton searchButton;
@@ -39,6 +40,7 @@ public class SearchMainActivity extends ListActivity {
         setContentView(R.layout.activity_search_main);
         Intent intent = getIntent();
 
+        roomName = intent.getStringExtra("ROOM_NAME");
         roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
         mFirebaseRef = new Firebase(roomBaseUrl).child("tags");
 
@@ -151,6 +153,7 @@ public class SearchMainActivity extends ListActivity {
         input = input.replace("<", "&lt;");
         input = input.replace(">", "&gt;");
         Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
+        intent.putExtra("ROOM_NAME", roomName);
         intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
         intent.putExtra("SEARCH_INPUT", input);
         view.getContext().startActivity(intent);
