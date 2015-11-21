@@ -3,6 +3,7 @@ package hk.ust.cse.hunkim.questionroom;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +15,10 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.Date;
+
 import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.reply.Reply;
 
 /**
  * Created by CAI on 2/11/2015.
@@ -22,7 +26,8 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 
 public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyActivity> {
-    private String roomBaseUrl = "https://cmkquestionsdb.firebaseio.com//rooms/TestRoom/";
+    private String roomBaseUrl = "https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/";
+    private String QuestionKey;
 
     private EditText replyInput;
     private ImageButton sendButton;
@@ -45,11 +50,11 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
 
     protected void setUp() throws Exception{
         super.setUp();
-        final String tempKey = "pretendingKey";
-        Question tempQuestion = new Question("This is a #temp question #title", "This is a temp question body");
+        String QuestionKey = "pretendingKey";
+        Question tempQuestion = new Question("This is a temp question title", "This is a #temp #question body");
 
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra("PUSHED_ID", tempKey);
+        mStartIntent.putExtra("PUSHED_ID", QuestionKey);
         mStartIntent.putExtra("ROOM_NAME", "TEST");
         mStartIntent.putExtra("ROOM_BASE_URL", roomBaseUrl);
         mStartIntent.putExtra("NUM_LIKE", tempQuestion.getLike());
@@ -62,7 +67,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         setActivityIntent(mStartIntent);
 
         Firebase.setAndroidContext(getActivity());
-        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(tempKey);
+        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(QuestionKey);
         testQuestionUrl.setValue(tempQuestion);
 
         replyInput = (EditText) getActivity().findViewById(R.id.reply_input_field);
@@ -79,10 +84,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        if(roomBaseUrl!=null){
-            Firebase mFirebaseRef = new Firebase(roomBaseUrl);
-            mFirebaseRef.removeValue();
-        }
+//        Firebase mFirebaseRef = new Firebase("https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/");
+//        mFirebaseRef.removeValue();
     }
 
     public void testPrecondition(){
@@ -142,6 +145,35 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
         assertEquals("There s not error message from the reply input", null, replyInput.getError());
+    }
+
+    public void testReplyWithDifferentTimeAndOrder(){
+        Firebase replyHour = new Firebase(roomBaseUrl).child("replies").child("reply_with_hours_ago");
+        Firebase replyDay = new Firebase(roomBaseUrl).child("replies").child("reply_with_actual_time");
+
+        replyHour.setValue(new Reply("Test reply", QuestionKey));
+        replyDay.setValue(new Reply("Test reply", QuestionKey));
+        long hourTime = new Date().getTime() - (DateUtils.HOUR_IN_MILLIS) * 3;
+        replyHour.child("timestamp").setValue(hourTime);
+        replyHour.child("order").setValue(3);
+
+        long dayTime = new Date().getTime() - (DateUtils.DAY_IN_MILLIS) * 3;
+        replyDay.child("timestamp").setValue(dayTime);
+        replyDay.child("order").setValue(9);
+
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, sendButton);
+        getInstrumentation().waitForIdleSync();
+    }
+
+    public void QuestionTitleNoTag(){
+        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(QuestionKey);
+        testQuestionUrl.child("desc").setValue("");
+        testQuestionUrl.child("tags").removeValue();
+
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, sendButton);
+        getInstrumentation().waitForIdleSync();
     }
 }
 
