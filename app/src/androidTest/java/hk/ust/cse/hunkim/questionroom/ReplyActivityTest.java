@@ -5,9 +5,11 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -29,6 +31,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     private String roomBaseUrl = "https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/";
     private String QuestionKey;
 
+    private ListView listview;
     private EditText replyInput;
     private ImageButton sendButton;
     private ImageButton parentLike;
@@ -50,7 +53,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
 
     protected void setUp() throws Exception{
         super.setUp();
-        String QuestionKey = "pretendingKey";
+        QuestionKey = "pretendingKey";
         Question tempQuestion = new Question("This is a temp question title", "This is a #temp #question body");
 
         mStartIntent = new Intent(Intent.ACTION_MAIN);
@@ -70,6 +73,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(QuestionKey);
         testQuestionUrl.setValue(tempQuestion);
 
+
         replyInput = (EditText) getActivity().findViewById(R.id.reply_input_field);
         sendButton = (ImageButton) getActivity().findViewById(R.id.send_reply_button);
         parentDislike=(ImageButton) getActivity().findViewById(R.id.parent_question_dislike_button);
@@ -79,6 +83,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         descText = (TextView) getActivity().findViewById((R.id.parent_question_desc));
         likeText = (TextView) getActivity().findViewById((R.id.parent_question_like_text));
         dislikeText = (TextView) getActivity().findViewById(R.id.parent_question_dislike_text);
+        listview = getActivity().getListView();
     }
 
     @Override
@@ -97,6 +102,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         assertNotNull(descText);
         assertNotNull(likeText);
         assertNotNull(dislikeText);
+
+        getActivity().finish();
     }
 
     public void testParentLikeButton(){
@@ -107,6 +114,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, parentLike);
         getInstrumentation().waitForIdleSync();
+
+        getActivity().finish();
     }
 
     public void testParentDislikeButton(){
@@ -116,12 +125,15 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, parentDislike);
         getInstrumentation().waitForIdleSync();
+        getActivity().finish();
     }
 
     public void testReplyWithoutMessage() {
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
         assertEquals("There s not error message from the reply input", "This field is required", replyInput.getError());
+
+        getActivity().finish();
     }
 
     public void testReplyWithMessage() {
@@ -145,6 +157,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
         assertEquals("There s not error message from the reply input", null, replyInput.getError());
+
+        getActivity().finish();
     }
 
     public void testReplyWithDifferentTimeAndOrder(){
@@ -164,6 +178,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
+        getActivity().finish();
     }
 
     public void QuestionTitleNoTag(){
@@ -174,6 +189,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
-    }
+        getActivity().finish();
+       }
+
 }
 

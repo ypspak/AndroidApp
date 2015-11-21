@@ -57,8 +57,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         Firebase.setAndroidContext(getActivity());
         mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
         /*Question question1 = new Question("Question 1 q1", "");
-        Question question2 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
-        Question question3 = new Question("Question 3 #  q3 ", "question 3 at here #abc look out");
+        Question question2 = new Question("Question 2 #Firebase mFirebaseRef = new Firebase(roomBaseUrl);
+        mFirebaseRef.removeValue();#abc look out");
         testQuestionUrl.push().setValue(question1);
         testQuestionUrl.push().setValue(question2);
         testQuestionUrl.push().setValue(question3);*/
