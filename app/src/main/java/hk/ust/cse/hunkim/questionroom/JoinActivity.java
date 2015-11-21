@@ -27,6 +27,7 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     private TabsPagerAdapter mAdapter;
     private String baseUrl;
     private Firebase roomsRef;
+    private Dialog dialog;
 
     // Tab titles
     private String[] tabs = { "Join Room", "Room List", "Create Room" };
@@ -95,7 +96,7 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
             join(roomName);
         }
         else{
-            final Dialog dialog = new Dialog(this);
+            dialog = new Dialog(this);
             dialog.setContentView(R.layout.password_join_room_dialog);
             final EditText pwField = (EditText) dialog.findViewById(R.id.password);
             Button cancel= (Button) dialog.findViewById(R.id.cancel);
@@ -140,5 +141,7 @@ public class JoinActivity extends AppCompatActivity implements ActionBar.TabList
     public String getBaseUrl(){
         return baseUrl;
     }
+
+    public Dialog getDialog() { return dialog; }
 }
 

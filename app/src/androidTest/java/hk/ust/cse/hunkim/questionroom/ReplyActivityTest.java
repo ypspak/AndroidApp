@@ -128,13 +128,13 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                replyInput.requestFocus();
+                replyInput.setText("Testing Reply");
             }
         });
         //Wait until all events from the MainHandler's queue are processed
         getInstrumentation().waitForIdleSync();
 
-        getInstrumentation().sendStringSync("Testing Reply");
+        //getInstrumentation().sendStringSync("Testing Reply");
         getInstrumentation().waitForIdleSync();
 
         String actualText = replyInput.getText().toString();
