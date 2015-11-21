@@ -1,6 +1,7 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.content.Intent;
+import android.media.Image;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.text.format.DateUtils;
@@ -16,6 +17,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.util.Date;
 
@@ -93,7 +96,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         mFirebaseRef.removeValue();
     }
 
-    public void testPrecondition(){
+    public void testPrecondition()throws Throwable {
         assertNotNull("ReplyActivity is null", getActivity());
         assertNotNull("ReplyMessage field is null", replyInput);
         assertNotNull("ReplySending Button is null", sendButton);
@@ -106,7 +109,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getActivity().finish();
     }
 
-    public void testParentLikeButton(){
+    public void testParentLikeButton() throws Throwable{
         assertNotNull("Parent Question has no like button", parentLike);
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, parentLike);
@@ -118,7 +121,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getActivity().finish();
     }
 
-    public void testParentDislikeButton(){
+    public void testParentDislikeButton() throws Throwable{
         assertNotNull("Parent Question has no like button", parentDislike);
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, parentDislike);
@@ -128,7 +131,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getActivity().finish();
     }
 
-    public void testReplyWithoutMessage() {
+    public void testReplyWithoutMessage() throws Throwable {
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
         assertEquals("There s not error message from the reply input", "This field is required", replyInput.getError());
@@ -136,11 +139,11 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getActivity().finish();
     }
 
-    public void testReplyWithMessage() {
+    public void testReplyWithMessage() throws Throwable{
         getInstrumentation().runOnMainSync(new Runnable() {
             @Override
             public void run() {
-                replyInput.setText("Testing Reply");
+                replyInput.setText("Testing < Reply >");
             }
         });
         //Wait until all events from the MainHandler's queue are processed
@@ -161,7 +164,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getActivity().finish();
     }
 
-    public void testReplyWithDifferentTimeAndOrder(){
+    public void testReplyWithDifferentTimeAndOrder() throws Throwable {
         Firebase replyHour = new Firebase(roomBaseUrl).child("replies").child("reply_with_hours_ago");
         Firebase replyDay = new Firebase(roomBaseUrl).child("replies").child("reply_with_actual_time");
 
@@ -181,7 +184,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         getActivity().finish();
     }
 
-    public void QuestionTitleNoTag(){
+    public void testQuestionTitleNoTag() throws Throwable {
         Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(QuestionKey);
         testQuestionUrl.child("desc").setValue("");
         testQuestionUrl.child("tags").removeValue();
@@ -190,7 +193,46 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
         getActivity().finish();
-       }
+    }
+
+    public void testReplyLike() throws Throwable{
+        Firebase testQuestionUrl = new Firebase("https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/").child("replies");
+        testQuestionUrl.push().setValue(new Reply("Reply One", "pretendingKey"));
+
+        Thread.sleep(3000);
+
+        View listElement = (View) getActivity().getListView().getChildAt(1);
+
+        ImageButton replyLikeBtn = (ImageButton) listElement.findViewById(R.id.reply_like_button);
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, replyLikeBtn);
+        getInstrumentation().waitForIdleSync();
+
+        getActivity().updateOrder((String) listElement.getTag(), 1);
+        getActivity().updateOrder((String) listElement.getTag(), -1);
+
+        TextView orderText = (TextView) listElement.findViewById(R.id.reply_order);
+        assertEquals("Click dislike at first have some problem", "1", orderText.getText());
+        getActivity().finish();
+    }
+
+    public void testReplyDislike() throws Throwable{
+        Firebase testQuestionUrl = new Firebase("https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/").child("replies");
+        testQuestionUrl.push().setValue(new Reply("Reply Two", "pretendingKey"));
+
+        Thread.sleep(3000);
+
+        View listElement = (View) getActivity().getListView().getChildAt(1);
+        ImageButton replyDislikeBtn = (ImageButton) listElement.findViewById(R.id.reply_dislike_button);
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, replyDislikeBtn);
+        getInstrumentation().waitForIdleSync();
+        getActivity().updateOrder((String) listElement.getTag(), 1);
+        getActivity().updateOrder((String) listElement.getTag(), -1);
+        TextView orderText = (TextView) listElement.findViewById(R.id.reply_order);
+        assertEquals("Click dislike at first have some problem", "-1", orderText.getText());
+        getActivity().finish();
+    }
 
 }
 
