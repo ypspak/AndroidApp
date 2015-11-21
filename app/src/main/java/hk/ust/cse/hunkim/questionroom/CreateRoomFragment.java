@@ -141,7 +141,7 @@ public class CreateRoomFragment extends Fragment {
 
     //sub function of attemptCreateRoom, checking if the input only have alpha / number
     private boolean isEmailValid(String input) {
-        return !input.matches("^.*[^a-zA-Z0-9 ].*$");
+        return !input.matches("^.*[^a-zA-Z0-9].*$");
     }
 
     //sub function of attemptCreateRoom, really create a room

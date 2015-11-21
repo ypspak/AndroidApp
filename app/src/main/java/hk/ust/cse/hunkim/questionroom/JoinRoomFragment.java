@@ -112,6 +112,6 @@ public class JoinRoomFragment extends Fragment {
     }
 
     private boolean isEmailValid(String room_name) {
-        return !room_name.matches("^.*[^a-zA-Z0-9 ].*$");
+        return !room_name.matches("^.*[^a-zA-Z0-9].*$");
     }
 }
