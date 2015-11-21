@@ -45,14 +45,11 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
 
     protected void setUp() throws Exception{
         super.setUp();
-        Firebase.setAndroidContext(getActivity());
         final String tempKey = "pretendingKey";
-        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(tempKey);
         Question tempQuestion = new Question("This is a #temp question #title", "This is a temp question body");
-        testQuestionUrl.setValue(tempQuestion);
 
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-        mStartIntent.putExtra("PUSHED_ID", tempQuestion.getKey());
+        mStartIntent.putExtra("PUSHED_ID", tempKey);
         mStartIntent.putExtra("ROOM_NAME", "TEST");
         mStartIntent.putExtra("ROOM_BASE_URL", roomBaseUrl);
         mStartIntent.putExtra("NUM_LIKE", tempQuestion.getLike());
@@ -63,6 +60,10 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         mStartIntent.putExtra("TIMESTAMP", tempQuestion.getTimestamp());
         mStartIntent.putExtra("TAGS", tempQuestion.getTags());
         setActivityIntent(mStartIntent);
+
+        Firebase.setAndroidContext(getActivity());
+        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(tempKey);
+        testQuestionUrl.setValue(tempQuestion);
 
         replyInput = (EditText) getActivity().findViewById(R.id.reply_input_field);
         sendButton = (ImageButton) getActivity().findViewById(R.id.send_reply_button);
@@ -101,6 +102,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         assertNotNull("Parent Question has no like button", parentLike);
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, parentLike);
+
         getInstrumentation().waitForIdleSync();
         TouchUtils.clickView(this, parentLike);
         getInstrumentation().waitForIdleSync();
@@ -116,23 +118,6 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     }
 
     public void testReplyWithoutMessage() {
-        getInstrumentation().runOnMainSync(new Runnable() {
-            @Override
-            public void run() {
-                replyInput.requestFocus();
-            }
-        });
-        //Wait until all events from the MainHandler's queue are processed
-        getInstrumentation().waitForIdleSync();
-
-        getInstrumentation().sendStringSync("");
-        getInstrumentation().waitForIdleSync();
-
-        String actualText = replyInput.getText().toString();
-        while(actualText==null){
-            actualText = replyInput.getText().toString();
-        }
-
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
         assertEquals("There s not error message from the reply input", "This field is required", replyInput.getError());
@@ -158,7 +143,7 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
 
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
-
+        assertEquals("There s not error message from the reply input", null, replyInput.getError());
     }
 }
 

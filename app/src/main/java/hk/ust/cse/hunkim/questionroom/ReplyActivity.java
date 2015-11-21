@@ -67,11 +67,13 @@ public class ReplyActivity extends ListActivity {
     public String getRoomBaseUrl(){return roomBaseUrl;}
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_reply);
 
         Intent intent = getIntent();
 
         //currently just for testing that I am entered the replying room corresponding to the question
+
         key = intent.getStringExtra("PUSHED_ID");
         roomName = intent.getStringExtra("ROOM_NAME");
         roomBaseUrl = intent.getStringExtra("ROOM_BASE_URL");
@@ -82,10 +84,8 @@ public class ReplyActivity extends ListActivity {
         question_Desc = intent.getStringExtra("DESC");
         question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
         question_Hashtag = intent.getStringArrayExtra("TAGS");
+        replyContainerRef = new Firebase(roomBaseUrl).child("replies");
 
-        if(roomBaseUrl!=null){
-            replyContainerRef = new Firebase(roomBaseUrl).child("replies");
-        }
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setTitle("Room Name:" + roomName);
@@ -103,9 +103,8 @@ public class ReplyActivity extends ListActivity {
 
     public void onStart() {
         super.onStart();
-        if(roomBaseUrl!=null){
-            questionUrl = new Firebase(roomBaseUrl).child("questions").child(key);
-        }
+        questionUrl = new Firebase(roomBaseUrl).child("questions").child(key);
+
         findViewById(R.id.send_reply_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,11 +118,9 @@ public class ReplyActivity extends ListActivity {
         final ListView listView = getListView();
 
         // Tell our list adapter that we only want 200 messages at a time
-        if(replyContainerRef!=null){
-            mChatListAdapter = new ReplyListAdapter(
-                    replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
-                    this, R.layout.reply);
-        }
+        mChatListAdapter = new ReplyListAdapter(
+                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
+                this, R.layout.reply);
 
         //For the like & dislike button in headerview
         likePQB = (ImageButton) findViewById(R.id.parent_question_like_button);
@@ -156,21 +153,18 @@ public class ReplyActivity extends ListActivity {
         //Now update the header, and update altogether  by setting the listview
         UpdateHeader();
         listView.setAdapter(mChatListAdapter);
-        if(mChatListAdapter!=null){
-            mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-                @Override
-                public void onChanged() {
-                    super.onChanged();
-                    //listView.setSelection(mChatListAdapter.getCount() - 1);
-                }
-            });
-        }
+        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+            }
+        });
+
     }
 
     public void onStop() {
         super.onStop();
-        if(mChatListAdapter!=null)
-            mChatListAdapter.cleanup();
+        mChatListAdapter.cleanup();
     }
 
     private void checkButtonPressed()
@@ -205,7 +199,6 @@ public class ReplyActivity extends ListActivity {
             // Create our 'model', a Chat object
             Reply reply = new Reply(input, key);
             // Create a new, auto-generated child of that chat location, and save our chat data there
-            if(replyContainerRef==null) return;
             replyContainerRef.push().setValue(reply);
             inputText.setText("");
             updateQuestionReply();
@@ -258,14 +251,10 @@ public class ReplyActivity extends ListActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            long orderValue = (long) dataSnapshot.getValue();
-                            Log.e("Order update:", "" + orderValue);
-
-                            orderRef.setValue(orderValue + value);
-                        }
+                        long orderValue = (long) dataSnapshot.getValue();
+                        Log.e("Order update:", "" + orderValue);
+                        orderRef.setValue(orderValue + value);
                     }
-
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
 
@@ -280,8 +269,7 @@ public class ReplyActivity extends ListActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
         }*/
-
-        // Update SQLite DB
+        //maybe GUI problem for the duplicated replies
         dbutil.put(key);
     }
 
@@ -291,19 +279,14 @@ public class ReplyActivity extends ListActivity {
             Log.e("Dupkey", "Key is already in the DB!");
             return;
         }
-
-        if(questionUrl==null) return;
-
         final Firebase orderRef = questionUrl.child(attri);
         orderRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() != null) {
-                            long orderValue = (long) dataSnapshot.getValue();
-                            Log.e("Order update:", "" + orderValue);
-                            orderRef.setValue(orderValue + 1);
-                        }
+                        long orderValue = (long) dataSnapshot.getValue();
+                        Log.e("Order update:", "" + orderValue);
+                        orderRef.setValue(orderValue + 1);
                     }
 
                     @Override
@@ -318,20 +301,15 @@ public class ReplyActivity extends ListActivity {
     }
 
     public void updateQuestionReply() {
-        if(questionUrl == null) return;
         questionUrl.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.child("replies").getValue()!=null){
-                            long replyValue = (long) dataSnapshot.child("replies").getValue();
-                            Log.e("Reply update:", "" + replyValue);
-                            //Add 1 value to the dislikeValue
-                            questionUrl.child("replies").setValue(replyValue + 1);
-                        }
-                        if(dataSnapshot.child("lastTimestamp").getValue()!=null){
-                            questionUrl.child("lastTimestamp").setValue(new Date().getTime());
-                        }
+                        long replyValue = (long) dataSnapshot.child("replies").getValue();
+                        Log.e("Reply update:", "" + replyValue);
+                        //Add 1 value to the dislikeValue
+                        questionUrl.child("replies").setValue(replyValue + 1);
+                        questionUrl.child("lastTimestamp").setValue(new Date().getTime());
                     }
 
                     @Override

@@ -33,21 +33,14 @@ public class DBUtil {
 
     public boolean contains(String key) {
         // Gets the data repository in write mode
-        if(key!=null) {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor c;
-
-
-            c = db.rawQuery(
-                    "SELECT 1 FROM " + DBHelper.TABLE_NAME +
-                            " WHERE " + DBHelper.KEY_NAME +
-                            " = ?", new String[]{key});
-
-            boolean exists = c.moveToFirst();
-            c.close();
-            return exists;
-        }
-        return false;
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor c = db.rawQuery(
+                "SELECT 1 FROM " + DBHelper.TABLE_NAME +
+                        " WHERE " + DBHelper.KEY_NAME +
+                        " = ?", new String[]{key});
+        boolean exists = c.moveToFirst();
+        c.close();
+        return exists;
     }
 
     public void delete(String key) {
