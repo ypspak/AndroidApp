@@ -20,6 +20,7 @@ import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
+import hk.ust.cse.hunkim.questionroom.timemanager.TimeManager;
 
 /**
  * Created by CAI on 21/10/2015.
@@ -53,7 +54,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
             scoreText.setTextColor(view.getResources().getColor(R.color.ReplyOrderNeutral));
 
         //Set the text of the timestamp
-        timeText.setText("" + getDate(reply.getTimestamp()));
+        timeText.setText("" + new TimeManager(reply.getTimestamp()).getDate());
         likeButton.setTag(reply.getKey()); // Set tag for button
         dislikeButton.setTag(reply.getKey());
 
@@ -106,29 +107,6 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
 
 
         view.setTag(reply.getKey());  // store key in the view
-    }
-
-    //If you want to know more about the function, plz visit here http://developer.android.com/reference/android/text/format/DateUtils.html
-    private String getDate(long postTime){
-        long currentTime = new Date().getTime();
-        long timeResolution = 0;
-        long timeDiff = currentTime-postTime;
-        if(timeDiff < DateUtils.SECOND_IN_MILLIS*5){
-            return "Just now";
-        }
-
-        if(timeDiff/DateUtils.MINUTE_IN_MILLIS == 0){
-            timeResolution = DateUtils.SECOND_IN_MILLIS;
-        }else if(timeDiff/DateUtils.HOUR_IN_MILLIS == 0){
-            timeResolution = DateUtils.MINUTE_IN_MILLIS;
-        }else if(timeDiff/DateUtils.DAY_IN_MILLIS == 0){
-            timeResolution = DateUtils.HOUR_IN_MILLIS;
-        }else{
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
-            Date date = (new Date(postTime));
-            return df.format(date);
-        }
-        return DateUtils.getRelativeTimeSpanString(postTime, currentTime, timeResolution).toString();
     }
 
     @Override
