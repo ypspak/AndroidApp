@@ -1,53 +1,68 @@
-//package hk.ust.cse.hunkim.questionroom;
-//
-//import android.app.Instrumentation;
-//import android.content.Intent;
-//import android.test.ActivityInstrumentationTestCase2;
-//import android.test.TouchUtils;
-//import android.test.suitebuilder.annotation.MediumTest;
-//import android.view.View;
-//import android.widget.Button;
-//import android.widget.ImageButton;
-//import android.widget.ListView;
-//import android.widget.TextView;
-//
-//import java.util.Date;
-//
-///**
-// * Created by hunkim on 7/20/15.
-// */
-//public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
-//
-//    MainActivity activity;
-//    Intent mStartIntent;
-//    ImageButton mButton;
-//    Button mSendQuestion;
-//    Button mCancel;
-//    TextView mTitle;
-//    TextView mBody;
-//    Long timestamp = new Date().getTime();
-//    Integer mCounter = 0;
-//    String RoomString = "AppTestcase:" + String.valueOf(timestamp);;
-//    String FIREBASE_URL = "https://cmkquestionsdb.firebaseio.com/";
-//
-//    public MainActivityTest() {
-//        super(MainActivity.class);
-//    }
-//
-//    @Override
-//    protected void setUp() throws Exception {
-//        super.setUp();
-//
-//        mStartIntent = new Intent(Intent.ACTION_MAIN);
-//        //timestamp = new Date().getTime();
-//        //RoomString = "Testcase:" + String.valueOf(timestamp);
-//        mStartIntent.putExtra(JoinActivity.ROOM_NAME, RoomString);
-//        setActivityIntent(mStartIntent);
-//        activity = getActivity();
-//        mButton = (ImageButton) getActivity().findViewById(R.id.postQuestion);
-//    }
-//
-//
+package hk.ust.cse.hunkim.questionroom;
+
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
+import android.test.TouchUtils;
+import android.test.suitebuilder.annotation.MediumTest;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.firebase.client.Firebase;
+
+import hk.ust.cse.hunkim.questionroom.question.Question;
+
+/**
+ * Created by hunkim on 7/20/15.
+ */
+public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActivity> {
+    private String roomBaseUrl =  "https://cmkquestionsdb.firebaseio.com//rooms/TestRoom/";
+
+    private ImageButton sortBtn;
+    private ImageButton postBtn;
+
+
+
+    public MainActivityTest() {
+        super(MainActivity.class);
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        Intent mStartIntent = new Intent(Intent.ACTION_MAIN);
+        mStartIntent.putExtra("ROOM_NAME", "TestRoom");
+        mStartIntent.putExtra("ROOM_BASE_URL", roomBaseUrl);
+        setActivityIntent(mStartIntent);
+
+        Firebase.setAndroidContext(getActivity());
+        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions");
+        Question question1 = new Question("Question 1 q1", "");
+        Question question2 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
+        Question question3 = new Question("Question 3 #  q3 ", "question 3 at here #abc look out");
+        testQuestionUrl.push().setValue(question1);
+        testQuestionUrl.push().setValue(question2);
+        testQuestionUrl.push().setValue(question3);
+
+        sortBtn = (ImageButton) getActivity().findViewById(R.id.question_sort_button);
+        postBtn = (ImageButton) getActivity().findViewById(R.id.post_question_button);
+
+
+    }
+
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        if(roomBaseUrl!=null){
+            Firebase mFirebaseRef = new Firebase(roomBaseUrl);
+            mFirebaseRef.removeValue();
+        }
+    }
+
 //    @MediumTest
 //    public void testPostingMessage_ValidString_Like() throws Exception {
 //
@@ -62,10 +77,6 @@
 //        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
 //                .waitForActivityWithTimeout(5000);
 //
-//        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
-//        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
-//        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
-//        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
 //
 //
 //        //Verify that MainActivity was started
@@ -313,4 +324,4 @@
 //        assertFalse(mLikeButton.isClickable());
 //        assertFalse(mDislikeButton.isClickable());
 //    }
-//}
+}

@@ -79,12 +79,10 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        if(roomBaseUrl==null){
-            return;
+        if(roomBaseUrl!=null){
+            Firebase mFirebaseRef = new Firebase(roomBaseUrl);
+            mFirebaseRef.removeValue();
         }
-        Firebase mFirebaseRef = new Firebase(roomBaseUrl);
-        mFirebaseRef.removeValue();
-
     }
 
     public void testPrecondition(){

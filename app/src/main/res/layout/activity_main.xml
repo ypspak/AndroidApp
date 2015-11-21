@@ -24,7 +24,7 @@
         android:layout_marginBottom="15dp">
 
         <ImageButton
-            android:id="@+id/postQuestion"
+            android:id="@+id/post_question_button"
             android:layout_width="@dimen/QuestionSendButtonSize"
             android:layout_height="@dimen/QuestionSendButtonSize"
             android:src="@drawable/create"
@@ -96,7 +96,7 @@
         <ImageButton
             android:layout_width="@dimen/HeaderIconSize"
             android:layout_height="@dimen/HeaderIconSize"
-            android:id="@+id/search"
+            android:id="@+id/search_button"
             android:layout_gravity="center_vertical"
             android:background="@drawable/round_button_transparent"
             android:src="@drawable/search"
@@ -104,11 +104,11 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
-            android:layout_toLeftOf="@+id/sort" />
+            android:layout_toLeftOf="@+id/question_sort_button" />
         <ImageButton
             android:layout_width="@dimen/HeaderIconSize"
             android:layout_height="@dimen/HeaderIconSize"
-            android:id="@+id/sort"
+            android:id="@+id/question_sort_button"
             android:layout_gravity="center_vertical"
             android:background="@drawable/round_button_transparent"
             android:src="@drawable/sort"
