@@ -264,6 +264,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         assertEquals("Number of like should be 1", "1", replyQuestionLikeText.getText());
         assertEquals("Number of dislike should be 0", "0", replyQuestionDislikeText.getText());
 
+        replyActivity.finish();
+
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+        getInstrumentation().waitForIdleSync();
+
         getActivity().finish();
     }
 
@@ -301,6 +306,11 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         assertEquals("Number of like should be 0", "0", replyQuestionLikeText.getText());
         assertEquals("Number of dislike should be 1", "1", replyQuestionDislikeText.getText());
+
+        replyActivity.finish();
+
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
+        getInstrumentation().waitForIdleSync();
 
         getActivity().finish();
     }
