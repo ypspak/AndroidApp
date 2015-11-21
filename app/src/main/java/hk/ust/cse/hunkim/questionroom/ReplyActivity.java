@@ -6,16 +6,9 @@ import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.hardware.input.InputManager;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +20,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
@@ -132,15 +122,15 @@ public class ReplyActivity extends ListActivity {
 
 
         //For the like & dislike button in headerview
-        likePQB = (ImageButton) findViewById(R.id.likeParentQuestion);
-        dislikePQB = (ImageButton) findViewById(R.id.dislikeParentQuestion);
+        likePQB = (ImageButton) findViewById(R.id.parent_question_like_button);
+        dislikePQB = (ImageButton) findViewById(R.id.parent_question_dislike_button);
         checkButtonPressed();
         likePQB.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("like");
-                        TextView likeText = (TextView) findViewById((R.id.likeText));
+                        TextView likeText = (TextView) findViewById((R.id.parent_question_like_text));
                         likeText.setText("" + (Integer.parseInt((String) likeText.getText()) + 1));
                         checkButtonPressed();
                     }
@@ -152,7 +142,7 @@ public class ReplyActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         updateLikeDislike("dislike");
-                        TextView dislikeText = (TextView) findViewById((R.id.dislikeText));
+                        TextView dislikeText = (TextView) findViewById((R.id.parent_question_dislike_text));
                         dislikeText.setText("" + (Integer.parseInt((String) dislikeText.getText()) + 1));
                         checkButtonPressed();
                     }
@@ -224,17 +214,17 @@ public class ReplyActivity extends ListActivity {
     }
 
     public void UpdateHeader() {
-        TextView timeText = (TextView) findViewById((R.id.timetext));
+        TextView timeText = (TextView) findViewById((R.id.parent_question_time_text));
         timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
         Button titleText = (Button) findViewById((R.id.head_reply));
         titleText.setText(Html.fromHtml("" + question_Head));
-        TextView descText = (TextView) findViewById((R.id.desc));
+        TextView descText = (TextView) findViewById((R.id.question_desc));
         descText.setText(Html.fromHtml("" + question_Desc));
-        TextView likeText = (TextView) findViewById((R.id.likeText));
+        TextView likeText = (TextView) findViewById((R.id.parent_question_like_text));
         likeText.setText("" + String.valueOf(question_NumLike));
-        TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
+        TextView dislikeText = (TextView) findViewById(R.id.parent_question_dislike_text);
         dislikeText.setText("" + String.valueOf(question_NumDislike));
-        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
+        TextView hashtagText = (TextView) findViewById(R.id.parent_question_hashtags);
 
         if (question_Hashtag == null)
             hashtag_processor = new Hashtag_processor(this.findViewById(android.R.id.content), hashtagText, question_Hashtag, 0);

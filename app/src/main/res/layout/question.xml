@@ -28,7 +28,7 @@
             android:textColor="@color/question_list_title" />
     </LinearLayout>
     <TextView
-        android:id="@+id/desc"
+        android:id="@+id/question_desc"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Hello! This is COMP3111 Layout Testing (Prototype)"
@@ -122,7 +122,7 @@
             android:layout_height="@dimen/update_of_time"
             android:layout_marginRight="3dp" />
         <TextView
-            android:id="@+id/timetext"
+            android:id="@+id/parent_question_time_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2015/10/25 19:31"

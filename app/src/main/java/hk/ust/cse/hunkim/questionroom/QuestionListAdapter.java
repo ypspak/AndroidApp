@@ -5,22 +5,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -94,7 +86,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.QuestionDislike);
         ImageButton replyButton = (ImageButton) view.findViewById(R.id.QuestionReply);
 
-        TextView timeText = (TextView) view.findViewById((R.id.timetext));
+        TextView timeText = (TextView) view.findViewById((R.id.parent_question_time_text));
         TextView likeNumText = (TextView) view.findViewById((R.id.likenumber));
         TextView dislikeNumText = (TextView) view.findViewById((R.id.dislikenumber));
         TextView replyNumText = (TextView) view.findViewById((R.id.replynumber));
@@ -184,14 +176,14 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         if (activity instanceof MainActivity) {
             dbUtil = ((MainActivity) activity).getDbutil();
             ((TextView) view.findViewById(R.id.head)).setText(Html.fromHtml("" + question.getHead()));
-            ((TextView) view.findViewById(R.id.desc)).setText(Html.fromHtml("" + question.getDesc()));
+            ((TextView) view.findViewById(R.id.question_desc)).setText(Html.fromHtml("" + question.getDesc()));
         }
         else if (activity instanceof SearchResultActivity) {
             dbUtil = ((SearchResultActivity) activity).getDbutil();
             if (question.getDesc().equals(""))
-                ((TextView) view.findViewById(R.id.desc)).setText(Html.fromHtml("Empty message."));
+                ((TextView) view.findViewById(R.id.question_desc)).setText(Html.fromHtml("Empty message."));
             else
-                ((TextView) view.findViewById(R.id.desc)).setText(Html.fromHtml("" + replaceFilterStr(question.getDesc(), filterStr)));
+                ((TextView) view.findViewById(R.id.question_desc)).setText(Html.fromHtml("" + replaceFilterStr(question.getDesc(), filterStr)));
 
             ((TextView) view.findViewById(R.id.head)).setText(Html.fromHtml("" + replaceFilterStr(question.getHead(), filterStr)));
 
