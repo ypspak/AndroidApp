@@ -85,7 +85,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         final int numDislike = question.getDislike();
         final int numReply = question.getReplies();
         final String qHead = question.getHead();
-        final String qDesc = question.getDesc().equals("") ? "" : question.getDesc();
+        final String qDesc = question.getDesc();
         final Long qTimestamp = question.getTimestamp();
         final String[] qTags = question.getTags();
 
@@ -167,7 +167,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                         intent.putExtra("NUM_DISLIKE", numDislike);
                         intent.putExtra("NUM_REPLY", numReply);
                         intent.putExtra("HEAD", qHead);
-                        intent.putExtra("DESC", qDesc);
+                        intent.putExtra("DESC", "" + qDesc);
                         intent.putExtra("TIMESTAMP", qTimestamp);
                         intent.putExtra("TAGS", qTags);
                         view.getContext().startActivity(intent);

@@ -89,7 +89,7 @@ public class ReplyActivity extends ListActivity {
         question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
         question_NumReply = intent.getIntExtra("NUM_REPLY", 0);
         question_Head = intent.getStringExtra("HEAD");
-        question_Desc = intent.getStringExtra("DESC");
+        question_Desc = intent.getStringExtra("DESC").replace("\n", "<br>");
         question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
         question_Hashtag = intent.getStringArrayExtra("TAGS");
 
@@ -204,6 +204,7 @@ public class ReplyActivity extends ListActivity {
             // Before creating our 'model', we have to replace substring so that prevent code injection
             input = input.replace("<", "&lt;");
             input = input.replace(">", "&gt;");
+            input = input.replace("\n", "<br>");
             // Create our 'model', a Chat object
             Reply reply = new Reply(input, key);
             // Create a new, auto-generated child of that chat location, and save our chat data there
@@ -226,9 +227,9 @@ public class ReplyActivity extends ListActivity {
         TextView timeText = (TextView) findViewById((R.id.timetext));
         timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
         Button titleText = (Button) findViewById((R.id.head_reply));
-        titleText.setText("" + question_Head);
+        titleText.setText(Html.fromHtml("" + question_Head));
         TextView descText = (TextView) findViewById((R.id.desc));
-        descText.setText("" + question_Desc);
+        descText.setText(Html.fromHtml("" + question_Desc));
         TextView likeText = (TextView) findViewById((R.id.likeText));
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.dislikeText);
@@ -244,50 +245,6 @@ public class ReplyActivity extends ListActivity {
         //HashtagTextJoin(question_Hashtag);
         //hashtagText.setText(question_Hashtag != null ?  (TextUtils.join(" ", question_Hashtag)) : "None");
         titleText.setTransformationMethod(null);
-    }
-
-    public void HashtagTextJoin(String[] Hashtags)
-    {
-        TextView hashtagText = (TextView) findViewById(R.id.hashtags);
-        if (Hashtags == null)
-        {
-            hashtagText.setText("None");
-            return;
-        }
-
-        SpannableStringBuilder sb = new SpannableStringBuilder();
-        int PreviousPosition = 0;
-        int CurrentPosition = 0;
-        for (int i = 0; i < Hashtags.length; i++)
-        {
-            final String SingleHashtags = Hashtags[i];
-
-            //Set the behavior of clicking it
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), SearchResultActivity.class);
-                    intent.putExtra("ROOM_BASE_URL", roomBaseUrl);
-                    intent.putExtra("HASH_TAG", SingleHashtags);
-                    view.getContext().startActivity(intent);
-                }
-            };
-
-            //Set the color of the text
-            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(getResources().getColor(R.color.SpannableHashtagReply));
-
-            CurrentPosition += Hashtags[i].length();
-            sb.append(Hashtags[i]);
-            sb.setSpan(clickableSpan, PreviousPosition, CurrentPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sb.setSpan(foregroundColorSpan, PreviousPosition, CurrentPosition, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            sb.append(" ");
-            CurrentPosition++;
-            PreviousPosition = CurrentPosition; //Increment 1 for delimiter
-        }
-
-        hashtagText.setText(sb);
-        hashtagText.setMovementMethod(LinkMovementMethod.getInstance());
-
     }
 
     //Update Like here. For every person who have liked, their key is stored at database.
@@ -318,13 +275,13 @@ public class ReplyActivity extends ListActivity {
                 }
         );
 
-        EditText reply = (EditText) findViewById(R.id.replyInput);
+        /*EditText reply = (EditText) findViewById(R.id.replyInput);
         reply.requestFocus();
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
-        }
+        }*/
 
         // Update SQLite DB
         dbutil.put(key);

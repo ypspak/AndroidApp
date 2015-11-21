@@ -41,7 +41,7 @@ public class JoinRoomFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_join_room, container, false);
 
-        roomNameField = (EditText) rootView.findViewById(R.id.room_name);
+        roomNameField = (EditText) rootView.findViewById(R.id.join_room_name);
         joinRoom = (Button) rootView.findViewById(R.id.join_button);
 
         baseUrl = ((JoinActivity)rootView.getContext()).getBaseUrl();
