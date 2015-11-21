@@ -6,12 +6,15 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.text.format.DateUtils;
+import android.text.method.Touch;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import com.firebase.client.Firebase;
 
@@ -185,6 +188,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         ImageButton qLike = (ImageButton) listElement.findViewById(R.id.QuestionLike);
         ImageButton qDisLike = (ImageButton) listElement.findViewById(R.id.QuestionDislike);
         ImageButton qReply = (ImageButton) listElement.findViewById(R.id.QuestionReply);
+        TextView qHead = (TextView) listElement.findViewById(R.id.head);
         TextView qTime = (TextView) listElement.findViewById(R.id.parent_question_time_text);
         TextView qLikeText = (TextView) listElement.findViewById(R.id.likenumber);
         TextView qDisLikeText = (TextView) listElement.findViewById(R.id.dislikenumber);
@@ -351,286 +355,203 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         View listElement = listview.getChildAt(0);
         String key = (String) listElement.getTag();
-        Long timestamp = question.getLastTimestamp();
         TextView qTime = (TextView) listElement.findViewById(R.id.parent_question_time_text);
         assertTrue("Time should be just now", qTime.getText().equals("Just now"));
 
-        mFirebaseRef.child(key).child("lastTimestamp").setValue((Long) ((new Date().getTime()) - DateUtils.MINUTE_IN_MILLIS));
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - 30 * DateUtils.SECOND_IN_MILLIS);
+        Thread.sleep(SHORT_TIMEOUT_IN_MS);
+        assertTrue("Time should be 30 seconds ago", qTime.getText().equals("30 seconds ago"));
+
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - DateUtils.MINUTE_IN_MILLIS);
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
         assertTrue("Time should be 1 minute ago", qTime.getText().equals("1 minute ago"));
 
-        mFirebaseRef.child(key).child("lastTimestamp").setValue((Long) ((new Date().getTime()) - DateUtils.HOUR_IN_MILLIS));
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - DateUtils.HOUR_IN_MILLIS);
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
         assertTrue("Time should be 1 hour ago", qTime.getText().equals("1 hour ago"));
 
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
         Date date = new Date(new Date().getTime() - DateUtils.DAY_IN_MILLIS);
-        mFirebaseRef.child(key).child("lastTimestamp").setValue((Long) ((new Date().getTime()) - DateUtils.DAY_IN_MILLIS));
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - DateUtils.DAY_IN_MILLIS);
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
         assertTrue("Time should be exact", qTime.getText().equals(df.format(date)));
 
         getActivity().finish();
     }
 
-//    @MediumTest
-//    public void testPostingMessage_ValidString_Like() throws Exception {
-//
-//        Instrumentation inst = new Instrumentation();
-//        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
-//                .addMonitor(PostQuestion.class.getName(), null, false);
-//
-//        final ListView lView = getActivity().getListView();
-//
-//        TouchUtils.clickView(this, mButton);
-//
-//        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
-//                .waitForActivityWithTimeout(5000);
-//
-//
-//
-//        //Verify that MainActivity was started
-//        assertNotNull("mSendQuestion is null", mSendQuestion);
-//        assertNotNull("mCancel is null", mCancel);
-//        assertNotNull("mTitle is null", mTitle);
-//        assertNotNull("mBody is null", mBody);
-//        assertNotNull("ReceiverActivity is null", postQuestion);
-//        assertEquals("Monitor for postQuestion has been called", 1,
-//                receiverActivityMonitor.getHits());
-//
-//        //Test case 1: Normal String
-//        getInstrumentation().runOnMainSync(new Runnable() {
-//            @Override
-//            public void run() {
-//                mTitle.requestFocus();
-//            }
-//        });
-//        getInstrumentation().waitForIdleSync();
-//        getInstrumentation().sendStringSync("<Like message>");
-//        getInstrumentation().waitForIdleSync();
-//
-//        String actualText = mTitle.getText().toString();
-//        while (actualText.isEmpty())
-//            actualText = mTitle.getText().toString();
-//        assertEquals("<Like message>", actualText);
-//
-//        TouchUtils.clickView(this, mSendQuestion);
-//
-//        //This part should be separated by a new test
-//        View listElement = lView.getChildAt(lView.getCount() - 1);
-//        assertNotNull(listElement);
-//
-//        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.QuestionLike);
-//        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.QuestionDislike);
-//
-//        //Should exist
-//        assertNotNull(mLikeButton);
-//        assertNotNull(mDislikeButton);
-//        Thread.sleep(1000);
-//        //Click like button
-//        TouchUtils.clickView(this, mLikeButton);
-//        //Should be not clickable now
-//        assertFalse(mLikeButton.isClickable());
-//        assertFalse(mDislikeButton.isClickable());
-//        //Try to update like/dislike by function call instead
-//        activity.updateLike((String) listElement.getTag());
-//        activity.updateDislike((String) listElement.getTag());
-//        getInstrumentation().removeMonitor(receiverActivityMonitor);
-//    }
-//
-//@MediumTest
-//    public void testPostingMessage_ValidString_Dislike() throws Exception {
-//
-//        Instrumentation inst = new Instrumentation();
-//        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
-//                .addMonitor(PostQuestion.class.getName(), null, false);
-//
-//        final ListView lView = getActivity().getListView();
-//
-//        TouchUtils.clickView(this, mButton);
-//
-//        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
-//                .waitForActivityWithTimeout(5000);
-//
-//        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
-//        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
-//        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
-//        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
-//
-//
-//        //Verify that MainActivity was started
-//        assertNotNull("mSendQuestion is null", mSendQuestion);
-//        assertNotNull("mCancel is null", mCancel);
-//        assertNotNull("mTitle is null", mTitle);
-//        assertNotNull("mBody is null", mBody);
-//        assertNotNull("ReceiverActivity is null", postQuestion);
-//        assertEquals("Monitor for postQuestion has been called", 1,
-//                receiverActivityMonitor.getHits());
-//
-//        //Test case 1: Normal String
-//        getInstrumentation().runOnMainSync(new Runnable() {
-//            @Override
-//            public void run() {
-//                mTitle.requestFocus();
-//            }
-//        });
-//        getInstrumentation().waitForIdleSync();
-//        getInstrumentation().sendStringSync("<Dislike message>");
-//        getInstrumentation().waitForIdleSync();
-//
-//        String actualText = mTitle.getText().toString();
-//        while (actualText.isEmpty())
-//            actualText = mTitle.getText().toString();
-//        assertEquals("<Dislike message>", actualText);
-//
-//        TouchUtils.clickView(this, mSendQuestion);
-//
-//        //This part should be separated by a new test
-//        View listElement = lView.getChildAt(lView.getCount() - 1);
-//        assertNotNull(listElement);
-//
-//        ImageButton mLikeButton = (ImageButton) listElement.findViewById(R.id.QuestionLike);
-//        ImageButton mDislikeButton = (ImageButton) listElement.findViewById(R.id.QuestionDislike);
-//        //Should exist
-//        assertNotNull(mLikeButton);
-//        assertNotNull(mDislikeButton);
-//        //Click dislike button
-//        Thread.sleep(1000);
-//        TouchUtils.clickView(this, mDislikeButton);
-//        //Should be not clickable now
-//        assertFalse(mLikeButton.isClickable());
-//        assertFalse(mDislikeButton.isClickable());
-//        //Try to update like/dislike by function call instead
-//        activity.updateLike((String) listElement.getTag());
-//        activity.updateDislike((String) listElement.getTag());
-//
-//    getInstrumentation().removeMonitor(receiverActivityMonitor);
-//    }
-//
-//
-//    @MediumTest
-//    public void testPostingMessage_EmptyString() {
-//
-//        Instrumentation inst = new Instrumentation();
-//        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
-//                .addMonitor(PostQuestion.class.getName(), null, false);
-//
-//        final ListView lView = getActivity().getListView();
-//
-//        TouchUtils.clickView(this, mButton);
-//
-//        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
-//                .waitForActivityWithTimeout(5000);
-//
-//        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
-//        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
-//        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
-//        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
-//
-//
-//        //Verify that MainActivity was started
-//        assertNotNull("mSendQuestion is null", mSendQuestion);
-//        assertNotNull("mCancel is null", mCancel);
-//        assertNotNull("mTitle is null", mTitle);
-//        assertNotNull("mBody is null", mBody);
-//        assertNotNull("ReceiverActivity is null", postQuestion);
-//        assertEquals("Monitor for postQuestion has been called", 1,
-//                receiverActivityMonitor.getHits());
-//
-//        //Test case 2: Empty string
-//        getInstrumentation().runOnMainSync(new Runnable() {
-//            @Override
-//            public void run() {
-//                mTitle.requestFocus();
-//            }
-//        });
-//        getInstrumentation().waitForIdleSync();
-//        getInstrumentation().sendStringSync("");
-//        getInstrumentation().waitForIdleSync();
-//
-//        String actualText = mTitle.getText().toString();
-//        actualText = mTitle.getText().toString();
-//        assertTrue(actualText.isEmpty());
-//
-//        TouchUtils.clickView(this, mSendQuestion);
-//        TouchUtils.clickView(this, mCancel);
-//
-//        getInstrumentation().removeMonitor(receiverActivityMonitor);
-//    }
-//
-//    @MediumTest
-//    public void testReplyMessage_LikeDislike() throws Exception{
-//
-//        Instrumentation inst = new Instrumentation();
-//        Instrumentation.ActivityMonitor receiverActivityMonitor = getInstrumentation()
-//                .addMonitor(PostQuestion.class.getName(), null, false);
-//        Instrumentation.ActivityMonitor receiverActivityMonitor2 = getInstrumentation()
-//                .addMonitor(ReplyActivity.class.getName(), null, false);
-//
-//        final ListView lView = getActivity().getListView();
-//
-//        TouchUtils.clickView(this, mButton);
-//
-//        PostQuestion postQuestion = (PostQuestion) receiverActivityMonitor
-//                .waitForActivityWithTimeout(5000);
-//
-//        mSendQuestion = (Button) postQuestion.findViewById(R.id.PostQuestion);
-//        mCancel = (Button) postQuestion.findViewById(R.id.Cancel);
-//        mTitle = (TextView) postQuestion.findViewById(R.id.QuestionTitle);
-//        mBody = (TextView) postQuestion.findViewById(R.id.QuestionBody);
-//
-//
-//        //Verify that MainActivity was started
-//        assertNotNull("mSendQuestion is null", mSendQuestion);
-//        assertNotNull("mCancel is null", mCancel);
-//        assertNotNull("mTitle is null", mTitle);
-//        assertNotNull("mBody is null", mBody);
-//        assertNotNull("ReceiverActivity is null", postQuestion);
-//        assertEquals("Monitor for postQuestion has been called", 1,
-//                receiverActivityMonitor.getHits());
-//
-//        //Test case 3
-//        getInstrumentation().runOnMainSync(new Runnable() {
-//            @Override
-//            public void run() {
-//                mTitle.requestFocus();
-//            }
-//        });
-//        getInstrumentation().waitForIdleSync();
-//        getInstrumentation().sendStringSync("<Reply button and like testing>");
-//        getInstrumentation().waitForIdleSync();
-//
-//        String actualText = mTitle.getText().toString();
-//        while (actualText.isEmpty())
-//            actualText = mTitle.getText().toString();
-//        assertEquals("<Reply button and like testing>", actualText);
-//
-//        TouchUtils.clickView(this, mSendQuestion);
-//        getInstrumentation().removeMonitor(receiverActivityMonitor);
-//        //This part should be separated by a new test
-//        View listElement = lView.getChildAt(lView.getCount() - 1);
-//        assertNotNull(listElement);
-//
-//        ImageButton mReplyButton = (ImageButton) listElement.findViewById(R.id.QuestionReply);
-//        //Should exist
-//        assertNotNull(mReplyButton);
-//        //Click dislike button
-//        Thread.sleep(1000);
-//        TouchUtils.clickView(this, mReplyButton);
-//
-//
-//        ReplyActivity replyActivity = (ReplyActivity) receiverActivityMonitor2
-//                .waitForActivityWithTimeout(5000);
-//
-//        ImageButton mLikeButton = (ImageButton) replyActivity.findViewById(R.id.likeParentQuestion);
-//        ImageButton mDislikeButton = (ImageButton) replyActivity.findViewById(R.id.dislikeParentQuestion);
-//        //Should exist
-//        assertNotNull(mLikeButton);
-//        assertNotNull(mDislikeButton);
-//        //Click dislike button
-//        Thread.sleep(1000);
-//        TouchUtils.clickView(this, mLikeButton);
-//        //Should be not clickable now
-//        assertFalse(mLikeButton.isClickable());
-//        assertFalse(mDislikeButton.isClickable());
-//    }
+    public void testPostQuestion_LikeOrder() throws Throwable {
+
+
+        Question question1 = new Question("1st like", "");
+        Question question2 = new Question("2nd like", "");
+        Question question3 = new Question("3rd like", "");
+
+        mFirebaseRef.push().setValue(question2);
+        mFirebaseRef.push().setValue(question3);
+        mFirebaseRef.push().setValue(question1);
+
+
+        Thread.sleep(SHORT_TIMEOUT_IN_MS);
+        assertEquals("Listview should only have 3 elements", 3, listview.getCount());
+
+        View[] listElement = new View[3];
+        String[] key = new String[3];
+        TextView[] textViews = new TextView[3];
+
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        mFirebaseRef.child(key[0]).child("like").setValue(455);
+        mFirebaseRef.child(key[2]).child("like").setValue(1000);
+        mFirebaseRef.child(key[1]).child("like").setValue(277);
+
+        mFirebaseRef.push().setValue(new Question("4th like", ""));
+        mFirebaseRef.push().setValue(new Question("5th like", ""));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().setSortIndex(2);
+                getActivity().RefreshAdapter();
+            }
+        });
+
+        Thread.sleep(TIMEOUT_IN_MS*3);
+
+        //Update the list
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+        mFirebaseRef.push().setValue(new Question("5th like", ""));
+        assertEquals("1st like should be placed at top", "1st like", textViews[0].getText().toString());
+        assertEquals("3rd like should be placed at third position", "3rd like", textViews[2].getText().toString());
+
+        getActivity().finish();
+    }
+
+    public void testPostQuestion_DislikeOrder() throws Throwable {
+
+
+        Question question1 = new Question("1st dislike", "");
+        Question question2 = new Question("2nd dislike", "");
+        Question question3 = new Question("3rd dislike", "");
+
+        mFirebaseRef.push().setValue(question2);
+        mFirebaseRef.push().setValue(question3);
+        mFirebaseRef.push().setValue(question1);
+
+
+        Thread.sleep(SHORT_TIMEOUT_IN_MS);
+        assertEquals("Listview should only have 3 elements", 3, listview.getCount());
+
+        View[] listElement = new View[3];
+        String[] key = new String[3];
+        TextView[] textViews = new TextView[3];
+
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        mFirebaseRef.child(key[0]).child("like").setValue(455);
+        mFirebaseRef.child(key[0]).child("dislike").setValue(455);
+        mFirebaseRef.child(key[2]).child("like").setValue(1000);
+        mFirebaseRef.child(key[2]).child("dislike").setValue(1000);
+        mFirebaseRef.child(key[1]).child("like").setValue(277);
+        mFirebaseRef.child(key[1]).child("dislike").setValue(277);
+
+        mFirebaseRef.push().setValue(new Question("4th dislike", ""));
+        mFirebaseRef.push().setValue(new Question("5th dislike", ""));
+        mFirebaseRef.push().setValue(new Question("5th dislike - same timestamp", ""));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().setSortIndex(3);
+                getActivity().RefreshAdapter();
+            }
+        });
+
+        Thread.sleep(TIMEOUT_IN_MS*3);
+
+        //Update the list
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        assertEquals("1st dislike should be placed at top", "1st dislike", textViews[0].getText().toString());
+        assertEquals("3rd dislike should be placed at third position", "3rd dislike", textViews[2].getText().toString());
+        getActivity().finish();
+    }
+
+    /*public void testPostQuestion_HotOrder() throws Throwable {
+
+
+        Question question1 = new Question("1st hot", "");
+        Question question2 = new Question("2nd hot", "");
+        Question question3 = new Question("3rd hot", "");
+
+        mFirebaseRef.push().setValue(question2);
+        mFirebaseRef.push().setValue(question3);
+        mFirebaseRef.push().setValue(question1);
+
+
+        Thread.sleep(SHORT_TIMEOUT_IN_MS);
+        assertEquals("Listview should only have 3 elements", 3, listview.getCount());
+
+        View[] listElement = new View[3];
+        String[] key = new String[3];
+        TextView[] textViews = new TextView[3];
+
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        mFirebaseRef.child(key[0]).child("like").setValue(455);
+        mFirebaseRef.child(key[0]).child("dislike").setValue(455);
+        mFirebaseRef.child(key[2]).child("like").setValue(1000);
+        mFirebaseRef.child(key[2]).child("dislike").setValue(1000);
+        mFirebaseRef.child(key[1]).child("like").setValue(277);
+        mFirebaseRef.child(key[1]).child("dislike").setValue(277);
+
+        mFirebaseRef.push().setValue(new Question("4th hot", ""));
+        mFirebaseRef.push().setValue(new Question("5th hot", ""));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().setSortIndex(1);
+                getActivity().RefreshAdapter();
+            }
+        });
+
+        Thread.sleep(TIMEOUT_IN_MS*3);
+
+        //Update the list
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        assertEquals("2nd hot should be placed at top", "2nd hot", textViews[0].getText().toString());
+        assertEquals("4th hot should be placed at third position", "4th hot", textViews[2].getText().toString());
+        getActivity().finish();
+    }*/
 }
