@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/newest"
-            android:title="@string/sortNew"/>
+            android:id="@+id/sort_by_new"
+            android:title="@string/sort_by_new"/>
 
 
         <item
-            android:id="@+id/hot"
+            android:id="@+id/sort_by_hot"
             android:title="@string/sortHot"/>
 
         <item
-            android:id="@+id/like"
+            android:id="@+id/sort_by_like"
             android:title="@string/sortLike"/>
 
         <item
-            android:id="@+id/dislike"
+            android:id="@+id/sort_by_dislike"
             android:title="@string/sortDislike"/>
 
         <item
-            android:id="@+id/lastreplied"
+            android:id="@+id/sort_by_update"
             android:title="@string/sortUpdate"/>
     </group>
 

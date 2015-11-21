@@ -74,7 +74,7 @@ public class MainActivity extends ListActivity {
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
         mFirebaseRef_Hashtag = new Firebase(roomBaseUrl).child("tags");
-        postQ = (ImageButton) findViewById(R.id.postQuestion);
+        postQ = (ImageButton) findViewById(R.id.post_question_button);
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
@@ -129,7 +129,7 @@ public class MainActivity extends ListActivity {
             }
         });
 
-        searchButton = (ImageButton) findViewById(R.id.search);
+        searchButton = (ImageButton) findViewById(R.id.search_button);
         searchButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -142,7 +142,7 @@ public class MainActivity extends ListActivity {
                 }
         );
 
-        sortButton = (ImageButton) findViewById(R.id.sort);
+        sortButton = (ImageButton) findViewById(R.id.question_sort_button);
         sortButton.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -164,11 +164,11 @@ public class MainActivity extends ListActivity {
                             public boolean onMenuItemClick(MenuItem item) {
                                 item.setChecked(true);
                                 switch(item.getItemId()){
-                                    case R.id.newest: setSortIndex(0); break;
-                                    case R.id.hot: setSortIndex(1); break;
-                                    case R.id.like: setSortIndex(2); break;
-                                    case R.id.dislike: setSortIndex(3); break;
-                                    case R.id.lastreplied: setSortIndex(4); break;
+                                    case R.id.sort_by_new: setSortIndex(0); break;
+                                    case R.id.sort_by_hot: setSortIndex(1); break;
+                                    case R.id.sort_by_like: setSortIndex(2); break;
+                                    case R.id.sort_by_dislike: setSortIndex(3); break;
+                                    case R.id.sort_by_update: setSortIndex(4); break;
                                 }
                                 mChatListAdapter.setSortMethod(getSortIndex());
                                 listView.setAdapter(mChatListAdapter);
