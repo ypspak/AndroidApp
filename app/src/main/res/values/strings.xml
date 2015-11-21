@@ -28,7 +28,7 @@
     <string name="prompt_question_body">Content (You may leave it blank)</string>
 
     <!--String retated to sort function of quesiton list, they are in same sequence as in the menu-->
-    <string name="sortNew">sort by new</string>
+    <string name="sort_by_new">sort by new</string>
     <string name="sortHot">sort by hot</string>
     <string name="sortLike">sort by like</string>
     <string name="sortDislike">sort by dislike</string>

@@ -33,13 +33,11 @@ public class WelcomeActivity extends Activity{
         mConnectedListener = mFirebaseRef.child(".info/connected").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue()!=null){
-                    boolean connected = (Boolean) dataSnapshot.getValue();
-                    if (connected) {
-                        connected();
-                    } else {
-                        waitingConnect();
-                    }
+                boolean connected = (Boolean) dataSnapshot.getValue();
+                if (connected) {
+                    connected();
+                } else {
+                    waitingConnect();
                 }
             }
 

@@ -100,7 +100,6 @@ public class JoinRoomFragment extends Fragment {
                 if (!dataSnapshot.exists()) {
                     roomNameField.setError(getString(R.string.error_not_exist_room));
                 } else {
-                    assert (dataSnapshot.getValue(Room.class) != null);
                     ((JoinActivity) view.getContext()).tryJoin(dataSnapshot.getKey(), dataSnapshot.getValue(Room.class));
                 }
             }
