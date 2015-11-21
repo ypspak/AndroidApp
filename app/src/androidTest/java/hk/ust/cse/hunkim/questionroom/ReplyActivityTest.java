@@ -84,8 +84,8 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-//        Firebase mFirebaseRef = new Firebase("https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/");
-//        mFirebaseRef.removeValue();
+        Firebase mFirebaseRef = new Firebase("https://cmkquestionsdb.firebaseio.com/rooms/TestRoom/");
+        mFirebaseRef.removeValue();
     }
 
     public void testPrecondition(){
