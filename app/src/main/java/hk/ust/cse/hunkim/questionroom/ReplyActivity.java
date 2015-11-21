@@ -224,11 +224,11 @@ public class ReplyActivity extends ListActivity {
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.parent_question_time_text));
         timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
-        Button titleText = (Button) findViewById((R.id.head_reply));
+        Button titleText = (Button) findViewById((R.id.parent_question_head));
         titleText.setText("" + question_Head);
-        TextView descText = (TextView) findViewById((R.id.desc));
+        TextView descText = (TextView) findViewById((R.id.parent_question_desc));
         descText.setText("" + question_Desc);
-        TextView likeText = (TextView) findViewById((R.id.likeText));
+        TextView likeText = (TextView) findViewById((R.id.parent_question_like_text));
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.parent_question_dislike_text);
         dislikeText.setText("" + String.valueOf(question_NumDislike));
