@@ -85,7 +85,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         msgString += reply.getDesc();
 
 //        ((TextView) view.findViewById(R.id.replyMsg)).setText(Html.fromHtml(msgString));
-        ((TextView) view.findViewById(R.id.replyMsg)).setText(msgString);
+        ((TextView) view.findViewById(R.id.replyMsg)).setText(Html.fromHtml(msgString));
         // check if we already clicked
         boolean clickable = !dbUtil.contains(reply.getKey());
 

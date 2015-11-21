@@ -23,6 +23,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  * and
  * http://developer.android.com/training/testing.html
  */
+
+/*
 public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActivity> {
     Intent mStartIntent;
     JoinActivity activity;
@@ -239,4 +241,4 @@ public class JoinActivityTest extends ActivityInstrumentationTestCase2<JoinActiv
         getInstrumentation().removeMonitor(receiverActivityMonitor);
         getInstrumentation().waitForIdleSync();
     }*/
-}
+//}

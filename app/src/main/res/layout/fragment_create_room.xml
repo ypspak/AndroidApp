@@ -11,7 +11,7 @@
     android:weightSum="1">
 
     <EditText
-        android:id="@+id/room_name"
+        android:id="@+id/create_room_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_room_name"
@@ -22,7 +22,7 @@
         style="@style/EditTextCustomHolo"/>
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/create_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/prompt_password"
