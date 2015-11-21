@@ -232,8 +232,7 @@ public class CreateRoomFragmentTest extends ActivityInstrumentationTestCase2<Joi
         TouchUtils.clickView(this, CreateButton);
         assertTrue("Room field should be cleared", "".equals(Room.getText().toString()));
         assertTrue("Password field should be cleared", "".equals(Password.getText().toString()));
-        //assertEquals("Room field should be cleared", "", Room.getText());
-        //assertEquals("Password should be cleared", "", Password.getText());
+
     }
 
     public void testCreatePublicRoom_Success_validPassword() throws Throwable {
