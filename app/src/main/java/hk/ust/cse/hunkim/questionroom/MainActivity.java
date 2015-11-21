@@ -74,7 +74,7 @@ public class MainActivity extends ListActivity {
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
         mFirebaseRef_Hashtag = new Firebase(roomBaseUrl).child("tags");
-        postQ = (ImageButton) findViewById(R.id.post_question_form_dialog_button);
+        postQ = (ImageButton) findViewById(R.id.post_question_button);
 
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);

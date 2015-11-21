@@ -24,7 +24,7 @@
         android:layout_marginBottom="15dp">
 
         <ImageButton
-            android:id="@+id/post_question_form_dialog_button"
+            android:id="@+id/post_question_button"
             android:layout_width="@dimen/QuestionSendButtonSize"
             android:layout_height="@dimen/QuestionSendButtonSize"
             android:src="@drawable/create"
