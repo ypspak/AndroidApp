@@ -6,6 +6,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.text.format.DateUtils;
+import android.text.method.Touch;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import com.firebase.client.Firebase;
 
@@ -31,7 +31,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
 
     // /private String roomBaseUrl =  "https://cmkquestionsdb.firebaseio.com//rooms/TestRoom/";
-    private MainActivity activity;
+
     private ImageButton sortBtn;
     private ImageButton postBtn;
     private ListView listview;
@@ -39,7 +39,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     private static final String RoomString = "AppTestcase1" + String.valueOf(new Date().getTime());
     private Firebase mFirebaseRef;
     private static final int SHORT_TIMEOUT_IN_MS = 2000;
-    private static final int TIMEOUT_IN_MS = 5000;
+    private static final int TIMEOUT_IN_MS = 3000;
 
 
     public MainActivityTest() {
@@ -60,8 +60,8 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         Firebase.setAndroidContext(getActivity());
         mFirebaseRef = new Firebase(roomBaseUrl).child("questions");
         /*Question question1 = new Question("Question 1 q1", "");
-        Question question2 = new Question("Question 2 #Firebase mFirebaseRef = new Firebase(roomBaseUrl);
-        mFirebaseRef.removeValue();#abc look out");
+        Question question2 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
+        Question question3 = new Question("Question 3 #  q3 ", "question 3 at here #abc look out");
         testQuestionUrl.push().setValue(question1);
         testQuestionUrl.push().setValue(question2);
         testQuestionUrl.push().setValue(question3);*/
@@ -69,8 +69,6 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         sortBtn = (ImageButton) getActivity().findViewById(R.id.question_sort_button);
         postBtn = (ImageButton) getActivity().findViewById(R.id.post_question_button);
         listview = getActivity().getListView();
-
-        activity = getActivity();
 
 
     }
@@ -190,6 +188,7 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
         ImageButton qLike = (ImageButton) listElement.findViewById(R.id.QuestionLike);
         ImageButton qDisLike = (ImageButton) listElement.findViewById(R.id.QuestionDislike);
         ImageButton qReply = (ImageButton) listElement.findViewById(R.id.QuestionReply);
+        TextView qHead = (TextView) listElement.findViewById(R.id.head);
         TextView qTime = (TextView) listElement.findViewById(R.id.parent_question_time_text);
         TextView qLikeText = (TextView) listElement.findViewById(R.id.likenumber);
         TextView qDisLikeText = (TextView) listElement.findViewById(R.id.dislikenumber);
@@ -356,153 +355,203 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
 
         View listElement = listview.getChildAt(0);
         String key = (String) listElement.getTag();
-        Long timestamp = question.getLastTimestamp();
         TextView qTime = (TextView) listElement.findViewById(R.id.parent_question_time_text);
         assertTrue("Time should be just now", qTime.getText().equals("Just now"));
 
-        mFirebaseRef.child(key).child("lastTimestamp").setValue((Long) ((new Date().getTime()) - DateUtils.MINUTE_IN_MILLIS));
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - 30 * DateUtils.SECOND_IN_MILLIS);
+        Thread.sleep(SHORT_TIMEOUT_IN_MS);
+        assertTrue("Time should be 30 seconds ago", qTime.getText().equals("30 seconds ago"));
+
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - DateUtils.MINUTE_IN_MILLIS);
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
         assertTrue("Time should be 1 minute ago", qTime.getText().equals("1 minute ago"));
 
-        mFirebaseRef.child(key).child("lastTimestamp").setValue((Long) ((new Date().getTime()) - DateUtils.HOUR_IN_MILLIS));
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - DateUtils.HOUR_IN_MILLIS);
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
         assertTrue("Time should be 1 hour ago", qTime.getText().equals("1 hour ago"));
 
         DateFormat df = new SimpleDateFormat("yyyy/MM/dd KK:mm aa");
         Date date = new Date(new Date().getTime() - DateUtils.DAY_IN_MILLIS);
-        mFirebaseRef.child(key).child("lastTimestamp").setValue((Long) ((new Date().getTime()) - DateUtils.DAY_IN_MILLIS));
+        mFirebaseRef.child(key).child("lastTimestamp").setValue((new Date().getTime()) - DateUtils.DAY_IN_MILLIS);
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
         assertTrue("Time should be exact", qTime.getText().equals(df.format(date)));
 
         getActivity().finish();
     }
 
-    public void testSortByHot() throws Throwable {
-        Question question1 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
-        Question question2 = new Question("Question 3 #q2 ", "This is question 3 \n # dealwith it haha.");
-        Question question3 = new Question("Question 4 #q2 ", "This is question 5 \n # dealwith it haha.");
-        Question question4 = new Question("Question 5 #q2 ", "This is question 4 \n # dealwith it haha.");
-        mFirebaseRef.push().setValue(question4);
-        mFirebaseRef.push().setValue(question3);
+    public void testPostQuestion_LikeOrder() throws Throwable {
+
+
+        Question question1 = new Question("1st like", "");
+        Question question2 = new Question("2nd like", "");
+        Question question3 = new Question("3rd like", "");
+
         mFirebaseRef.push().setValue(question2);
+        mFirebaseRef.push().setValue(question3);
         mFirebaseRef.push().setValue(question1);
 
 
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
-        assertEquals("Listview should only have 4 element", 4, listview.getCount());
+        assertEquals("Listview should only have 3 elements", 3, listview.getCount());
 
-//        TouchUtils.clickView(this, sortBtn);
-//
-//        runTestOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                PopupMenu popup = getActivity().getPopup();
-//                View sortByHot = (View) popup.getMenu().findItem(R.id.sort_by_hot);
-//
-//                TouchUtils.clickView(this,sortByHot);
-////                assertEquals("The sort is not 1", 1, getActivity().getSortIndex());
-//                Log.i("SUP1", "" + activity.getSortIndex());
-//                popup.dismiss();
-//            }
-//        });
-        getActivity().setSortIndex(1);
-        Thread.sleep(TIMEOUT_IN_MS);
+        View[] listElement = new View[3];
+        String[] key = new String[3];
+        TextView[] textViews = new TextView[3];
+
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        mFirebaseRef.child(key[0]).child("like").setValue(455);
+        mFirebaseRef.child(key[2]).child("like").setValue(1000);
+        mFirebaseRef.child(key[1]).child("like").setValue(277);
+
+        mFirebaseRef.push().setValue(new Question("4th like", ""));
+        mFirebaseRef.push().setValue(new Question("5th like", ""));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().setSortIndex(2);
+                getActivity().RefreshAdapter();
+            }
+        });
+
+        Thread.sleep(TIMEOUT_IN_MS*3);
+
+        //Update the list
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+        mFirebaseRef.push().setValue(new Question("5th like", ""));
+        assertEquals("1st like should be placed at top", "1st like", textViews[0].getText().toString());
+        assertEquals("3rd like should be placed at third position", "3rd like", textViews[2].getText().toString());
+
         getActivity().finish();
     }
 
-    public void testSortByLike() throws Throwable {
-        Question question1 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
-        Question question2 = new Question("Question 3 #q2 ", "This is question 3 \n # dealwith it haha.");
-        Question question3 = new Question("Question 4 #q2 ", "This is question 5 \n # dealwith it haha.");
-        Question question4 = new Question("Question 5 #q2 ", "This is question 4 \n # dealwith it haha.");
-        mFirebaseRef.push().setValue(question4);
-        mFirebaseRef.push().setValue(question3);
+    public void testPostQuestion_DislikeOrder() throws Throwable {
+
+
+        Question question1 = new Question("1st dislike", "");
+        Question question2 = new Question("2nd dislike", "");
+        Question question3 = new Question("3rd dislike", "");
+
         mFirebaseRef.push().setValue(question2);
+        mFirebaseRef.push().setValue(question3);
         mFirebaseRef.push().setValue(question1);
 
 
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
-        assertEquals("Listview should only have 4 element", 4, listview.getCount());
+        assertEquals("Listview should only have 3 elements", 3, listview.getCount());
 
-//        TouchUtils.clickView(this, sortBtn);
-//
-//        runTestOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                PopupMenu popup = getActivity().getPopup();
-//                MenuItem sortByHot = (MenuItem) popup.getMenu().findItem(R.id.sort_by_like);
-//                sortByHot.setChecked(true);
-////                assertEquals("The sort is not 1", 2, getActivity().getSortIndex());
-//                Log.i("SUP2", "" + activity.getSortIndex());
-//                popup.dismiss();
-//            }
-//        });
-        getActivity().setSortIndex(2);
-        Thread.sleep(TIMEOUT_IN_MS);
+        View[] listElement = new View[3];
+        String[] key = new String[3];
+        TextView[] textViews = new TextView[3];
+
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        mFirebaseRef.child(key[0]).child("like").setValue(455);
+        mFirebaseRef.child(key[0]).child("dislike").setValue(455);
+        mFirebaseRef.child(key[2]).child("like").setValue(1000);
+        mFirebaseRef.child(key[2]).child("dislike").setValue(1000);
+        mFirebaseRef.child(key[1]).child("like").setValue(277);
+        mFirebaseRef.child(key[1]).child("dislike").setValue(277);
+
+        mFirebaseRef.push().setValue(new Question("4th dislike", ""));
+        mFirebaseRef.push().setValue(new Question("5th dislike", ""));
+        mFirebaseRef.push().setValue(new Question("5th dislike - same timestamp", ""));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().setSortIndex(3);
+                getActivity().RefreshAdapter();
+            }
+        });
+
+        Thread.sleep(TIMEOUT_IN_MS*3);
+
+        //Update the list
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        assertEquals("1st dislike should be placed at top", "1st dislike", textViews[0].getText().toString());
+        assertEquals("3rd dislike should be placed at third position", "3rd dislike", textViews[2].getText().toString());
         getActivity().finish();
     }
 
-    public void testSortByDislike() throws Throwable {
-        Question question1 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
-        Question question2 = new Question("Question 3 #q2 ", "This is question 3 \n # dealwith it haha.");
-        Question question3 = new Question("Question 4 #q2 ", "This is question 5 \n # dealwith it haha.");
-        Question question4 = new Question("Question 5 #q2 ", "This is question 4 \n # dealwith it haha.");
-        mFirebaseRef.push().setValue(question4);
-        mFirebaseRef.push().setValue(question3);
+    /*public void testPostQuestion_HotOrder() throws Throwable {
+
+
+        Question question1 = new Question("1st hot", "");
+        Question question2 = new Question("2nd hot", "");
+        Question question3 = new Question("3rd hot", "");
+
         mFirebaseRef.push().setValue(question2);
+        mFirebaseRef.push().setValue(question3);
         mFirebaseRef.push().setValue(question1);
 
 
         Thread.sleep(SHORT_TIMEOUT_IN_MS);
-        assertEquals("Listview should only have 4 element", 4, listview.getCount());
+        assertEquals("Listview should only have 3 elements", 3, listview.getCount());
 
-//        TouchUtils.clickView(this, sortBtn);
+        View[] listElement = new View[3];
+        String[] key = new String[3];
+        TextView[] textViews = new TextView[3];
 
-//        runTestOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                PopupMenu popup = getActivity().getPopup();
-//                MenuItem sortByHot = (MenuItem) popup.getMenu().findItem(R.id.sort_by_dislike);
-//                sortByHot.setChecked(true);
-////                assertEquals("The sort is not 1", 3, getActivity().getSortIndex());
-//                Log.i("SUP3", ""+activity.getSortIndex());
-//                popup.dismiss();
-//            }
-//        });
-        getActivity().setSortIndex(3);
-        Thread.sleep(TIMEOUT_IN_MS);
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        mFirebaseRef.child(key[0]).child("like").setValue(455);
+        mFirebaseRef.child(key[0]).child("dislike").setValue(455);
+        mFirebaseRef.child(key[2]).child("like").setValue(1000);
+        mFirebaseRef.child(key[2]).child("dislike").setValue(1000);
+        mFirebaseRef.child(key[1]).child("like").setValue(277);
+        mFirebaseRef.child(key[1]).child("dislike").setValue(277);
+
+        mFirebaseRef.push().setValue(new Question("4th hot", ""));
+        mFirebaseRef.push().setValue(new Question("5th hot", ""));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().setSortIndex(1);
+                getActivity().RefreshAdapter();
+            }
+        });
+
+        Thread.sleep(TIMEOUT_IN_MS*3);
+
+        //Update the list
+        for (int i = 0; i < 3; i ++)
+        {
+            listElement[i] = listview.getChildAt(i);
+            key[i] = (String) listElement[i].getTag();
+            textViews[i] = (TextView) listElement[i].findViewById(R.id.head);
+        }
+
+        assertEquals("2nd hot should be placed at top", "2nd hot", textViews[0].getText().toString());
+        assertEquals("4th hot should be placed at third position", "4th hot", textViews[2].getText().toString());
         getActivity().finish();
-    }
-
-    public void testSortByUpdate() throws Throwable {
-        Question question1 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
-        Question question2 = new Question("Question 3 #q2 ", "This is question 3 \n # dealwith it haha.");
-        Question question3 = new Question("Question 4 #q2 ", "This is question 5 \n # dealwith it haha.");
-        Question question4 = new Question("Question 5 #q2 ", "This is question 4 \n # dealwith it haha.");
-        mFirebaseRef.push().setValue(question4);
-        mFirebaseRef.push().setValue(question3);
-        mFirebaseRef.push().setValue(question2);
-        mFirebaseRef.push().setValue(question1);
-
-
-        Thread.sleep(SHORT_TIMEOUT_IN_MS);
-        assertEquals("Listview should only have 4 element", 4, listview.getCount());
-
-//        TouchUtils.clickView(this, sortBtn);
-//
-//        runTestOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                PopupMenu popup = getActivity().getPopup();
-//                MenuItem sortByHot = (MenuItem) popup.getMenu().findItem(R.id.sort_by_update);
-//                sortByHot.setChecked(true);
-////                assertEquals("The sort is not 1", 4, getActivity().getSortIndex());
-//                Log.i("SUP4", ""+activity.getSortIndex());
-//                popup.dismiss();
-//            }
-//        });
-        getActivity().setSortIndex(4);
-        Thread.sleep(TIMEOUT_IN_MS);
-        getActivity().finish();
-    }
+    }*/
 }

@@ -169,21 +169,37 @@ public class MainActivity extends ListActivity {
                         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             public boolean onMenuItemClick(MenuItem item) {
                                 item.setChecked(true);
-                                switch(item.getItemId()){
-                                    case R.id.sort_by_new: setSortIndex(0); break;
-                                    case R.id.sort_by_hot: setSortIndex(1); break;
-                                    case R.id.sort_by_like: setSortIndex(2); break;
-                                    case R.id.sort_by_dislike: setSortIndex(3); break;
-                                    case R.id.sort_by_update: setSortIndex(4); break;
+                                switch (item.getItemId()) {
+                                    case R.id.sort_by_new:
+                                        setSortIndex(0);
+                                        break;
+                                    case R.id.sort_by_hot:
+                                        setSortIndex(1);
+                                        break;
+                                    case R.id.sort_by_like:
+                                        setSortIndex(2);
+                                        break;
+                                    case R.id.sort_by_dislike:
+                                        setSortIndex(3);
+                                        break;
+                                    case R.id.sort_by_update:
+                                        setSortIndex(4);
+                                        break;
                                 }
-                                mChatListAdapter.setSortMethod(getSortIndex());
-                                listView.setAdapter(mChatListAdapter);
+
+                                RefreshAdapter();
                                 return true;
                             }
                         });
                         popup.show();//showing popup menu
                     }
                 });
+    }
+
+    public void RefreshAdapter()
+    {
+        mChatListAdapter.setSortMethod(getSortIndex());
+        getListView().setAdapter(mChatListAdapter);
     }
 
     //todo: Leave it here, probably will work on this part later
