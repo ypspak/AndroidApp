@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="COMP3111"
-            android:id="@+id/head_reply"
+            android:id="@+id/parent_question_head"
             android:textSize="18sp"
             android:textColor="@color/HeaderText"
             android:layout_marginLeft="2dp"
@@ -65,7 +65,7 @@
         android:gravity="center_vertical">
 
         <EditText
-            android:id="@+id/replyInput"
+            android:id="@+id/reply_input_field"
             android:textColor="@color/reply_input"
             android:layout_margin="10dp"
             android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
             android:scrollbars="vertical"/>
 
         <ImageButton
-            android:id="@+id/sendButton"
+            android:id="@+id/send_reply_button"
             android:layout_width="@dimen/ReplySendButtonSize"
             android:layout_height="@dimen/ReplySendButtonSize"
             android:src="@drawable/create"

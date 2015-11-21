@@ -78,13 +78,13 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
                 }
         );
 
-        replyInput = (EditText) getActivity().findViewById(R.id.replyInput);
-        sendButton = (ImageButton) getActivity().findViewById(R.id.sendButton);
+        replyInput = (EditText) getActivity().findViewById(R.id.reply_input_field);
+        sendButton = (ImageButton) getActivity().findViewById(R.id.send_reply_button);
         parentDislike=(ImageButton) getActivity().findViewById(R.id.parent_question_dislike_button);
         parentLike=(ImageButton) getActivity().findViewById(R.id.parent_question_like_button);
         timeText = (TextView) getActivity().findViewById((R.id.parent_question_time_text));
-        titleText = (Button) getActivity().findViewById((R.id.head_reply));
-        descText = (TextView) getActivity().findViewById((R.id.question_desc));
+        titleText = (Button) getActivity().findViewById((R.id.parent_question_head));
+        descText = (TextView) getActivity().findViewById((R.id.parent_question_desc));
         likeText = (TextView) getActivity().findViewById((R.id.parent_question_like_text));
         dislikeText = (TextView) getActivity().findViewById(R.id.parent_question_dislike_text);
     }

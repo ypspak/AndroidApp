@@ -103,7 +103,7 @@ public class ReplyActivity extends ListActivity {
     public void onStart() {
         super.onStart();
         questionUrl = new Firebase(roomBaseUrl).child("questions").child(key);
-        findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.send_reply_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendMessage();
@@ -186,7 +186,7 @@ public class ReplyActivity extends ListActivity {
     }
     //Make this function private only because I want it triggered by the SendReply Button. For security.
     private void sendMessage() {
-        inputText = (EditText) findViewById(R.id.replyInput);
+        inputText = (EditText) findViewById(R.id.reply_input_field);
         inputText.setError(null);
 
         String input = inputText.getText().toString();
@@ -216,9 +216,9 @@ public class ReplyActivity extends ListActivity {
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.parent_question_time_text));
         timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
-        Button titleText = (Button) findViewById((R.id.head_reply));
+        Button titleText = (Button) findViewById((R.id.parent_question_head));
         titleText.setText(Html.fromHtml("" + question_Head));
-        TextView descText = (TextView) findViewById((R.id.question_desc));
+        TextView descText = (TextView) findViewById((R.id.parent_question_desc));
         descText.setText(Html.fromHtml("" + question_Desc));
         TextView likeText = (TextView) findViewById((R.id.parent_question_like_text));
         likeText.setText("" + String.valueOf(question_NumLike));
