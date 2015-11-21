@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
-import hk.ust.cse.hunkim.questionroom.question.Question;
 import hk.ust.cse.hunkim.questionroom.reply.Reply;
 
 /**
@@ -39,11 +37,11 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         DBUtil dbUtil = ((ReplyActivity)activity).getDbutil();
         int order = reply.getOrder();
 
-        ImageButton likeButton = (ImageButton) view.findViewById(R.id.ReplyLike);
-        ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.ReplyDislike);
+        ImageButton likeButton = (ImageButton) view.findViewById(R.id.reply_like_button);
+        ImageButton dislikeButton = (ImageButton) view.findViewById(R.id.reply_dislike_button);
 
-        TextView scoreText = (TextView) view.findViewById(R.id.order);
-        TextView timeText = (TextView) view.findViewById(R.id.timetext);
+        TextView scoreText = (TextView) view.findViewById(R.id.reply_order);
+        TextView timeText = (TextView) view.findViewById(R.id.reply_time_text);
 
         //Set the color of the score according to the like/dislike
         scoreText.setText("" + order);
@@ -85,7 +83,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
         msgString += reply.getDesc();
 
 //        ((TextView) view.findViewById(R.id.replyMsg)).setText(Html.fromHtml(msgString));
-        ((TextView) view.findViewById(R.id.replyMsg)).setText(Html.fromHtml(msgString));
+        ((TextView) view.findViewById(R.id.reply_content)).setText(Html.fromHtml(msgString));
         // check if we already clicked
         boolean clickable = !dbUtil.contains(reply.getKey());
 

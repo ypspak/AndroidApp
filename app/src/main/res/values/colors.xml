@@ -24,7 +24,8 @@
 	<!-- For round_button.xml (currently white)-->
 	<color name="RoundButton2Base">#FF8C00</color>
 	<color name="RoundButton2Press">#505050</color>
-
+	<color name="reply_background_color">#d7d7d7</color>
+	<color name="reply_input">#000000</color>
 	<color name="RoundBg1"> #000000</color>
 	<!-- For reply order in round button -->
 	<color name="ReplyOrderLike">#FFFFFF</color>

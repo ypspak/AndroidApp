@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="COMP3111"
-            android:id="@+id/head_reply"
+            android:id="@+id/parent_question_head"
             android:textSize="18sp"
             android:textColor="@color/HeaderText"
             android:layout_marginLeft="2dp"
@@ -56,19 +56,22 @@
         android:transcriptMode="disabled" />
 
     <LinearLayout
+        android:background="@color/reply_background_color"
         android:id="@+id/listFooter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:layout_margin="10dp"
         android:gravity="center_vertical">
 
         <EditText
-            android:id="@+id/replyInput"
+            android:id="@+id/reply_input_field"
+            android:textColor="@color/reply_input"
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColorHint="@color/HeaderText"
             android:inputType="textMultiLine"
             android:singleLine="false"
             style="@style/EditTextCustomHolo"
@@ -76,7 +79,7 @@
             android:scrollbars="vertical"/>
 
         <ImageButton
-            android:id="@+id/sendButton"
+            android:id="@+id/send_reply_button"
             android:layout_width="@dimen/ReplySendButtonSize"
             android:layout_height="@dimen/ReplySendButtonSize"
             android:src="@drawable/create"
@@ -84,7 +87,7 @@
             android:scaleType="fitXY"
             android:background="@drawable/round_button_2"
             android:padding="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_margin="5dp"
             android:layout_gravity="center_vertical" />
 
     </LinearLayout>

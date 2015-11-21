@@ -38,7 +38,6 @@ public class DBUtil {
                 "SELECT 1 FROM " + DBHelper.TABLE_NAME +
                         " WHERE " + DBHelper.KEY_NAME +
                         " = ?", new String[]{key});
-
         boolean exists = c.moveToFirst();
         c.close();
         return exists;
