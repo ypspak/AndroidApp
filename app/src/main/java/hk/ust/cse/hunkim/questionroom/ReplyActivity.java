@@ -79,7 +79,7 @@ public class ReplyActivity extends ListActivity {
         question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
         question_NumReply = intent.getIntExtra("NUM_REPLY", 0);
         question_Head = intent.getStringExtra("HEAD");
-        question_Desc = (intent.getStringExtra("DESC")!=null)?intent.getStringExtra("DESC").replace("\n", "<br>"): intent.getStringExtra("DESC");
+        question_Desc = intent.getStringExtra("DESC");
         question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
         question_Hashtag = intent.getStringArrayExtra("TAGS");
 
@@ -224,11 +224,11 @@ public class ReplyActivity extends ListActivity {
     public void UpdateHeader() {
         TextView timeText = (TextView) findViewById((R.id.parent_question_time_text));
         timeText.setText("" + (new TimeManager(question_Timestamp)).getDate());
-        Button titleText = (Button) findViewById((R.id.parent_question_head));
-        titleText.setText(Html.fromHtml("" + question_Head));
-        TextView descText = (TextView) findViewById((R.id.parent_question_desc));
-        descText.setText(Html.fromHtml("" + question_Desc));
-        TextView likeText = (TextView) findViewById((R.id.parent_question_like_text));
+        Button titleText = (Button) findViewById((R.id.head_reply));
+        titleText.setText("" + question_Head);
+        TextView descText = (TextView) findViewById((R.id.desc));
+        descText.setText("" + question_Desc);
+        TextView likeText = (TextView) findViewById((R.id.likeText));
         likeText.setText("" + String.valueOf(question_NumLike));
         TextView dislikeText = (TextView) findViewById(R.id.parent_question_dislike_text);
         dislikeText.setText("" + String.valueOf(question_NumDislike));
