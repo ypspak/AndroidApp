@@ -42,6 +42,7 @@ public class MainActivity extends ListActivity {
     private int sortIndex;
     private QuestionListAdapter mChatListAdapter;
     private Hashtag_extracter hashtag_extracter;
+    private Dialog dialog;
 
     private DBUtil dbutil;
 
@@ -54,6 +55,8 @@ public class MainActivity extends ListActivity {
     public String getRoomName(){return roomName;}
 
     public String getRoomBaseUrl(){return roomBaseUrl;}
+
+    public Dialog getDialog() { return dialog; }
 
     public void setSortIndex(int i){sortIndex = i;}
     @Override
@@ -253,7 +256,7 @@ public class MainActivity extends ListActivity {
 
     //Operation for the Question Post Button
     private void postQuestion(View view){
-        final Dialog dialog = new Dialog(this);
+        dialog = new Dialog(this);
         dialog.setContentView(R.layout.post_question_popbox);
         final EditText titleInput = (EditText) dialog.findViewById(R.id.QuestionTitle);
         final EditText bodyInput = (EditText) dialog.findViewById(R.id.QuestionBody);
