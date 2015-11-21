@@ -22,7 +22,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 
 public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyActivity> {
-    private String roomBaseUrl = "https://radiant-torch-7281.firebaseio.com/rooms/TEST/questions";
+    private String roomBaseUrl = "https://cmkquestionsdb.firebaseio.com//rooms/TestRoom/";
 
     private EditText replyInput;
     private ImageButton sendButton;
@@ -47,36 +47,22 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         super.setUp();
         Firebase.setAndroidContext(getActivity());
         final String tempKey = "pretendingKey";
-        Log.e("EEE", roomBaseUrl);
-        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child(tempKey);
-        testQuestionUrl.setValue(new Question("This is a #temp question #title", "This is a temp question body"));
+        Firebase testQuestionUrl = new Firebase(roomBaseUrl).child("questions").child(tempKey);
+        Question tempQuestion = new Question("This is a #temp question #title", "This is a temp question body");
+        testQuestionUrl.setValue(tempQuestion);
 
         mStartIntent = new Intent(Intent.ACTION_MAIN);
-
-        testQuestionUrl.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Question tempQuestion = dataSnapshot.getValue(Question.class);
-                        mStartIntent.putExtra("PUSHED_ID", tempQuestion.getKey());
-                        mStartIntent.putExtra("ROOM_NAME", "TEST");
-                        mStartIntent.putExtra("ROOM_BASE_URL", roomBaseUrl);
-                        mStartIntent.putExtra("NUM_LIKE", tempQuestion.getLike());
-                        mStartIntent.putExtra("NUM_DISLIKE", tempQuestion.getDislike());
-                        mStartIntent.putExtra("NUM_REPLY", tempQuestion.getReplies());
-                        mStartIntent.putExtra("HEAD", tempQuestion.getHead());
-                        mStartIntent.putExtra("DESC", tempQuestion.getDesc());
-                        mStartIntent.putExtra("TIMESTAMP", tempQuestion.getTimestamp());
-                        mStartIntent.putExtra("TAGS", tempQuestion.getTags());
-                        setActivityIntent(mStartIntent);
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                }
-        );
+        mStartIntent.putExtra("PUSHED_ID", tempQuestion.getKey());
+        mStartIntent.putExtra("ROOM_NAME", "TEST");
+        mStartIntent.putExtra("ROOM_BASE_URL", roomBaseUrl);
+        mStartIntent.putExtra("NUM_LIKE", tempQuestion.getLike());
+        mStartIntent.putExtra("NUM_DISLIKE", tempQuestion.getDislike());
+        mStartIntent.putExtra("NUM_REPLY", tempQuestion.getReplies());
+        mStartIntent.putExtra("HEAD", tempQuestion.getHead());
+        mStartIntent.putExtra("DESC", tempQuestion.getDesc());
+        mStartIntent.putExtra("TIMESTAMP", tempQuestion.getTimestamp());
+        mStartIntent.putExtra("TAGS", tempQuestion.getTags());
+        setActivityIntent(mStartIntent);
 
         replyInput = (EditText) getActivity().findViewById(R.id.reply_input_field);
         sendButton = (ImageButton) getActivity().findViewById(R.id.send_reply_button);
@@ -92,6 +78,9 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+        if(roomBaseUrl==null){
+            return;
+        }
         Firebase mFirebaseRef = new Firebase(roomBaseUrl);
         mFirebaseRef.removeValue();
 
@@ -108,23 +97,23 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
         assertNotNull(dislikeText);
     }
 
-//    public void testParentLikeButton(){
-//        assertNotNull("Parent Question has no like button", parentLike);
-//        getInstrumentation().waitForIdleSync();
-//        TouchUtils.clickView(this, parentLike);
-//        getInstrumentation().waitForIdleSync();
-//        TouchUtils.clickView(this, parentLike);
-//        getInstrumentation().waitForIdleSync();
-//    }
+    public void testParentLikeButton(){
+        assertNotNull("Parent Question has no like button", parentLike);
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, parentLike);
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, parentLike);
+        getInstrumentation().waitForIdleSync();
+    }
 
-//    public void testParentDislikeButton(){
-//        assertNotNull("Parent Question has no like button", parentDislike);
-//        getInstrumentation().waitForIdleSync();
-//        TouchUtils.clickView(this, parentDislike);
-//        getInstrumentation().waitForIdleSync();
-//        TouchUtils.clickView(this, parentDislike);
-//        getInstrumentation().waitForIdleSync();
-//    }
+    public void testParentDislikeButton(){
+        assertNotNull("Parent Question has no like button", parentDislike);
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, parentDislike);
+        getInstrumentation().waitForIdleSync();
+        TouchUtils.clickView(this, parentDislike);
+        getInstrumentation().waitForIdleSync();
+    }
 
     public void testReplyWithoutMessage() {
         getInstrumentation().runOnMainSync(new Runnable() {
@@ -169,7 +158,6 @@ public class ReplyActivityTest extends ActivityInstrumentationTestCase2<ReplyAct
 
         TouchUtils.clickView(this, sendButton);
         getInstrumentation().waitForIdleSync();
-        assertEquals("There s not error message from the reply input", null, replyInput.getError());
 
     }
 }

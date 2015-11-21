@@ -79,12 +79,13 @@ public class ReplyActivity extends ListActivity {
         question_NumDislike = intent.getIntExtra("NUM_DISLIKE", 0);
         question_NumReply = intent.getIntExtra("NUM_REPLY", 0);
         question_Head = intent.getStringExtra("HEAD");
-        question_Desc = intent.getStringExtra("DESC").replace("\n", "<br>");
+        question_Desc = (intent.getStringExtra("DESC")!=null)?intent.getStringExtra("DESC").replace("\n", "<br>"): intent.getStringExtra("DESC");
         question_Timestamp = intent.getLongExtra("TIMESTAMP", 0);
         question_Hashtag = intent.getStringArrayExtra("TAGS");
 
-
-        replyContainerRef = new Firebase(roomBaseUrl).child("replies");
+        if(roomBaseUrl!=null){
+            replyContainerRef = new Firebase(roomBaseUrl).child("replies");
+        }
         // make sure the keyboard wont pop up when I first time enter this interface
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setTitle("Room Name:" + roomName);
@@ -102,7 +103,9 @@ public class ReplyActivity extends ListActivity {
 
     public void onStart() {
         super.onStart();
-        questionUrl = new Firebase(roomBaseUrl).child("questions").child(key);
+        if(roomBaseUrl!=null){
+            questionUrl = new Firebase(roomBaseUrl).child("questions").child(key);
+        }
         findViewById(R.id.send_reply_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,10 +119,11 @@ public class ReplyActivity extends ListActivity {
         final ListView listView = getListView();
 
         // Tell our list adapter that we only want 200 messages at a time
-        mChatListAdapter = new ReplyListAdapter(
-                replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
-                this, R.layout.reply);
-
+        if(replyContainerRef!=null){
+            mChatListAdapter = new ReplyListAdapter(
+                    replyContainerRef.orderByChild("parentID").equalTo(key).limitToFirst(200),
+                    this, R.layout.reply);
+        }
 
         //For the like & dislike button in headerview
         likePQB = (ImageButton) findViewById(R.id.parent_question_like_button);
@@ -152,18 +156,21 @@ public class ReplyActivity extends ListActivity {
         //Now update the header, and update altogether  by setting the listview
         UpdateHeader();
         listView.setAdapter(mChatListAdapter);
-        mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                //listView.setSelection(mChatListAdapter.getCount() - 1);
-            }
-        });
+        if(mChatListAdapter!=null){
+            mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
+                @Override
+                public void onChanged() {
+                    super.onChanged();
+                    //listView.setSelection(mChatListAdapter.getCount() - 1);
+                }
+            });
+        }
     }
 
     public void onStop() {
         super.onStop();
-        mChatListAdapter.cleanup();
+        if(mChatListAdapter!=null)
+            mChatListAdapter.cleanup();
     }
 
     private void checkButtonPressed()
@@ -198,6 +205,7 @@ public class ReplyActivity extends ListActivity {
             // Create our 'model', a Chat object
             Reply reply = new Reply(input, key);
             // Create a new, auto-generated child of that chat location, and save our chat data there
+            if(replyContainerRef==null) return;
             replyContainerRef.push().setValue(reply);
             inputText.setText("");
             updateQuestionReply();
@@ -284,6 +292,8 @@ public class ReplyActivity extends ListActivity {
             return;
         }
 
+        if(questionUrl==null) return;
+
         final Firebase orderRef = questionUrl.child(attri);
         orderRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -308,6 +318,7 @@ public class ReplyActivity extends ListActivity {
     }
 
     public void updateQuestionReply() {
+        if(questionUrl == null) return;
         questionUrl.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
