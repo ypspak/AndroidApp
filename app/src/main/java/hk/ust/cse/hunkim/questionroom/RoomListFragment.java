@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.firebase.client.Firebase;
@@ -40,6 +43,15 @@ public class RoomListFragment extends Fragment {
         listView = (ListView)rootView.findViewById(R.id.room_list);
         listView.setAdapter(mRoomListAdapter);
         listView.setFastScrollEnabled(true);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //String input = ((TextView) view.findViewById(R.id.name)).getText().toString();
+                //EnterSearchResult(view, input);
+                Button joinButton = (Button) view.findViewById(R.id.join_button);
+                joinButton.performClick();
+            }
+        });
 
         return rootView;
     }
