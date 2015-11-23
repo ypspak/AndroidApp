@@ -126,7 +126,7 @@ public class MainActivity extends ListActivity {
 //                listView.smoothScrollToPositionFromTop(0,0);
 //            }
 //        });
-
+        RefreshAdapter();
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {

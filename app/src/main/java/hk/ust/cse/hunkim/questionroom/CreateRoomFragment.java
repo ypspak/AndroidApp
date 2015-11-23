@@ -62,18 +62,10 @@ public class CreateRoomFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        isCheckedPrivate(isPrivate.isChecked());
         isPrivate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    passwordField.setEnabled(true);
-                    isPrivate.setTextColor(getResources().getColor(R.color.HeaderColor));
-                    passwordField.setHintTextColor(getResources().getColor(R.color.Join_Hint_Color));
-                } else {
-                    passwordField.setEnabled(false);
-                    passwordField.setText(null);
-                    isPrivate.setTextColor(getResources().getColor(R.color.Join_Disable_Color));
-                    passwordField.setHintTextColor(getResources().getColor(R.color.Join_Disable_Color));
-                }
+                isCheckedPrivate(isChecked);
             }
         });
 
@@ -84,6 +76,20 @@ public class CreateRoomFragment extends Fragment {
                 attemptCreateRoom(v);
             }
         });
+    }
+
+    public void isCheckedPrivate(boolean isChecked)
+    {
+        if (isChecked) {
+            passwordField.setEnabled(true);
+            isPrivate.setTextColor(getResources().getColor(R.color.HeaderColor));
+            passwordField.setHintTextColor(getResources().getColor(R.color.Join_Hint_Color));
+        } else {
+            passwordField.setEnabled(false);
+            passwordField.setText(null);
+            isPrivate.setTextColor(getResources().getColor(R.color.Join_Disable_Color));
+            passwordField.setHintTextColor(getResources().getColor(R.color.Join_Disable_Color));
+        }
     }
 
     //function will triggered if click the createRoom button
