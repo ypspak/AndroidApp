@@ -43,7 +43,7 @@ public class ReplyListAdapter extends FirebaseListAdapter<Reply> {
 
         TextView scoreText = (TextView) view.findViewById(R.id.reply_order);
         TextView timeText = (TextView) view.findViewById(R.id.reply_time_text);
-
+        scoreText.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_OVER);
         //Set the color of the score according to the like/dislike
         scoreText.setText("" + order);
         if (order < 0)
