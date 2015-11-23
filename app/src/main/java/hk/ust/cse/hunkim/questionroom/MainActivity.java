@@ -43,6 +43,7 @@ public class MainActivity extends ListActivity {
     private QuestionListAdapter mChatListAdapter;
     private Hashtag_extracter hashtag_extracter;
     private Dialog dialog;
+    private PopupMenu popup;
 
     private DBUtil dbutil;
 
@@ -57,6 +58,8 @@ public class MainActivity extends ListActivity {
     public String getRoomBaseUrl(){return roomBaseUrl;}
 
     public Dialog getDialog() { return dialog; }
+
+    public PopupMenu getPopup() {return popup;}
 
     public void setSortIndex(int i){sortIndex = i;}
     @Override
@@ -151,7 +154,7 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onClick(View view) {
                         //Creating the instance of PopupMenu
-                        PopupMenu popup = new PopupMenu(MainActivity.this, sortButton);
+                        popup = new PopupMenu(MainActivity.this, sortButton);
                         //Inflating the Popup using xml file
                         popup.getMenuInflater().inflate(R.menu.popup_menu_sort, popup.getMenu());
 

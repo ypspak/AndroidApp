@@ -55,9 +55,9 @@ public class SearchResultActivityTest extends ActivityInstrumentationTestCase2<S
         Question question1 = new Question("Question 1 q1", "");
         Question question2 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
         Question question3 = new Question("Question 3 #  q3 ", "question 3 at here #abc look out");
-        Question question4 = new Question("Question 1 q1", "");
-        Question question5 = new Question("Question 2 #q2 ", "This is question 2 \n # dealwith it haha.");
-        Question question6 = new Question("Question 3 #  q3 ", "question 3 at here #abc look out");
+        Question question4 = new Question("#", "");
+        Question question5 = new Question("#@$ asdf", "asdf#saf 2 \n # dealwith it haha.");
+        Question question6 = new Question("Question 3 #  q #3 ", "question #3 # at here #abc look out");
         testQuestionUrl.push().setValue(question1);
         testQuestionUrl.push().setValue(question2);
         testQuestionUrl.push().setValue(question3);
@@ -67,6 +67,8 @@ public class SearchResultActivityTest extends ActivityInstrumentationTestCase2<S
 
         Firebase mFirebaseRef = new Firebase(roomBaseUrl);
         mFirebaseRef.removeValue();
+
+        getActivity().finish();
     }
 
     public void testSearchNoMatchedResult() {
@@ -84,6 +86,8 @@ public class SearchResultActivityTest extends ActivityInstrumentationTestCase2<S
 
         Firebase mFirebaseRef = new Firebase(roomBaseUrl);
         mFirebaseRef.removeValue();
+
+        getActivity().finish();
     }
 
     public void testSearchHashTag(){
@@ -113,6 +117,8 @@ public class SearchResultActivityTest extends ActivityInstrumentationTestCase2<S
 
         Firebase mFirebaseRef = new Firebase(roomBaseUrl);
         mFirebaseRef.removeValue();
+
+        getActivity().finish();
     }
 
 }
