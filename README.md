@@ -9,4 +9,5 @@ RePosta! aims to provide a Q&A platform for student and teacher to interact afte
 
 # Technology
 1. Backend: Firebase Realtime Database
-2. Android: Java (Developed using Android Studio)
+2. Frontend: AngularJS (CSS with Bootstrap)
+3. Android App: Java (Developed using Android Studio)
