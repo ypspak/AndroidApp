@@ -1,4 +1,4 @@
-# Android App. for RePosta!
+# RePosta! (Android App.)
 
 RePosta! aims to provide a Q&A platform for student and teacher to interact afterclass. Similar to the forum like Reddits, users can post a question, and upvote/downvote is available to rate the questions.
 
